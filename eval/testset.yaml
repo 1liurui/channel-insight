@@ -1,0 +1,637 @@
+# 问数评测集
+# 四档难度：1 基础聚合 / 2 多表关联 / 3 嵌套与窗口 / 4 复合指标与跨粒度
+# gold_sql 独立编写，不参照系统生成结果；评测比对结果集而非 SQL 文本。
+# 时间基准：今天 2026-09-04，数据覆盖 2024-09-01 至 2026-08-31，"上个月" = 2026-08
+version: 1
+
+cases:
+  # ========== 第一档：基础聚合 ==========
+  - {id: T1-01, tier: 1, tags: [聚合], question: "2026年8月的总净销额是多少",
+     gold_sql: "SELECT SUM(s.net_amount) FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key WHERE d.year_month='2026-08'"}
+  - {id: T1-02, tier: 1, tags: [分组], question: "各大区的净销额分别是多少",
+     gold_sql: "SELECT o.region, SUM(s.net_amount) FROM fact_sales s JOIN dim_outlet o ON s.outlet_id=o.outlet_id GROUP BY o.region"}
+  - {id: T1-03, tier: 1, tags: [计数], question: "每个渠道各有多少家有效终端",
+     gold_sql: "SELECT channel, COUNT(*) FROM dim_outlet WHERE is_active GROUP BY channel"}
+  - {id: T1-04, tier: 1, tags: [分组], question: "各品类的总销量是多少支",
+     gold_sql: "SELECT p.category, SUM(s.qty) FROM fact_sales s JOIN dim_product p ON s.sku_id=p.sku_id GROUP BY p.category"}
+  - {id: T1-05, tier: 1, tags: [去重计数], question: "2026年8月有多少家终端产生了销售",
+     gold_sql: "SELECT COUNT(DISTINCT s.outlet_id) FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key WHERE d.year_month='2026-08'"}
+  - {id: T1-06, tier: 1, tags: [计数], question: "各等级的经销商各有多少家",
+     gold_sql: "SELECT dealer_level, COUNT(*) FROM dim_dealer GROUP BY dealer_level"}
+  - {id: T1-07, tier: 1, tags: [排序], question: "各品牌的净销额排名",
+     gold_sql: "SELECT p.brand, SUM(s.net_amount) AS amt FROM fact_sales s JOIN dim_product p ON s.sku_id=p.sku_id GROUP BY p.brand ORDER BY amt DESC"}
+  - {id: T1-08, tier: 1, tags: [条件分组], question: "促销期净销额占总净销额的比例是多少",
+     gold_sql: "SELECT SUM(net_amount) FILTER (WHERE is_promo)/SUM(net_amount) FROM fact_sales"}
+  - {id: T1-09, tier: 1, tags: [分组], question: "各包装形式的销量分别是多少",
+     gold_sql: "SELECT p.package_type, SUM(s.qty) FROM fact_sales s JOIN dim_product p ON s.sku_id=p.sku_id GROUP BY p.package_type"}
+  - {id: T1-10, tier: 1, tags: [计数], question: "在职的业务代表有多少人",
+     gold_sql: "SELECT COUNT(*) FROM dim_rep WHERE is_active"}
+  - {id: T1-11, tier: 1, tags: [计数], question: "2026年8月一共拜访了多少次",
+     gold_sql: "SELECT COUNT(*) FROM fact_visit v JOIN dim_date d ON v.date_key=d.date_key WHERE d.year_month='2026-08'"}
+  - {id: T1-12, tier: 1, tags: [分组], question: "各种促销形式的费用合计是多少",
+     gold_sql: "SELECT promo_type, SUM(cost_amount) FROM fact_promo_cost GROUP BY promo_type"}
+  - {id: T1-13, tier: 1, tags: [计数], question: "每个大区有多少家有效终端",
+     gold_sql: "SELECT region, COUNT(*) FROM dim_outlet WHERE is_active GROUP BY region"}
+  - {id: T1-14, tier: 1, tags: [筛选计数], question: "目前有多少个新品",
+     gold_sql: "SELECT COUNT(*) FROM dim_product WHERE is_new_product"}
+  - {id: T1-15, tier: 1, tags: [时间序列], question: "2026年上半年每个月的净销额",
+     gold_sql: "SELECT d.year_month, SUM(s.net_amount) FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key WHERE d.year=2026 AND d.month<=6 GROUP BY d.year_month ORDER BY d.year_month"}
+  - {id: T1-16, tier: 1, tags: [计数], question: "各门店等级的有效终端数量",
+     gold_sql: "SELECT outlet_grade, COUNT(*) FROM dim_outlet WHERE is_active GROUP BY outlet_grade"}
+  - {id: T1-17, tier: 1, tags: [聚合], question: "全周期的折扣总额是多少",
+     gold_sql: "SELECT SUM(discount_amount) FROM fact_sales"}
+  - {id: T1-18, tier: 1, tags: [计数], question: "各省份分别有多少家有效终端",
+     gold_sql: "SELECT province, COUNT(*) FROM dim_outlet WHERE is_active GROUP BY province"}
+  - {id: T1-19, tier: 1, tags: [分组], question: "2026年8月每天的销量",
+     gold_sql: "SELECT d.full_date, SUM(s.qty) FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key WHERE d.year_month='2026-08' GROUP BY d.full_date ORDER BY d.full_date"}
+  - {id: T1-20, tier: 1, tags: [聚合], question: "2026年8月末的经销商总在库量是多少",
+     gold_sql: "SELECT SUM(qty_on_hand) FROM fact_inventory WHERE date_key=20260831"}
+  - {id: T1-21, tier: 1, tags: [计数], question: "各品类下各有多少个SKU",
+     gold_sql: "SELECT category, COUNT(*) FROM dim_product GROUP BY category"}
+  - {id: T1-22, tier: 1, tags: [比率], question: "全周期平均每支商品卖多少钱",
+     gold_sql: "SELECT SUM(net_amount)/SUM(qty) FROM fact_sales"}
+  - {id: T1-23, tier: 1, tags: [分组], question: "各渠道的销量分别是多少",
+     gold_sql: "SELECT o.channel, SUM(s.qty) FROM fact_sales s JOIN dim_outlet o ON s.outlet_id=o.outlet_id GROUP BY o.channel"}
+  - {id: T1-24, tier: 1, tags: [去重计数], question: "2026年8月有多少家终端被拜访过",
+     gold_sql: "SELECT COUNT(DISTINCT v.outlet_id) FROM fact_visit v JOIN dim_date d ON v.date_key=d.date_key WHERE d.year_month='2026-08' AND v.is_executed"}
+  - {id: T1-25, tier: 1, tags: [计数], question: "各团队有多少名在职业务代表",
+     gold_sql: "SELECT team, COUNT(*) FROM dim_rep WHERE is_active GROUP BY team"}
+
+  # ========== 第二档：多表关联 ==========
+  - {id: T2-01, tier: 2, tags: [多维筛选], question: "2026年8月华东区的净销额是多少",
+     gold_sql: "SELECT SUM(s.net_amount) FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key JOIN dim_outlet o ON s.outlet_id=o.outlet_id WHERE d.year_month='2026-08' AND o.region='华东'"}
+  - {id: T2-02, tier: 2, tags: [三表关联], question: "清源品牌在便利店渠道卖了多少支",
+     gold_sql: "SELECT SUM(s.qty) FROM fact_sales s JOIN dim_product p ON s.sku_id=p.sku_id JOIN dim_outlet o ON s.outlet_id=o.outlet_id WHERE p.brand='清源' AND o.channel='便利店'"}
+  - {id: T2-03, tier: 2, tags: [交叉分组], question: "各大区各渠道的净销额",
+     gold_sql: "SELECT o.region, o.channel, SUM(s.net_amount) FROM fact_sales s JOIN dim_outlet o ON s.outlet_id=o.outlet_id GROUP BY o.region, o.channel"}
+  - {id: T2-04, tier: 2, tags: [排序限制], question: "净销额最高的十个经销商",
+     gold_sql: "SELECT dl.dealer_name, SUM(s.net_amount) AS amt FROM fact_sales s JOIN dim_dealer dl ON s.dealer_id=dl.dealer_id GROUP BY dl.dealer_name ORDER BY amt DESC LIMIT 10"}
+  - {id: T2-05, tier: 2, tags: [时间维度], question: "2026年8月各品类的销量",
+     gold_sql: "SELECT p.category, SUM(s.qty) FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key JOIN dim_product p ON s.sku_id=p.sku_id WHERE d.year_month='2026-08' GROUP BY p.category"}
+  - {id: T2-06, tier: 2, tags: [拜访], question: "各大区的实际到店拜访次数合计是多少",
+     gold_sql: "SELECT r.region, COUNT(*) FROM fact_visit v JOIN dim_rep r ON v.rep_id=r.rep_id WHERE v.is_executed GROUP BY r.region"}
+  - {id: T2-07, tier: 2, tags: [库存], question: "2026年8月末各品类的在库量",
+     gold_sql: "SELECT p.category, SUM(i.qty_on_hand) FROM fact_inventory i JOIN dim_product p ON i.sku_id=p.sku_id WHERE i.date_key=20260831 GROUP BY p.category"}
+  - {id: T2-08, tier: 2, tags: [费用], question: "各大区的促销费用合计",
+     gold_sql: "SELECT o.region, SUM(pc.cost_amount) FROM fact_promo_cost pc JOIN dim_outlet o ON pc.outlet_id=o.outlet_id GROUP BY o.region"}
+  - {id: T2-09, tier: 2, tags: [周末], question: "周末的日均销量是多少",
+     gold_sql: "SELECT SUM(s.qty)::DOUBLE/COUNT(DISTINCT d.full_date) FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key WHERE d.is_weekend"}
+  - {id: T2-10, tier: 2, tags: [多条件], question: "2026年8月大卖场渠道碳酸饮料的净销额",
+     gold_sql: "SELECT SUM(s.net_amount) FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key JOIN dim_outlet o ON s.outlet_id=o.outlet_id JOIN dim_product p ON s.sku_id=p.sku_id WHERE d.year_month='2026-08' AND o.channel='大卖场' AND p.category='碳酸饮料'"}
+  - {id: T2-11, tier: 2, tags: [排序限制], question: "销量最高的十个单品",
+     gold_sql: "SELECT p.sku_name, SUM(s.qty) AS q FROM fact_sales s JOIN dim_product p ON s.sku_id=p.sku_id GROUP BY p.sku_name ORDER BY q DESC LIMIT 10"}
+  - {id: T2-12, tier: 2, tags: [铺货], question: "每个品牌被多少家终端铺货",
+     gold_sql: "SELECT p.brand, COUNT(DISTINCT r.outlet_id) FROM rel_outlet_sku r JOIN dim_product p ON r.sku_id=p.sku_id GROUP BY p.brand"}
+  - {id: T2-13, tier: 2, tags: [城市], question: "江苏省各城市的净销额",
+     gold_sql: "SELECT o.city, SUM(s.net_amount) FROM fact_sales s JOIN dim_outlet o ON s.outlet_id=o.outlet_id WHERE o.province='江苏' GROUP BY o.city"}
+  - {id: T2-14, tier: 2, tags: [季节], question: "各季节的销量分别是多少",
+     gold_sql: "SELECT d.season, SUM(s.qty) FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key GROUP BY d.season"}
+  - {id: T2-15, tier: 2, tags: [新品], question: "新品在2026年8月的净销额是多少",
+     gold_sql: "SELECT SUM(s.net_amount) FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key JOIN dim_product p ON s.sku_id=p.sku_id WHERE d.year_month='2026-08' AND p.is_new_product"}
+  - {id: T2-16, tier: 2, tags: [拜访], question: "各渠道的拜访次数",
+     gold_sql: "SELECT o.channel, COUNT(*) FROM fact_visit v JOIN dim_outlet o ON v.outlet_id=o.outlet_id GROUP BY o.channel"}
+  - {id: T2-17, tier: 2, tags: [节假日], question: "节假日的日均净销额是多少",
+     gold_sql: "SELECT SUM(s.net_amount)/COUNT(DISTINCT d.full_date) FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key WHERE d.is_holiday"}
+  - {id: T2-18, tier: 2, tags: [口味], question: "各口味的销量排名前十",
+     gold_sql: "SELECT p.flavor, SUM(s.qty) AS q FROM fact_sales s JOIN dim_product p ON s.sku_id=p.sku_id GROUP BY p.flavor ORDER BY q DESC LIMIT 10"}
+  - {id: T2-19, tier: 2, tags: [临期], question: "2026年8月末临期库存量最大的十个经销商",
+     gold_sql: "SELECT dl.dealer_name, SUM(i.near_expiry_qty) AS q FROM fact_inventory i JOIN dim_dealer dl ON i.dealer_id=dl.dealer_id WHERE i.date_key=20260831 GROUP BY dl.dealer_name ORDER BY q DESC LIMIT 10"}
+  - {id: T2-20, tier: 2, tags: [促销形式], question: "各大区各促销形式的费用",
+     gold_sql: "SELECT o.region, pc.promo_type, SUM(pc.cost_amount) FROM fact_promo_cost pc JOIN dim_outlet o ON pc.outlet_id=o.outlet_id GROUP BY o.region, pc.promo_type"}
+  - {id: T2-21, tier: 2, tags: [门店等级], question: "各门店等级的净销额和终端数",
+     gold_sql: "SELECT o.outlet_grade, SUM(s.net_amount), COUNT(DISTINCT s.outlet_id) FROM fact_sales s JOIN dim_outlet o ON s.outlet_id=o.outlet_id GROUP BY o.outlet_grade"}
+  - {id: T2-22, tier: 2, tags: [业代], question: "拜访次数最多的十名业务代表",
+     gold_sql: "SELECT r.rep_name, COUNT(*) AS c FROM fact_visit v JOIN dim_rep r ON v.rep_id=r.rep_id WHERE v.is_executed GROUP BY r.rep_name ORDER BY c DESC LIMIT 10"}
+  - {id: T2-23, tier: 2, tags: [规格], question: "各规格档位的销量，按规格毫升数分组",
+     gold_sql: "SELECT p.spec_ml, SUM(s.qty) FROM fact_sales s JOIN dim_product p ON s.sku_id=p.sku_id GROUP BY p.spec_ml ORDER BY p.spec_ml"}
+  - {id: T2-24, tier: 2, tags: [经销商等级], question: "各等级经销商的净销额",
+     gold_sql: "SELECT dl.dealer_level, SUM(s.net_amount) FROM fact_sales s JOIN dim_dealer dl ON s.dealer_id=dl.dealer_id GROUP BY dl.dealer_level"}
+  - {id: T2-25, tier: 2, tags: [陈列整改], question: "各大区做过陈列整改的拜访次数",
+     gold_sql: "SELECT r.region, COUNT(*) FROM fact_visit v JOIN dim_rep r ON v.rep_id=r.rep_id WHERE v.has_display_fix GROUP BY r.region"}
+
+  # ========== 第三档：嵌套与窗口 ==========
+  - id: T3-01
+    tier: 3
+    tags: [分组TOPN, 窗口函数]
+    question: "每个大区销量最高的单品是哪个"
+    gold_sql: |
+      SELECT region, sku_name, q FROM (
+        SELECT o.region, p.sku_name, SUM(s.qty) AS q,
+               ROW_NUMBER() OVER (PARTITION BY o.region ORDER BY SUM(s.qty) DESC) rn
+        FROM fact_sales s JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+        JOIN dim_product p ON s.sku_id=p.sku_id
+        GROUP BY o.region, p.sku_name)
+      WHERE rn = 1
+  - id: T3-02
+    tier: 3
+    tags: [占比]
+    question: "各渠道净销额占总销额的比例"
+    gold_sql: |
+      SELECT o.channel, SUM(s.net_amount) / (SELECT SUM(net_amount) FROM fact_sales) AS ratio
+      FROM fact_sales s JOIN dim_outlet o ON s.outlet_id=o.outlet_id GROUP BY o.channel
+  - id: T3-03
+    tier: 3
+    tags: [HAVING]
+    question: "哪些品牌的净销额占比超过百分之十"
+    gold_sql: |
+      SELECT p.brand FROM fact_sales s JOIN dim_product p ON s.sku_id=p.sku_id
+      GROUP BY p.brand
+      HAVING SUM(s.net_amount) / (SELECT SUM(net_amount) FROM fact_sales) > 0.1
+  - id: T3-04
+    tier: 3
+    tags: [子查询比较]
+    question: "有多少家终端的净销额高于所有终端的平均水平"
+    gold_sql: |
+      WITH t AS (SELECT outlet_id, SUM(net_amount) amt FROM fact_sales GROUP BY outlet_id)
+      SELECT COUNT(*) FROM t WHERE amt > (SELECT AVG(amt) FROM t)
+  - id: T3-05
+    tier: 3
+    tags: [分组TOPN]
+    question: "每个品类销量最高的三个单品"
+    gold_sql: |
+      SELECT category, sku_name, q FROM (
+        SELECT p.category, p.sku_name, SUM(s.qty) AS q,
+               ROW_NUMBER() OVER (PARTITION BY p.category ORDER BY SUM(s.qty) DESC) rn
+        FROM fact_sales s JOIN dim_product p ON s.sku_id=p.sku_id
+        GROUP BY p.category, p.sku_name)
+      WHERE rn <= 3
+  - id: T3-06
+    tier: 3
+    tags: [环比, 自关联]
+    question: "2026年8月哪些品类的销量比7月增长了"
+    gold_sql: |
+      WITH m AS (
+        SELECT p.category, d.year_month, SUM(s.qty) q
+        FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key
+        JOIN dim_product p ON s.sku_id=p.sku_id
+        WHERE d.year_month IN ('2026-07','2026-08') GROUP BY 1,2)
+      SELECT a.category FROM m a JOIN m b ON a.category=b.category
+      WHERE a.year_month='2026-08' AND b.year_month='2026-07' AND a.q > b.q
+  - id: T3-07
+    tier: 3
+    tags: [窗口累计]
+    question: "各大区净销额及其累计占比，按销额从高到低"
+    gold_sql: |
+      WITH t AS (SELECT o.region, SUM(s.net_amount) amt FROM fact_sales s
+                 JOIN dim_outlet o ON s.outlet_id=o.outlet_id GROUP BY o.region)
+      SELECT region, amt,
+             SUM(amt) OVER (ORDER BY amt DESC) / SUM(amt) OVER () AS cum_ratio
+      FROM t ORDER BY amt DESC
+  - id: T3-08
+    tier: 3
+    tags: [反向连接]
+    question: "有多少个终端和单品的铺货组合在2026年8月完全没有销售"
+    gold_sql: |
+      SELECT COUNT(*) FROM rel_outlet_sku r
+      WHERE NOT EXISTS (
+        SELECT 1 FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key
+        WHERE s.outlet_id=r.outlet_id AND s.sku_id=r.sku_id AND d.year_month='2026-08')
+  - id: T3-09
+    tier: 3
+    tags: [子查询比较]
+    question: "哪些业务代表的拜访次数高于平均值"
+    gold_sql: |
+      WITH t AS (SELECT r.rep_name, COUNT(*) c FROM fact_visit v
+                 JOIN dim_rep r ON v.rep_id=r.rep_id WHERE v.is_executed GROUP BY r.rep_name)
+      SELECT rep_name FROM t WHERE c > (SELECT AVG(c) FROM t)
+  - id: T3-10
+    tier: 3
+    tags: [分组TOPN]
+    question: "每个经销商销额最高的那家终端"
+    gold_sql: |
+      SELECT dealer_name, outlet_name, amt FROM (
+        SELECT dl.dealer_name, o.outlet_name, SUM(s.net_amount) amt,
+               ROW_NUMBER() OVER (PARTITION BY dl.dealer_name ORDER BY SUM(s.net_amount) DESC) rn
+        FROM fact_sales s JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+        JOIN dim_dealer dl ON o.dealer_id=dl.dealer_id
+        GROUP BY dl.dealer_name, o.outlet_name)
+      WHERE rn = 1
+  - id: T3-11
+    tier: 3
+    tags: [占比]
+    question: "2026年各月净销额及占全年的比例"
+    gold_sql: |
+      SELECT d.year_month, SUM(s.net_amount) amt,
+             SUM(s.net_amount) / (SELECT SUM(s2.net_amount) FROM fact_sales s2
+                                  JOIN dim_date d2 ON s2.date_key=d2.date_key WHERE d2.year=2026) r
+      FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key
+      WHERE d.year=2026 GROUP BY d.year_month ORDER BY d.year_month
+  - id: T3-12
+    tier: 3
+    tags: [帕累托, 窗口函数]
+    question: "销额排名前二十的单品贡献了多少比例的销额"
+    gold_sql: |
+      WITH t AS (
+        SELECT sku_id, SUM(net_amount) amt,
+               ROW_NUMBER() OVER (ORDER BY SUM(net_amount) DESC) rn,
+               COUNT(*) OVER () tot
+        FROM fact_sales GROUP BY sku_id)
+      SELECT SUM(amt) FILTER (WHERE rn <= 20) / SUM(amt) FROM t
+  - id: T3-13
+    tier: 3
+    tags: [HAVING, 去重]
+    question: "有多少家终端在2026年7月和8月都有销售"
+    gold_sql: |
+      SELECT COUNT(*) FROM (
+        SELECT s.outlet_id FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key
+        WHERE d.year_month IN ('2026-07','2026-08')
+        GROUP BY s.outlet_id HAVING COUNT(DISTINCT d.year_month)=2)
+  - id: T3-14
+    tier: 3
+    tags: [HAVING]
+    question: "哪些城市的有效终端数超过五十家"
+    gold_sql: |
+      SELECT city FROM dim_outlet WHERE is_active GROUP BY city HAVING COUNT(*) > 50
+  - id: T3-15
+    tier: 3
+    tags: [分位数]
+    question: "各渠道终端净销额的中位数"
+    gold_sql: |
+      WITH t AS (SELECT o.channel, s.outlet_id, SUM(s.net_amount) amt
+                 FROM fact_sales s JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+                 GROUP BY o.channel, s.outlet_id)
+      SELECT channel, MEDIAN(amt) FROM t GROUP BY channel
+  - id: T3-16
+    tier: 3
+    tags: [分组TOPN]
+    question: "每个城市销额最高的渠道是哪个"
+    gold_sql: |
+      SELECT city, channel, amt FROM (
+        SELECT o.city, o.channel, SUM(s.net_amount) amt,
+               ROW_NUMBER() OVER (PARTITION BY o.city ORDER BY SUM(s.net_amount) DESC) rn
+        FROM fact_sales s JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+        GROUP BY o.city, o.channel)
+      WHERE rn = 1
+  - id: T3-17
+    tier: 3
+    tags: [窗口排名]
+    question: "各品牌的销额排名名次以及与第一名的销额差额"
+    gold_sql: |
+      WITH t AS (SELECT p.brand, SUM(s.net_amount) amt FROM fact_sales s
+                 JOIN dim_product p ON s.sku_id=p.sku_id GROUP BY p.brand)
+      SELECT brand, RANK() OVER (ORDER BY amt DESC) rk,
+             MAX(amt) OVER () - amt AS gap FROM t ORDER BY amt DESC
+  - id: T3-18
+    tier: 3
+    tags: [占比]
+    question: "2026年8月新品销额占各大区总销额的比例"
+    gold_sql: |
+      SELECT o.region,
+             SUM(s.net_amount) FILTER (WHERE p.is_new_product) / SUM(s.net_amount) AS r
+      FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id JOIN dim_product p ON s.sku_id=p.sku_id
+      WHERE d.year_month='2026-08' GROUP BY o.region
+  - id: T3-19
+    tier: 3
+    tags: [HAVING, 占比]
+    question: "促销销额占比超过百分之十九的经销商有哪些"
+    gold_sql: |
+      SELECT dealer_id FROM fact_sales
+      GROUP BY dealer_id
+      HAVING SUM(net_amount) FILTER (WHERE is_promo) / SUM(net_amount) > 0.19
+  - id: T3-20
+    tier: 3
+    tags: [分组TOPN]
+    question: "每个品类里标准零售价最高的单品"
+    gold_sql: |
+      SELECT category, sku_name, list_price FROM (
+        SELECT category, sku_name, list_price,
+               ROW_NUMBER() OVER (PARTITION BY category ORDER BY list_price DESC) rn
+        FROM dim_product)
+      WHERE rn = 1
+  - id: T3-21
+    tier: 3
+    tags: [窗口环比]
+    question: "2026年各月活跃终端数及相比上月的变化"
+    gold_sql: |
+      WITH t AS (SELECT d.year_month, COUNT(DISTINCT s.outlet_id) c
+                 FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key
+                 WHERE d.year=2026 GROUP BY d.year_month)
+      SELECT year_month, c, c - LAG(c) OVER (ORDER BY year_month) AS chg FROM t ORDER BY year_month
+  - id: T3-22
+    tier: 3
+    tags: [占比, 限制]
+    question: "销额前十的终端合计占总销额的比例"
+    gold_sql: |
+      WITH t AS (SELECT outlet_id, SUM(net_amount) amt FROM fact_sales GROUP BY outlet_id)
+      SELECT (SELECT SUM(amt) FROM (SELECT amt FROM t ORDER BY amt DESC LIMIT 10))
+             / (SELECT SUM(amt) FROM t)
+  - id: T3-23
+    tier: 3
+    tags: [反向连接]
+    question: "哪些终端在2026年8月完全没有任何销售"
+    gold_sql: |
+      SELECT o.outlet_name FROM dim_outlet o
+      WHERE NOT EXISTS (
+        SELECT 1 FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key
+        WHERE s.outlet_id=o.outlet_id AND d.year_month='2026-08')
+  - id: T3-24
+    tier: 3
+    tags: [子查询比较]
+    question: "有多少家经销商的促销费用高于所有经销商的平均费用"
+    gold_sql: |
+      WITH t AS (SELECT dealer_id, SUM(cost_amount) c FROM fact_promo_cost GROUP BY dealer_id)
+      SELECT COUNT(*) FROM t WHERE c > (SELECT AVG(c) FROM t)
+  - id: T3-25
+    tier: 3
+    tags: [窗口排名]
+    question: "华东区销额前五的城市及其在全国的排名"
+    gold_sql: |
+      WITH t AS (SELECT o.region, o.city, SUM(s.net_amount) amt FROM fact_sales s
+                 JOIN dim_outlet o ON s.outlet_id=o.outlet_id GROUP BY o.region, o.city),
+      r AS (SELECT region, city, amt, RANK() OVER (ORDER BY amt DESC) national_rank FROM t)
+      SELECT city, amt, national_rank FROM r WHERE region='华东' ORDER BY amt DESC LIMIT 5
+
+  # ========== 第四档：复合指标与跨粒度 ==========
+  - id: T4-01
+    tier: 4
+    tags: [费效比, 跨粒度]
+    question: "2026年8月各大区的费效比是多少"
+    gold_sql: |
+      WITH s AS (SELECT o.region, SUM(fs.net_amount) amt FROM fact_sales fs
+                 JOIN dim_date d ON fs.date_key=d.date_key
+                 JOIN dim_outlet o ON fs.outlet_id=o.outlet_id
+                 WHERE d.year_month='2026-08' AND fs.is_promo GROUP BY 1),
+      c AS (SELECT o.region, SUM(pc.cost_amount) cost_amt FROM fact_promo_cost pc
+            JOIN dim_date d ON pc.date_key=d.date_key
+            JOIN dim_outlet o ON pc.outlet_id=o.outlet_id
+            WHERE d.year_month='2026-08' GROUP BY 1)
+      SELECT s.region, s.amt / NULLIF(c.cost_amt,0) FROM s JOIN c USING (region)
+  - id: T4-02
+    tier: 4
+    tags: [铺市率]
+    question: "清源品牌的铺市率是多少"
+    gold_sql: |
+      SELECT COUNT(DISTINCT r.outlet_id)::DOUBLE
+             / (SELECT COUNT(*) FROM dim_outlet WHERE is_active)
+      FROM rel_outlet_sku r JOIN dim_product p ON r.sku_id=p.sku_id WHERE p.brand='清源'
+  - id: T4-03
+    tier: 4
+    tags: [动销率]
+    question: "2026年8月碳酸饮料的动销率是多少"
+    gold_sql: |
+      WITH sold AS (SELECT DISTINCT s.outlet_id, s.sku_id FROM fact_sales s
+                    JOIN dim_date d ON s.date_key=d.date_key
+                    JOIN dim_product p ON s.sku_id=p.sku_id
+                    WHERE d.year_month='2026-08' AND p.category='碳酸饮料'),
+      listed AS (SELECT r.outlet_id, r.sku_id FROM rel_outlet_sku r
+                 JOIN dim_product p ON r.sku_id=p.sku_id WHERE p.category='碳酸饮料')
+      SELECT (SELECT COUNT(*) FROM sold)::DOUBLE / (SELECT COUNT(*) FROM listed)
+  - id: T4-04
+    tier: 4
+    tags: [单店产出]
+    question: "2026年8月各大区的单店产出是多少"
+    gold_sql: |
+      SELECT o.region, SUM(s.net_amount) / COUNT(DISTINCT s.outlet_id)
+      FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+      WHERE d.year_month='2026-08' GROUP BY o.region
+  - id: T4-05
+    tier: 4
+    tags: [拜访达成率]
+    question: "各大区的拜访达成率是多少"
+    gold_sql: |
+      SELECT r.region,
+             COUNT(*) FILTER (WHERE v.is_executed)::DOUBLE
+             / NULLIF(COUNT(*) FILTER (WHERE v.is_planned),0)
+      FROM fact_visit v JOIN dim_rep r ON v.rep_id=r.rep_id GROUP BY r.region
+  - id: T4-06
+    tier: 4
+    tags: [拜访成单率]
+    question: "各团队的拜访成单率是多少"
+    gold_sql: |
+      SELECT r.team,
+             COUNT(*) FILTER (WHERE v.has_order)::DOUBLE
+             / NULLIF(COUNT(*) FILTER (WHERE v.is_executed),0)
+      FROM fact_visit v JOIN dim_rep r ON v.rep_id=r.rep_id GROUP BY r.team
+  - id: T4-07
+    tier: 4
+    tags: [促销费用率, 跨粒度]
+    question: "2026年8月各渠道的促销费用率是多少"
+    gold_sql: |
+      WITH s AS (SELECT o.channel, SUM(fs.net_amount) amt FROM fact_sales fs
+                 JOIN dim_date d ON fs.date_key=d.date_key
+                 JOIN dim_outlet o ON fs.outlet_id=o.outlet_id
+                 WHERE d.year_month='2026-08' AND fs.is_promo GROUP BY 1),
+      c AS (SELECT o.channel, SUM(pc.cost_amount) cost_amt FROM fact_promo_cost pc
+            JOIN dim_date d ON pc.date_key=d.date_key
+            JOIN dim_outlet o ON pc.outlet_id=o.outlet_id
+            WHERE d.year_month='2026-08' GROUP BY 1)
+      SELECT s.channel, c.cost_amt / NULLIF(s.amt,0) FROM s JOIN c USING (channel)
+  - id: T4-08
+    tier: 4
+    tags: [库存周转, 跨粒度]
+    question: "2026年8月的库存周转天数是多少"
+    gold_sql: |
+      WITH inv AS (SELECT SUM(qty_on_hand) h FROM fact_inventory WHERE date_key=20260831),
+      so AS (SELECT SUM(s.qty)::DOUBLE / COUNT(DISTINCT s.date_key) d FROM fact_sales s
+             JOIN dim_date dd ON s.date_key=dd.date_key WHERE dd.year_month='2026-08')
+      SELECT (SELECT h FROM inv) / (SELECT d FROM so)
+  - id: T4-09
+    tier: 4
+    tags: [临期占比]
+    question: "2026年8月末各大区的临期库存占比"
+    gold_sql: |
+      SELECT dl.region, SUM(i.near_expiry_qty)::DOUBLE / SUM(i.qty_on_hand)
+      FROM fact_inventory i JOIN dim_dealer dl ON i.dealer_id=dl.dealer_id
+      WHERE i.date_key=20260831 GROUP BY dl.region
+  - id: T4-10
+    tier: 4
+    tags: [新品铺市率]
+    question: "新品的铺市率是多少"
+    gold_sql: |
+      SELECT COUNT(DISTINCT r.outlet_id)::DOUBLE
+             / (SELECT COUNT(*) FROM dim_outlet WHERE is_active)
+      FROM rel_outlet_sku r JOIN dim_product p ON r.sku_id=p.sku_id WHERE p.is_new_product
+  - id: T4-11
+    tier: 4
+    tags: [同比]
+    question: "2026年8月的净销额同比去年同期增长了多少"
+    gold_sql: |
+      WITH t AS (SELECT d.year_month, SUM(s.net_amount) amt FROM fact_sales s
+                 JOIN dim_date d ON s.date_key=d.date_key
+                 WHERE d.year_month IN ('2025-08','2026-08') GROUP BY 1)
+      SELECT ((SELECT amt FROM t WHERE year_month='2026-08')
+              - (SELECT amt FROM t WHERE year_month='2025-08'))
+             / (SELECT amt FROM t WHERE year_month='2025-08')
+  - id: T4-12
+    tier: 4
+    tags: [环比]
+    question: "2026年8月的净销额环比7月增长了多少"
+    gold_sql: |
+      WITH t AS (SELECT d.year_month, SUM(s.net_amount) amt FROM fact_sales s
+                 JOIN dim_date d ON s.date_key=d.date_key
+                 WHERE d.year_month IN ('2026-07','2026-08') GROUP BY 1)
+      SELECT ((SELECT amt FROM t WHERE year_month='2026-08')
+              - (SELECT amt FROM t WHERE year_month='2026-07'))
+             / (SELECT amt FROM t WHERE year_month='2026-07')
+  - id: T4-13
+    tier: 4
+    tags: [动销率]
+    question: "2026年8月各渠道的动销率是多少"
+    gold_sql: |
+      WITH sold AS (SELECT DISTINCT o.channel, s.outlet_id, s.sku_id FROM fact_sales s
+                    JOIN dim_date d ON s.date_key=d.date_key
+                    JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+                    WHERE d.year_month='2026-08'),
+      listed AS (SELECT o.channel, r.outlet_id, r.sku_id FROM rel_outlet_sku r
+                 JOIN dim_outlet o ON r.outlet_id=o.outlet_id)
+      SELECT l.channel, COUNT(DISTINCT (s.outlet_id, s.sku_id))::DOUBLE / COUNT(DISTINCT (l.outlet_id, l.sku_id))
+      FROM listed l LEFT JOIN sold s ON l.outlet_id=s.outlet_id AND l.sku_id=s.sku_id
+      GROUP BY l.channel
+  - id: T4-14
+    tier: 4
+    tags: [费效比, 跨粒度, TOPN]
+    question: "2026年8月费效比最高的五个经销商"
+    gold_sql: |
+      WITH s AS (SELECT fs.dealer_id, SUM(fs.net_amount) amt FROM fact_sales fs
+                 JOIN dim_date d ON fs.date_key=d.date_key
+                 WHERE d.year_month='2026-08' AND fs.is_promo GROUP BY 1),
+      c AS (SELECT pc.dealer_id, SUM(pc.cost_amount) cost_amt FROM fact_promo_cost pc
+            JOIN dim_date d ON pc.date_key=d.date_key
+            WHERE d.year_month='2026-08' GROUP BY 1)
+      SELECT dl.dealer_name, s.amt / NULLIF(c.cost_amt,0) roi
+      FROM s JOIN c USING (dealer_id) JOIN dim_dealer dl ON s.dealer_id=dl.dealer_id
+      ORDER BY roi DESC LIMIT 5
+  - id: T4-15
+    tier: 4
+    tags: [铺市率, 动销率]
+    question: "华东区在2026年8月的铺市率和动销率分别是多少"
+    gold_sql: |
+      WITH base AS (SELECT outlet_id FROM dim_outlet WHERE is_active AND region='华东'),
+      listed AS (SELECT r.outlet_id, r.sku_id FROM rel_outlet_sku r
+                 WHERE r.outlet_id IN (SELECT outlet_id FROM base)),
+      sold AS (SELECT DISTINCT s.outlet_id, s.sku_id FROM fact_sales s
+               JOIN dim_date d ON s.date_key=d.date_key
+               WHERE d.year_month='2026-08' AND s.outlet_id IN (SELECT outlet_id FROM base))
+      SELECT (SELECT COUNT(DISTINCT outlet_id) FROM listed)::DOUBLE
+             / (SELECT COUNT(*) FROM base) AS 铺市率,
+             (SELECT COUNT(*) FROM sold)::DOUBLE
+             / (SELECT COUNT(*) FROM listed) AS 动销率
+  - id: T4-16
+    tier: 4
+    tags: [单店产出]
+    question: "2026年8月各品类的单店产出是多少"
+    gold_sql: |
+      SELECT p.category, SUM(s.net_amount) / COUNT(DISTINCT s.outlet_id)
+      FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_product p ON s.sku_id=p.sku_id
+      WHERE d.year_month='2026-08' GROUP BY p.category
+  - id: T4-17
+    tier: 4
+    tags: [费效比, 跨粒度, 季度]
+    question: "2026年第二季度各大区的费效比"
+    gold_sql: |
+      WITH s AS (SELECT o.region, SUM(fs.net_amount) amt FROM fact_sales fs
+                 JOIN dim_date d ON fs.date_key=d.date_key
+                 JOIN dim_outlet o ON fs.outlet_id=o.outlet_id
+                 WHERE d.year=2026 AND d.quarter=2 AND fs.is_promo GROUP BY 1),
+      c AS (SELECT o.region, SUM(pc.cost_amount) cost_amt FROM fact_promo_cost pc
+            JOIN dim_date d ON pc.date_key=d.date_key
+            JOIN dim_outlet o ON pc.outlet_id=o.outlet_id
+            WHERE d.year=2026 AND d.quarter=2 GROUP BY 1)
+      SELECT s.region, s.amt / NULLIF(c.cost_amt,0) FROM s JOIN c USING (region)
+  - id: T4-18
+    tier: 4
+    tags: [拜访达成率, 成单率]
+    question: "2026年8月各大区的拜访达成率和成单率"
+    gold_sql: |
+      SELECT r.region,
+             COUNT(*) FILTER (WHERE v.is_executed)::DOUBLE
+             / NULLIF(COUNT(*) FILTER (WHERE v.is_planned),0) AS 达成率,
+             COUNT(*) FILTER (WHERE v.has_order)::DOUBLE
+             / NULLIF(COUNT(*) FILTER (WHERE v.is_executed),0) AS 成单率
+      FROM fact_visit v JOIN dim_rep r ON v.rep_id=r.rep_id
+      JOIN dim_date d ON v.date_key=d.date_key
+      WHERE d.year_month='2026-08' GROUP BY r.region
+  - id: T4-19
+    tier: 4
+    tags: [库存周转, TOPN]
+    question: "2026年8月库存周转天数最长的十个经销商"
+    gold_sql: |
+      WITH inv AS (SELECT dealer_id, SUM(qty_on_hand) h FROM fact_inventory
+                   WHERE date_key=20260831 GROUP BY dealer_id),
+      so AS (SELECT s.dealer_id, SUM(s.qty)::DOUBLE / COUNT(DISTINCT s.date_key) d
+             FROM fact_sales s JOIN dim_date dd ON s.date_key=dd.date_key
+             WHERE dd.year_month='2026-08' GROUP BY s.dealer_id)
+      SELECT dl.dealer_name, inv.h / NULLIF(so.d,0) turn_days
+      FROM inv JOIN so USING (dealer_id) JOIN dim_dealer dl ON inv.dealer_id=dl.dealer_id
+      ORDER BY turn_days DESC LIMIT 10
+  - id: T4-20
+    tier: 4
+    tags: [动销率, 品牌]
+    question: "清源品牌2026年8月的动销率是多少"
+    gold_sql: |
+      WITH sold AS (SELECT DISTINCT s.outlet_id, s.sku_id FROM fact_sales s
+                    JOIN dim_date d ON s.date_key=d.date_key
+                    JOIN dim_product p ON s.sku_id=p.sku_id
+                    WHERE d.year_month='2026-08' AND p.brand='清源'),
+      listed AS (SELECT r.outlet_id, r.sku_id FROM rel_outlet_sku r
+                 JOIN dim_product p ON r.sku_id=p.sku_id WHERE p.brand='清源')
+      SELECT (SELECT COUNT(*) FROM sold)::DOUBLE / (SELECT COUNT(*) FROM listed)
+  - id: T4-21
+    tier: 4
+    tags: [新品铺市率, 分组]
+    question: "各大区的新品铺市率是多少"
+    gold_sql: |
+      WITH base AS (SELECT region, COUNT(*) n FROM dim_outlet WHERE is_active GROUP BY region),
+      cov AS (SELECT o.region, COUNT(DISTINCT r.outlet_id) c FROM rel_outlet_sku r
+              JOIN dim_product p ON r.sku_id=p.sku_id
+              JOIN dim_outlet o ON r.outlet_id=o.outlet_id
+              WHERE p.is_new_product GROUP BY o.region)
+      SELECT base.region, cov.c::DOUBLE / base.n FROM base JOIN cov USING (region)
+  - id: T4-22
+    tier: 4
+    tags: [费效比, 筛选]
+    question: "2026年8月哪些大区的费效比低于5.5"
+    gold_sql: |
+      WITH s AS (SELECT o.region, SUM(fs.net_amount) amt FROM fact_sales fs
+                 JOIN dim_date d ON fs.date_key=d.date_key
+                 JOIN dim_outlet o ON fs.outlet_id=o.outlet_id
+                 WHERE d.year_month='2026-08' AND fs.is_promo GROUP BY 1),
+      c AS (SELECT o.region, SUM(pc.cost_amount) cost_amt FROM fact_promo_cost pc
+            JOIN dim_date d ON pc.date_key=d.date_key
+            JOIN dim_outlet o ON pc.outlet_id=o.outlet_id
+            WHERE d.year_month='2026-08' GROUP BY 1)
+      SELECT s.region FROM s JOIN c USING (region) WHERE s.amt / NULLIF(c.cost_amt,0) < 5.5
+  - id: T4-23
+    tier: 4
+    tags: [同比, 分组]
+    question: "各大区2026年8月净销额相比去年同期的增长率"
+    gold_sql: |
+      WITH t AS (SELECT o.region, d.year_month, SUM(s.net_amount) amt FROM fact_sales s
+                 JOIN dim_date d ON s.date_key=d.date_key
+                 JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+                 WHERE d.year_month IN ('2025-08','2026-08') GROUP BY 1,2)
+      SELECT a.region, (a.amt - b.amt) / b.amt
+      FROM t a JOIN t b ON a.region=b.region
+      WHERE a.year_month='2026-08' AND b.year_month='2025-08'
+  - id: T4-24
+    tier: 4
+    tags: [单店产出, 同比]
+    question: "各渠道2026年8月的单店产出相比去年同期的变化"
+    gold_sql: |
+      WITH t AS (SELECT o.channel, d.year_month,
+                        SUM(s.net_amount) / COUNT(DISTINCT s.outlet_id) spo
+                 FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key
+                 JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+                 WHERE d.year_month IN ('2025-08','2026-08') GROUP BY 1,2)
+      SELECT a.channel, a.spo - b.spo
+      FROM t a JOIN t b ON a.channel=b.channel
+      WHERE a.year_month='2026-08' AND b.year_month='2025-08'
+  - id: T4-25
+    tier: 4
+    tags: [费效比, 跨粒度, 对比]
+    question: "2026年上半年的费效比比2025年下半年高多少"
+    gold_sql: |
+      WITH span AS (
+        SELECT date_key,
+               CASE WHEN year=2026 AND month<=6 THEN '2026H1'
+                    WHEN year=2025 AND month>=7 THEN '2025H2' END AS seg
+        FROM dim_date WHERE (year=2026 AND month<=6) OR (year=2025 AND month>=7)),
+      s AS (SELECT sp.seg, SUM(fs.net_amount) amt FROM fact_sales fs
+            JOIN span sp ON fs.date_key=sp.date_key WHERE fs.is_promo GROUP BY 1),
+      c AS (SELECT sp.seg, SUM(pc.cost_amount) cost_amt FROM fact_promo_cost pc
+            JOIN span sp ON pc.date_key=sp.date_key GROUP BY 1)
+      SELECT (SELECT s.amt/c.cost_amt FROM s JOIN c USING (seg) WHERE seg='2026H1')
+           - (SELECT s.amt/c.cost_amt FROM s JOIN c USING (seg) WHERE seg='2025H2')

@@ -1,0 +1,967 @@
+[
+ {
+  "sid": "S01",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "大区=华北"
+  ],
+  "missed": [],
+  "best_dim": "region",
+  "note": "总变动 +9.0%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "region",
+    "value": "华北",
+    "factor": 1.4326,
+    "share": 0.1576882067876633,
+    "impact": 0.06821811037800003
+   }
+  ]
+ },
+ {
+  "sid": "S02",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "渠道=连锁超市"
+  ],
+  "missed": [],
+  "best_dim": "channel",
+  "note": "总变动 -7.2%，主拆解维度 渠道",
+  "causes": [
+   {
+    "dimension": "channel",
+    "value": "连锁超市",
+    "factor": 0.8164,
+    "share": 0.40041517160020135,
+    "impact": -0.07352791622342916
+   }
+  ]
+ },
+ {
+  "sid": "S03",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "品类=碳酸饮料（引擎报为等价切片 品牌=气立方）"
+  ],
+  "missed": [],
+  "best_dim": "brand",
+  "note": "总变动 -6.7%，主拆解维度 品牌",
+  "causes": [
+   {
+    "dimension": "category",
+    "value": "碳酸饮料",
+    "factor": 0.4861,
+    "share": 0.17286914284967775,
+    "impact": -0.0888379719184504
+   }
+  ]
+ },
+ {
+  "sid": "S04",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "品牌=鲜果道"
+  ],
+  "missed": [],
+  "best_dim": "brand",
+  "note": "总变动 -4.1%，主拆解维度 品牌",
+  "causes": [
+   {
+    "dimension": "brand",
+    "value": "鲜果道",
+    "factor": 0.7835,
+    "share": 0.2782995297891478,
+    "impact": -0.06025299634338079
+   }
+  ]
+ },
+ {
+  "sid": "S05",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "门店等级=C"
+  ],
+  "missed": [],
+  "best_dim": "grade",
+  "note": "总变动 -3.5%，主拆解维度 门店等级",
+  "causes": [
+   {
+    "dimension": "grade",
+    "value": "C",
+    "factor": 0.7048,
+    "share": 0.1854187609867872,
+    "impact": -0.05473605218996576
+   }
+  ]
+ },
+ {
+  "sid": "S06",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "大区=华北"
+  ],
+  "missed": [],
+  "best_dim": "region",
+  "note": "总变动 -5.0%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "region",
+    "value": "华北",
+    "factor": 0.5488,
+    "share": 0.1576882067876633,
+    "impact": -0.0711528758679294
+   }
+  ]
+ },
+ {
+  "sid": "S07",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "渠道=传统食杂"
+  ],
+  "missed": [],
+  "best_dim": "channel",
+  "note": "总变动 -5.3%，主拆解维度 渠道",
+  "causes": [
+   {
+    "dimension": "channel",
+    "value": "传统食杂",
+    "factor": 0.4816,
+    "share": 0.12317465616290653,
+    "impact": -0.0638536340714297
+   }
+  ]
+ },
+ {
+  "sid": "S08",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "品类=功能饮料（引擎报为等价切片 品牌=燃力）"
+  ],
+  "missed": [],
+  "best_dim": "brand",
+  "note": "总变动 -2.1%，主拆解维度 品牌",
+  "causes": [
+   {
+    "dimension": "category",
+    "value": "功能饮料",
+    "factor": 0.7836,
+    "share": 0.23976714373207828,
+    "impact": -0.05188424379834776
+   }
+  ]
+ },
+ {
+  "sid": "S09",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "门店等级=D"
+  ],
+  "missed": [],
+  "best_dim": "grade",
+  "note": "总变动 +9.6%，主拆解维度 门店等级",
+  "causes": [
+   {
+    "dimension": "grade",
+    "value": "D",
+    "factor": 1.6646,
+    "share": 0.10541693647828279,
+    "impact": 0.07006371314720578
+   }
+  ]
+ },
+ {
+  "sid": "S10",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "省份=福建"
+  ],
+  "missed": [],
+  "best_dim": "region",
+  "note": "总变动 +8.3%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "province",
+    "value": "福建",
+    "factor": 1.6418,
+    "share": 0.10332166869013469,
+    "impact": 0.06631652294272415
+   }
+  ]
+ },
+ {
+  "sid": "S11",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "大区=西北"
+  ],
+  "missed": [],
+  "best_dim": "region",
+  "note": "总变动 +9.0%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "region",
+    "value": "西北",
+    "factor": 2.9679,
+    "share": 0.04040816726544328,
+    "impact": 0.07951910865989789
+   }
+  ]
+ },
+ {
+  "sid": "S12",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "门店等级=B"
+  ],
+  "missed": [],
+  "best_dim": "grade",
+  "note": "总变动 +7.1%，主拆解维度 门店等级",
+  "causes": [
+   {
+    "dimension": "grade",
+    "value": "B",
+    "factor": 1.1436,
+    "share": 0.3796151303712202,
+    "impact": 0.05451146727563304
+   }
+  ]
+ },
+ {
+  "sid": "S13",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "大区=西北"
+  ],
+  "missed": [],
+  "best_dim": "region",
+  "note": "总变动 +6.7%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "region",
+    "value": "西北",
+    "factor": 2.2944,
+    "share": 0.04040816726544328,
+    "impact": 0.05230366448856093
+   }
+  ]
+ },
+ {
+  "sid": "S14",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "渠道=便利店"
+  ],
+  "missed": [],
+  "best_dim": "channel",
+  "note": "总变动 -3.9%，主拆解维度 渠道",
+  "causes": [
+   {
+    "dimension": "channel",
+    "value": "便利店",
+    "factor": 0.7452,
+    "share": 0.19948768223102872,
+    "impact": -0.050828747649242056
+   }
+  ]
+ },
+ {
+  "sid": "S15",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "品牌=鲜果道（引擎报为等价切片 品类=果汁）"
+  ],
+  "missed": [],
+  "best_dim": "category",
+  "note": "总变动 -6.3%，主拆解维度 品类",
+  "causes": [
+   {
+    "dimension": "brand",
+    "value": "鲜果道",
+    "factor": 0.7489,
+    "share": 0.2782995297891478,
+    "impact": -0.06988493753432681
+   }
+  ]
+ },
+ {
+  "sid": "S16",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "门店等级=A"
+  ],
+  "missed": [],
+  "best_dim": "grade",
+  "note": "总变动 -7.2%，主拆解维度 门店等级",
+  "causes": [
+   {
+    "dimension": "grade",
+    "value": "A",
+    "factor": 0.7715,
+    "share": 0.3295491721637099,
+    "impact": -0.07529939368172597
+   }
+  ]
+ },
+ {
+  "sid": "S17",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "省份=江苏"
+  ],
+  "missed": [],
+  "best_dim": "region",
+  "note": "总变动 +10.6%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "province",
+    "value": "江苏",
+    "factor": 2.4579,
+    "share": 0.059184584378999254,
+    "impact": 0.08628493800584078
+   }
+  ]
+ },
+ {
+  "sid": "S18",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "单品=鲜果道低浓度果汁葡萄1000ml"
+  ],
+  "missed": [],
+  "best_dim": "category",
+  "note": "总变动 +9.3%，主拆解维度 品类",
+  "causes": [
+   {
+    "dimension": "sku",
+    "value": "鲜果道低浓度果汁葡萄1000ml",
+    "factor": 2.242,
+    "share": 0.04759078989339455,
+    "impact": 0.05910891540486549
+   }
+  ]
+ },
+ {
+  "sid": "S19",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "品类=茶饮料（引擎报为等价切片 品牌=茶小叙）"
+  ],
+  "missed": [],
+  "best_dim": "brand",
+  "note": "总变动 +7.6%，主拆解维度 品牌",
+  "causes": [
+   {
+    "dimension": "category",
+    "value": "茶饮料",
+    "factor": 1.3791,
+    "share": 0.14116605480582242,
+    "impact": 0.05352126807146619
+   }
+  ]
+ },
+ {
+  "sid": "S20",
+  "kind": "single",
+  "hit": true,
+  "found": [
+   "品牌=鲜果道（引擎报为等价切片 品类=果汁）"
+  ],
+  "missed": [],
+  "best_dim": "category",
+  "note": "总变动 +10.6%，主拆解维度 品类",
+  "causes": [
+   {
+    "dimension": "brand",
+    "value": "鲜果道",
+    "factor": 1.2767,
+    "share": 0.2782995297891478,
+    "impact": 0.07700514205063937
+   }
+  ]
+ },
+ {
+  "sid": "S21",
+  "kind": "multi_same_dim",
+  "hit": true,
+  "found": [
+   "门店等级=C",
+   "门店等级=D"
+  ],
+  "missed": [],
+  "best_dim": "grade",
+  "note": "总变动 +9.7%，主拆解维度 门店等级",
+  "causes": [
+   {
+    "dimension": "grade",
+    "value": "C",
+    "factor": 1.2248,
+    "share": 0.1854187609867872,
+    "impact": 0.04167509330521088
+   },
+   {
+    "dimension": "grade",
+    "value": "D",
+    "factor": 1.3782,
+    "share": 0.10541693647828279,
+    "impact": 0.0398674719819736
+   }
+  ]
+ },
+ {
+  "sid": "S22",
+  "kind": "multi_same_dim",
+  "hit": false,
+  "found": [],
+  "missed": [
+   "省份=广西",
+   "省份=福建"
+  ],
+  "best_dim": "region",
+  "note": "总变动 -3.6%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "province",
+    "value": "广西",
+    "factor": 0.5172,
+    "share": 0.06065173772505581,
+    "impact": -0.02928268713144592
+   },
+   {
+    "dimension": "province",
+    "value": "福建",
+    "factor": 0.7213,
+    "share": 0.10332166869013469,
+    "impact": -0.02879773889348817
+   }
+  ]
+ },
+ {
+  "sid": "S23",
+  "kind": "multi_same_dim",
+  "hit": true,
+  "found": [
+   "单品=鲜果道低浓度果汁芒果1000ml",
+   "单品=燃力能量饮料荔枝500ml"
+  ],
+  "missed": [],
+  "best_dim": "region",
+  "note": "总变动 +7.0%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "sku",
+    "value": "鲜果道低浓度果汁芒果1000ml",
+    "factor": 2.0789,
+    "share": 0.02837545063555267,
+    "impact": 0.030613601028211767
+   },
+   {
+    "dimension": "sku",
+    "value": "燃力能量饮料荔枝500ml",
+    "factor": 2.723,
+    "share": 0.024007524855308313,
+    "impact": 0.041364725477562814
+   }
+  ]
+ },
+ {
+  "sid": "S24",
+  "kind": "multi_same_dim",
+  "hit": true,
+  "found": [
+   "大区=西南",
+   "大区=东北"
+  ],
+  "missed": [],
+  "best_dim": "channel",
+  "note": "总变动 +9.0%，主拆解维度 渠道",
+  "causes": [
+   {
+    "dimension": "region",
+    "value": "西南",
+    "factor": 1.2623,
+    "share": 0.10162906369490965,
+    "impact": 0.02665904328777889
+   },
+   {
+    "dimension": "region",
+    "value": "东北",
+    "factor": 1.5045,
+    "share": 0.07307681544329492,
+    "impact": 0.03686978929641809
+   }
+  ]
+ },
+ {
+  "sid": "S25",
+  "kind": "multi_same_dim",
+  "hit": true,
+  "found": [
+   "品类=碳酸饮料（引擎报为等价切片 品牌=气立方）",
+   "品类=乳饮料（引擎报为等价切片 品牌=牧诚）"
+  ],
+  "missed": [],
+  "best_dim": "region",
+  "note": "总变动 +8.4%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "category",
+    "value": "碳酸饮料",
+    "factor": 1.1459,
+    "share": 0.17286914284967775,
+    "impact": 0.025221567487997736
+   },
+   {
+    "dimension": "category",
+    "value": "乳饮料",
+    "factor": 1.4622,
+    "share": 0.0783844720935276,
+    "impact": 0.036232789583965516
+   }
+  ]
+ },
+ {
+  "sid": "S26",
+  "kind": "multi_same_dim",
+  "hit": true,
+  "found": [
+   "品牌=清源",
+   "品牌=气立方"
+  ],
+  "missed": [],
+  "best_dim": "brand",
+  "note": "总变动 +8.8%，主拆解维度 品牌",
+  "causes": [
+   {
+    "dimension": "brand",
+    "value": "清源",
+    "factor": 1.3787,
+    "share": 0.08951365672974623,
+    "impact": 0.03389639136712581
+   },
+   {
+    "dimension": "brand",
+    "value": "气立方",
+    "factor": 1.2522,
+    "share": 0.17286914284967775,
+    "impact": 0.04359032613070682
+   }
+  ]
+ },
+ {
+  "sid": "S27",
+  "kind": "multi_same_dim",
+  "hit": false,
+  "found": [
+   "门店等级=D"
+  ],
+  "missed": [
+   "门店等级=B"
+  ],
+  "best_dim": "grade",
+  "note": "总变动 -3.9%，主拆解维度 门店等级",
+  "causes": [
+   {
+    "dimension": "grade",
+    "value": "D",
+    "factor": 0.6186,
+    "share": 0.10541693647828279,
+    "impact": -0.04020912192071435
+   },
+   {
+    "dimension": "grade",
+    "value": "B",
+    "factor": 0.9247,
+    "share": 0.3796151303712202,
+    "impact": -0.02857130715224278
+   }
+  ]
+ },
+ {
+  "sid": "S28",
+  "kind": "multi_same_dim",
+  "hit": true,
+  "found": [
+   "省份=天津",
+   "省份=广东"
+  ],
+  "missed": [],
+  "best_dim": "region",
+  "note": "总变动 +8.6%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "province",
+    "value": "天津",
+    "factor": 1.7812,
+    "share": 0.05755777927504534,
+    "impact": 0.044966962208943376
+   },
+   {
+    "dimension": "province",
+    "value": "广东",
+    "factor": 1.5322,
+    "share": 0.07618615144759551,
+    "impact": 0.04054800441039086
+   }
+  ]
+ },
+ {
+  "sid": "S29",
+  "kind": "multi_same_dim",
+  "hit": true,
+  "found": [
+   "经销商=广州恒信商贸有限公司",
+   "经销商=贵阳嘉和商贸有限公司"
+  ],
+  "missed": [],
+  "best_dim": "region",
+  "note": "总变动 +8.2%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "dealer",
+    "value": "广州恒信商贸有限公司",
+    "factor": 2.3563,
+    "share": 0.01919239252510208,
+    "impact": 0.02603044533489291
+   },
+   {
+    "dimension": "dealer",
+    "value": "贵阳嘉和商贸有限公司",
+    "factor": 2.6641,
+    "share": 0.020766226893885104,
+    "impact": 0.03455785171526117
+   }
+  ]
+ },
+ {
+  "sid": "S30",
+  "kind": "multi_same_dim",
+  "hit": false,
+  "found": [
+   "大区=华东"
+  ],
+  "missed": [
+   "大区=华南"
+  ],
+  "best_dim": "region",
+  "note": "总变动 -4.8%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "region",
+    "value": "华东",
+    "factor": 0.8777,
+    "share": 0.24680856354551736,
+    "impact": -0.03019455098978313
+   },
+   {
+    "dimension": "region",
+    "value": "华南",
+    "factor": 0.8454,
+    "share": 0.24015955786278603,
+    "impact": -0.037126677163563104
+   }
+  ]
+ },
+ {
+  "sid": "S31",
+  "kind": "multi_same_dim",
+  "hit": true,
+  "found": [
+   "渠道=传统食杂",
+   "渠道=大卖场"
+  ],
+  "missed": [],
+  "best_dim": "channel",
+  "note": "总变动 +8.8%，主拆解维度 渠道",
+  "causes": [
+   {
+    "dimension": "channel",
+    "value": "传统食杂",
+    "factor": 1.26,
+    "share": 0.12317465616290653,
+    "impact": 0.03202919605439479
+   },
+   {
+    "dimension": "channel",
+    "value": "大卖场",
+    "factor": 1.1137,
+    "share": 0.22466592357902565,
+    "impact": 0.02553466217586912
+   }
+  ]
+ },
+ {
+  "sid": "S32",
+  "kind": "multi_same_dim",
+  "hit": true,
+  "found": [
+   "品类=乳饮料（引擎报为等价切片 品牌=牧诚）",
+   "品类=茶饮料（引擎报为等价切片 品牌=茶小叙）"
+  ],
+  "missed": [],
+  "best_dim": "brand",
+  "note": "总变动 -6.0%，主拆解维度 品牌",
+  "causes": [
+   {
+    "dimension": "category",
+    "value": "乳饮料",
+    "factor": 0.505,
+    "share": 0.0783844720935276,
+    "impact": -0.038803560809005294
+   },
+   {
+    "dimension": "category",
+    "value": "茶饮料",
+    "factor": 0.6957,
+    "share": 0.14116605480582242,
+    "impact": -0.04295279425625023
+   }
+  ]
+ },
+ {
+  "sid": "S33",
+  "kind": "multi_cross_dim",
+  "hit": true,
+  "found": [
+   "单品=鲜果道低浓度果汁桃1000ml",
+   "品牌=茶小叙"
+  ],
+  "missed": [],
+  "best_dim": "brand",
+  "note": "总变动 +9.0%，主拆解维度 品牌",
+  "causes": [
+   {
+    "dimension": "sku",
+    "value": "鲜果道低浓度果汁桃1000ml",
+    "factor": 2.1395,
+    "share": 0.03458588519954752,
+    "impact": 0.039409167874516836
+   },
+   {
+    "dimension": "brand",
+    "value": "茶小叙",
+    "factor": 1.2928,
+    "share": 0.14116605480582242,
+    "impact": 0.0413338729149456
+   }
+  ]
+ },
+ {
+  "sid": "S34",
+  "kind": "multi_cross_dim",
+  "hit": true,
+  "found": [
+   "经销商=厦门嘉和商贸有限公司",
+   "门店等级=A"
+  ],
+  "missed": [],
+  "best_dim": "region",
+  "note": "总变动 +9.3%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "dealer",
+    "value": "厦门嘉和商贸有限公司",
+    "factor": 2.1468,
+    "share": 0.028258366215575655,
+    "impact": 0.032405842585394626
+   },
+   {
+    "dimension": "grade",
+    "value": "A",
+    "factor": 1.0806,
+    "share": 0.3295491721637099,
+    "impact": 0.02655333549031211
+   }
+  ]
+ },
+ {
+  "sid": "S35",
+  "kind": "multi_cross_dim",
+  "hit": true,
+  "found": [
+   "单品=茶小叙调味茶柠檬红茶1500ml",
+   "大区=华东"
+  ],
+  "missed": [],
+  "best_dim": "region",
+  "note": "总变动 +7.3%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "sku",
+    "value": "茶小叙调味茶柠檬红茶1500ml",
+    "factor": 2.7536,
+    "share": 0.016466367636683844,
+    "impact": 0.02887469183548225
+   },
+   {
+    "dimension": "region",
+    "value": "华东",
+    "factor": 1.1051,
+    "share": 0.24680856354551736,
+    "impact": 0.025944890288776463
+   }
+  ]
+ },
+ {
+  "sid": "S36",
+  "kind": "multi_cross_dim",
+  "hit": false,
+  "found": [
+   "省份=贵州"
+  ],
+  "missed": [
+   "品牌=清源"
+  ],
+  "best_dim": "region",
+  "note": "总变动 +8.9%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "brand",
+    "value": "清源",
+    "factor": 1.2985,
+    "share": 0.08951365672974623,
+    "impact": 0.026721686901891136
+   },
+   {
+    "dimension": "province",
+    "value": "贵州",
+    "factor": 1.7802,
+    "share": 0.05630043109572729,
+    "impact": 0.043924167828368894
+   }
+  ]
+ },
+ {
+  "sid": "S37",
+  "kind": "multi_cross_dim",
+  "hit": true,
+  "found": [
+   "品类=茶饮料",
+   "单品=燃力电解质水西柚500ml"
+  ],
+  "missed": [],
+  "best_dim": "category",
+  "note": "总变动 +11.6%，主拆解维度 品类",
+  "causes": [
+   {
+    "dimension": "category",
+    "value": "茶饮料",
+    "factor": 1.2981,
+    "share": 0.14116605480582242,
+    "impact": 0.042077385919415636
+   },
+   {
+    "dimension": "sku",
+    "value": "燃力电解质水西柚500ml",
+    "factor": 2.3259,
+    "share": 0.0310270331066365,
+    "impact": 0.04113928319846358
+   }
+  ]
+ },
+ {
+  "sid": "S38",
+  "kind": "multi_cross_dim",
+  "hit": false,
+  "found": [
+   "品类=功能饮料（引擎报为等价切片 品牌=燃力）"
+  ],
+  "missed": [
+   "省份=北京"
+  ],
+  "best_dim": "brand",
+  "note": "总变动 +10.0%，主拆解维度 品牌",
+  "causes": [
+   {
+    "dimension": "province",
+    "value": "北京",
+    "factor": 1.8049,
+    "share": 0.04214652045089649,
+    "impact": 0.03392176560661854
+   },
+   {
+    "dimension": "category",
+    "value": "功能饮料",
+    "factor": 1.1617,
+    "share": 0.23976714373207828,
+    "impact": 0.038772912061853806
+   }
+  ]
+ },
+ {
+  "sid": "S39",
+  "kind": "multi_cross_dim",
+  "hit": false,
+  "found": [
+   "门店等级=B"
+  ],
+  "missed": [
+   "省份=广东"
+  ],
+  "best_dim": "grade",
+  "note": "总变动 -5.4%，主拆解维度 门店等级",
+  "causes": [
+   {
+    "dimension": "province",
+    "value": "广东",
+    "factor": 0.5733,
+    "share": 0.07618615144759551,
+    "impact": -0.03251046781186851
+   },
+   {
+    "dimension": "grade",
+    "value": "B",
+    "factor": 0.9233,
+    "share": 0.3796151303712202,
+    "impact": -0.029098372227373995
+   }
+  ]
+ },
+ {
+  "sid": "S40",
+  "kind": "multi_cross_dim",
+  "hit": true,
+  "found": [
+   "省份=河南",
+   "大区=华中"
+  ],
+  "missed": [],
+  "best_dim": "region",
+  "note": "总变动 +8.2%，主拆解维度 大区",
+  "causes": [
+   {
+    "dimension": "province",
+    "value": "河南",
+    "factor": 1.4064,
+    "share": 0.07308473362019749,
+    "impact": 0.029701263236015546
+   },
+   {
+    "dimension": "region",
+    "value": "华中",
+    "factor": 1.2555,
+    "share": 0.14022962540038553,
+    "impact": 0.035824654178872185
+   }
+  ]
+ }
+]

@@ -1,0 +1,167 @@
+# 指标口径定义（semantic layer 的指标侧）
+# 每项指标是唯一事实来源：向量检索按 name/aliases/description 建索引，
+# SQL 生成阶段把 expr 与 caveat 注入 prompt，杜绝模型自行发挥口径。
+version: 1
+
+metrics:
+  - id: net_sales
+    name: 净销额
+    aliases: [销售额, 销售金额, 净销售额, 销额, 销售收入, 出货金额, GMV]
+    unit: 元
+    description: 扣除折扣后的实际销售金额，是渠道业绩考核的第一指标。
+    tables: [fact_sales]
+    expr: "SUM(fact_sales.net_amount)"
+    caveat: 与总销额（gross_amount）的差额为折扣，不要混用；退货不在本表内。
+
+  - id: sales_qty
+    name: 销量
+    aliases: [销售量, 出货量, 卖了多少支, 动销量]
+    unit: 支
+    description: 终端实际售出的商品支数，按最小销售单元计。
+    tables: [fact_sales]
+    expr: "SUM(fact_sales.qty)"
+    caveat: 单位是支不是箱；换算箱数需除以 dim_product.pack_size。
+
+  - id: distribution_rate
+    name: 铺市率
+    aliases: [铺货率, 覆盖率, 铺市, 分销率, numeric distribution]
+    unit: "%"
+    description: 已铺货终端数占目标终端总数的比例，衡量深度分销的广度。
+    tables: [rel_outlet_sku, dim_outlet]
+    expr: |
+      COUNT(DISTINCT rel_outlet_sku.outlet_id)::DOUBLE
+      / NULLIF(COUNT(DISTINCT dim_outlet.outlet_id), 0)
+    caveat: |
+      分母是范围内全部有效终端（dim_outlet.is_active），不是有销量的终端。
+      分子按 rel_outlet_sku 的铺货关系计，与动销率的分子口径不同，不要互换。
+
+  - id: sell_through_rate
+    name: 动销率
+    aliases: [动销, 有销率, 活跃终端占比, sell-through]
+    unit: "%"
+    description: 统计期内产生销量的「终端 × 单品」组合数，占已铺货组合数的比例，衡量铺货质量。
+    tables: [fact_sales, rel_outlet_sku]
+    expr: |
+      COUNT(DISTINCT (fact_sales.outlet_id, fact_sales.sku_id))::DOUBLE
+      / NULLIF((SELECT COUNT(*) FROM rel_outlet_sku), 0)
+    caveat: |
+      口径是「终端 × 单品」组合级，不是终端级。终端级在跨多个单品提问时会塌成 100%——
+      一家店只要卖出任意一支商品就算动销，失去业务含义；真正卖不动的是某店的某个单品。
+      分母须与分子施加完全相同的商品与终端筛选（如只看碳酸饮料，
+      分母也只能算碳酸饮料的铺货组合），否则结果无意义。
+      铺市率高而动销率低是压货的典型信号。
+
+  - id: sales_per_outlet
+    name: 单店产出
+    aliases: [店均销售, 单店销售额, 店均产出, 单产]
+    unit: 元
+    description: 平均每个有动销终端贡献的净销额。
+    tables: [fact_sales]
+    expr: |
+      SUM(fact_sales.net_amount)
+      / NULLIF(COUNT(DISTINCT fact_sales.outlet_id), 0)
+    caveat: 分母只算有动销的终端，不含铺货但零动销的终端，否则会低估。
+
+  - id: new_product_distribution
+    name: 新品铺市率
+    aliases: [新品铺货率, 新品覆盖率, 新品上架率]
+    unit: "%"
+    description: 上市 12 个月内商品的铺市率，考核新品推广力度。
+    tables: [rel_outlet_sku, dim_product, dim_outlet]
+    expr: |
+      COUNT(DISTINCT CASE WHEN dim_product.is_new_product
+            THEN rel_outlet_sku.outlet_id END)::DOUBLE
+      / NULLIF(COUNT(DISTINCT dim_outlet.outlet_id), 0)
+    caveat: 新品判定以 dim_product.is_new_product 为准，不要按 launch_date 现算。
+
+  - id: visit_completion_rate
+    name: 拜访达成率
+    aliases: [拜访完成率, 拜访率, 计划达成率]
+    unit: "%"
+    description: 实际到店拜访次数占计划拜访次数的比例，考核业务代表执行力。
+    tables: [fact_visit]
+    expr: |
+      COUNT(*) FILTER (WHERE fact_visit.is_executed)::DOUBLE
+      / NULLIF(COUNT(*) FILTER (WHERE fact_visit.is_planned), 0)
+    caveat: 分母只含计划内拜访；临时拜访计入分子不计入分母，故该值可能超过 100%。
+
+  - id: visit_order_rate
+    name: 拜访成单率
+    aliases: [成单率, 拜访转化率, 有效拜访率]
+    unit: "%"
+    description: 产生订单的拜访占实际到店拜访的比例，衡量拜访质量。
+    tables: [fact_visit]
+    expr: |
+      COUNT(*) FILTER (WHERE fact_visit.has_order)::DOUBLE
+      / NULLIF(COUNT(*) FILTER (WHERE fact_visit.is_executed), 0)
+    caveat: 分母是实际到店数而非计划数，与拜访达成率的分母不同。
+
+  - id: promo_roi
+    name: 费效比
+    aliases: [投产比, ROI, 促销ROI, 费用产出比, 投入产出比]
+    unit: 倍
+    description: 每投入一元促销费用带来的净销额，是费用审批的核心依据。
+    tables: [fact_sales, fact_promo_cost]
+    expr: |
+      SUM(fact_sales.net_amount) FILTER (WHERE fact_sales.is_promo)
+      / NULLIF(SUM(fact_promo_cost.cost_amount), 0)
+    caveat: |
+      分子只计促销期销额（is_promo = TRUE），衡量的是费用带来的销售，非促销销额不计入。
+
+      【必读】fact_sales 是日粒度，fact_promo_cost.date_key 固定为归属月首日。
+      严禁按 date_key 直接关联——那样只有每月 1 号能匹配上，结果完全错误。
+      必须各自先聚合到 year_month，再按 year_month 及所需维度关联，范式如下：
+
+      WITH s AS (
+        SELECT d.year_month, o.region, SUM(fs.net_amount) AS amt
+        FROM fact_sales fs
+        JOIN dim_date d ON fs.date_key = d.date_key
+        JOIN dim_outlet o ON fs.outlet_id = o.outlet_id
+        WHERE fs.is_promo GROUP BY 1, 2),
+      c AS (
+        SELECT d.year_month, o.region, SUM(pc.cost_amount) AS cost
+        FROM fact_promo_cost pc
+        JOIN dim_date d ON pc.date_key = d.date_key
+        JOIN dim_outlet o ON pc.outlet_id = o.outlet_id
+        GROUP BY 1, 2)
+      SELECT s.year_month, s.region, s.amt / NULLIF(c.cost, 0) AS 费效比
+      FROM s JOIN c USING (year_month, region)
+
+  - id: promo_cost_ratio
+    name: 促销费用率
+    aliases: [费用率, 费用占比, 促销投入占比]
+    unit: "%"
+    description: 促销费用占净销额的比例，费效比的倒数视角。
+    tables: [fact_sales, fact_promo_cost]
+    expr: |
+      SUM(fact_promo_cost.cost_amount)
+      / NULLIF(SUM(fact_sales.net_amount) FILTER (WHERE fact_sales.is_promo), 0)
+    caveat: |
+      费效比的倒数，跨粒度关联的处理方式完全相同，
+      必须各自聚合到 year_month 后再关联，不得按 date_key 直接 JOIN。
+
+  - id: inventory_turnover_days
+    name: 库存周转天数
+    aliases: [周转天数, 库存周转, 存货周转天数]
+    unit: 天
+    description: 经销商现有库存按当前出货速度可支撑的天数。
+    tables: [fact_inventory, fact_sales]
+    expr: |
+      SUM(fact_inventory.qty_on_hand)
+      / NULLIF(SUM(fact_sales.qty) / COUNT(DISTINCT fact_sales.date_key), 0)
+    caveat: |
+      fact_inventory 是月末快照，date_key 为当月最后一日；fact_sales 是日粒度。
+      两表同样不得按 date_key 直接关联，须各自聚合到 year_month 后再关联。
+      分母是日均出货量（区间销量除以区间天数），不是区间总量。
+      仅经销商仓库存，不含终端库存。
+
+  - id: near_expiry_ratio
+    name: 临期库存占比
+    aliases: [临期占比, 临期率, 临期货占比]
+    unit: "%"
+    description: 剩余保质期不足三分之一的库存占总库存的比例，用于预警冲货与压货。
+    tables: [fact_inventory]
+    expr: |
+      SUM(fact_inventory.near_expiry_qty)::DOUBLE
+      / NULLIF(SUM(fact_inventory.qty_on_hand), 0)
+    caveat: 临期阈值为剩余保质期 < 1/3，随品类保质期不同而不同，已在写入时算好。

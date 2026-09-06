@@ -1,0 +1,178 @@
+# 表结构业务语义（semantic layer 的表侧）
+# 用途一：字段召回——按 description/aliases 建向量索引
+# 用途二：SQL 生成——把命中的表、字段、关联路径、枚举值注入 prompt
+version: 1
+
+joins:
+  # 显式声明关联路径，避免模型自行推断出错误 JOIN
+  - "fact_sales.date_key = dim_date.date_key"
+  - "fact_sales.outlet_id = dim_outlet.outlet_id"
+  - "fact_sales.sku_id = dim_product.sku_id"
+  - "fact_sales.dealer_id = dim_dealer.dealer_id"
+  - "fact_visit.date_key = dim_date.date_key"
+  - "fact_visit.rep_id = dim_rep.rep_id"
+  - "fact_visit.outlet_id = dim_outlet.outlet_id"
+  - "fact_promo_cost.date_key = dim_date.date_key"
+  - "fact_promo_cost.outlet_id = dim_outlet.outlet_id"
+  - "fact_promo_cost.sku_id = dim_product.sku_id"
+  - "fact_inventory.date_key = dim_date.date_key"
+  - "fact_inventory.dealer_id = dim_dealer.dealer_id"
+  - "fact_inventory.sku_id = dim_product.sku_id"
+  - "rel_outlet_sku.outlet_id = dim_outlet.outlet_id"
+  - "rel_outlet_sku.sku_id = dim_product.sku_id"
+  - "dim_outlet.dealer_id = dim_dealer.dealer_id"
+
+cross_grain_warning: |
+  fact_sales 为日粒度；fact_promo_cost.date_key 固定为归属月首日，
+  fact_inventory.date_key 固定为当月最后一日。
+  这三张表严禁按 date_key 相互关联——日粒度与月粒度的 date_key 几乎无法匹配，
+  按 date_key 关联只有每月首日或末日能命中，得到的数字看似合理实则完全错误。
+  正确做法：各表先 JOIN dim_date 取 year_month，各自聚合到 year_month 及所需维度，
+  再按 year_month 关联。
+
+tables:
+  - name: dim_date
+    type: dimension
+    description: 日期维度，覆盖 2024-09-01 至 2026-08-31。所有时间筛选走本表，不要对事实表的 date_key 直接做日期函数。
+    columns:
+      - {name: date_key, type: INTEGER, description: "日期主键，格式 YYYYMMDD 整数", role: key}
+      - {name: full_date, type: DATE, description: "标准日期，做日期区间筛选用这一列"}
+      - {name: year, type: SMALLINT, description: "年份"}
+      - {name: quarter, type: SMALLINT, description: "季度 1-4"}
+      - {name: month, type: SMALLINT, description: "月份 1-12"}
+      - {name: year_month, type: VARCHAR, description: "年月，格式 2026-08，按月分组用这一列"}
+      - {name: week_of_year, type: SMALLINT, description: "年内第几周"}
+      - {name: day_of_week, type: SMALLINT, description: "星期几，1 为周一"}
+      - {name: is_weekend, type: BOOLEAN, description: "是否周末"}
+      - {name: is_holiday, type: BOOLEAN, description: "是否法定节假日"}
+      - {name: season, type: VARCHAR, description: "季节", enum: [春, 夏, 秋, 冬]}
+
+  - name: dim_product
+    type: dimension
+    description: 商品维度，即 SKU 主数据。单品、产品、货号一律指本表。
+    columns:
+      - {name: sku_id, type: INTEGER, description: "商品主键", role: key}
+      - {name: sku_code, type: VARCHAR, description: "商品编码"}
+      - {name: sku_name, type: VARCHAR, description: "商品全称，含品牌口味规格"}
+      - {name: brand, type: VARCHAR, description: "品牌"}
+      - {name: category, type: VARCHAR, description: "品类", enum: [饮用水, 碳酸饮料, 果汁, 茶饮料, 功能饮料, 乳饮料]}
+      - {name: sub_category, type: VARCHAR, description: "子品类"}
+      - {name: flavor, type: VARCHAR, description: "口味，陈列稽核按品牌加口味定位单品"}
+      - {name: package_type, type: VARCHAR, description: "包装形式", enum: [瓶装, 罐装, 利乐包]}
+      - {name: spec_ml, type: SMALLINT, description: "规格毫升数"}
+      - {name: pack_size, type: SMALLINT, description: "每箱支数，支箱换算用"}
+      - {name: list_price, type: DECIMAL, description: "标准零售价"}
+      - {name: unit_cost, type: DECIMAL, description: "单位成本"}
+      - {name: launch_date, type: DATE, description: "上市日期"}
+      - {name: is_new_product, type: BOOLEAN, description: "是否新品，上市 12 个月内为真。判定新品用本列不要用 launch_date 现算"}
+      - {name: is_active, type: BOOLEAN, description: "是否在售"}
+
+  - name: dim_dealer
+    type: dimension
+    description: 经销商维度。经销商是品牌商的一级客户，向下覆盖若干终端网点。
+    columns:
+      - {name: dealer_id, type: INTEGER, description: "经销商主键", role: key}
+      - {name: dealer_code, type: VARCHAR, description: "经销商编码"}
+      - {name: dealer_name, type: VARCHAR, description: "经销商名称"}
+      - {name: region, type: VARCHAR, description: "所属大区", enum: [华东, 华南, 华北, 华中, 西南, 西北, 东北]}
+      - {name: province, type: VARCHAR, description: "省份"}
+      - {name: city, type: VARCHAR, description: "城市"}
+      - {name: dealer_level, type: VARCHAR, description: "经销商等级", enum: [A, B, C]}
+      - {name: sign_date, type: DATE, description: "签约日期"}
+      - {name: credit_limit, type: DECIMAL, description: "授信额度"}
+      - {name: is_active, type: BOOLEAN, description: "是否合作中"}
+
+  - name: dim_outlet
+    type: dimension
+    description: 终端网点维度，即门店。终端、网点、门店、售点均指本表。铺市率的分母来自本表。
+    columns:
+      - {name: outlet_id, type: INTEGER, description: "终端主键", role: key}
+      - {name: outlet_code, type: VARCHAR, description: "终端编码"}
+      - {name: outlet_name, type: VARCHAR, description: "终端名称"}
+      - {name: dealer_id, type: INTEGER, description: "所属经销商", role: fk}
+      - {name: channel, type: VARCHAR, description: "渠道类型", enum: [大卖场, 连锁超市, 便利店, 传统食杂, 餐饮, 特通]}
+      - {name: outlet_grade, type: VARCHAR, description: "门店等级，决定销量量级", enum: [A, B, C, D]}
+      - {name: region, type: VARCHAR, description: "所属大区", enum: [华东, 华南, 华北, 华中, 西南, 西北, 东北]}
+      - {name: province, type: VARCHAR, description: "省份"}
+      - {name: city, type: VARCHAR, description: "城市"}
+      - {name: district, type: VARCHAR, description: "区县"}
+      - {name: open_date, type: DATE, description: "开业日期"}
+      - {name: is_active, type: BOOLEAN, description: "是否有效终端，铺市率分母只算有效终端"}
+
+  - name: dim_rep
+    type: dimension
+    description: 业务代表维度，负责终端拜访与陈列维护。业代、业务员、销售代表均指本表。
+    columns:
+      - {name: rep_id, type: INTEGER, description: "业务代表主键", role: key}
+      - {name: rep_code, type: VARCHAR, description: "工号"}
+      - {name: rep_name, type: VARCHAR, description: "姓名"}
+      - {name: region, type: VARCHAR, description: "负责大区"}
+      - {name: city, type: VARCHAR, description: "负责城市"}
+      - {name: team, type: VARCHAR, description: "所属团队"}
+      - {name: hire_date, type: DATE, description: "入职日期"}
+      - {name: is_active, type: BOOLEAN, description: "是否在职"}
+
+  - name: fact_sales
+    type: fact
+    grain: 日 × 终端 × SKU
+    description: 动销明细事实表，本数仓主表。终端实际售出记录，销售额销量类问题均查本表。
+    columns:
+      - {name: date_key, type: INTEGER, description: "日期外键", role: fk}
+      - {name: outlet_id, type: INTEGER, description: "终端外键", role: fk}
+      - {name: sku_id, type: INTEGER, description: "商品外键", role: fk}
+      - {name: dealer_id, type: INTEGER, description: "经销商外键，冗余自终端，便于免 JOIN 聚合", role: fk}
+      - {name: qty, type: INTEGER, description: "销量，单位支"}
+      - {name: gross_amount, type: DECIMAL, description: "总销额，未扣折扣"}
+      - {name: discount_amount, type: DECIMAL, description: "折扣金额"}
+      - {name: net_amount, type: DECIMAL, description: "净销额，业绩考核以本列为准"}
+      - {name: is_promo, type: BOOLEAN, description: "当日该商品是否处于促销期"}
+
+  - name: fact_visit
+    type: fact
+    grain: 日 × 业务代表 × 终端
+    description: 拜访执行事实表。拜访达成率、成单率查本表。
+    columns:
+      - {name: date_key, type: INTEGER, description: "日期外键", role: fk}
+      - {name: rep_id, type: INTEGER, description: "业务代表外键", role: fk}
+      - {name: outlet_id, type: INTEGER, description: "终端外键", role: fk}
+      - {name: is_planned, type: BOOLEAN, description: "是否计划内拜访，达成率分母"}
+      - {name: is_executed, type: BOOLEAN, description: "是否实际到店，达成率分子兼成单率分母"}
+      - {name: duration_min, type: SMALLINT, description: "在店时长分钟"}
+      - {name: has_order, type: BOOLEAN, description: "本次拜访是否产生订单"}
+      - {name: has_display_fix, type: BOOLEAN, description: "是否做了陈列整改"}
+
+  - name: fact_promo_cost
+    type: fact
+    grain: 月 × 终端 × SKU × 促销类型
+    description: 促销费用事实表，月粒度。费效比、费用率查本表。与 fact_sales 关联须先按月聚合。
+    columns:
+      - {name: date_key, type: INTEGER, description: "归属月首日的 date_key", role: fk}
+      - {name: outlet_id, type: INTEGER, description: "终端外键", role: fk}
+      - {name: sku_id, type: INTEGER, description: "商品外键", role: fk}
+      - {name: dealer_id, type: INTEGER, description: "经销商外键", role: fk}
+      - {name: promo_type, type: VARCHAR, description: "促销形式", enum: [陈列奖励, 买赠, 特价, 堆头, DM]}
+      - {name: cost_amount, type: DECIMAL, description: "费用金额"}
+
+  - name: fact_inventory
+    type: fact
+    grain: 月末快照 × 经销商 × SKU
+    description: 经销商库存快照事实表，月粒度。库存周转、临期占比查本表。仅经销商仓，不含终端库存。
+    columns:
+      - {name: date_key, type: INTEGER, description: "快照日的 date_key，为当月最后一日", role: fk}
+      - {name: dealer_id, type: INTEGER, description: "经销商外键", role: fk}
+      - {name: sku_id, type: INTEGER, description: "商品外键", role: fk}
+      - {name: qty_on_hand, type: INTEGER, description: "在库数量"}
+      - {name: qty_in_transit, type: INTEGER, description: "在途数量"}
+      - {name: near_expiry_qty, type: INTEGER, description: "临期数量，剩余保质期不足三分之一"}
+      - {name: avg_shelf_life_days, type: SMALLINT, description: "平均剩余保质期天数"}
+
+  - name: rel_outlet_sku
+    type: relation
+    grain: 终端 × SKU
+    description: 铺货关系表。记录终端将哪些 SKU 列入经营范围，铺市率的分子来自本表，与是否有销量无关。
+    columns:
+      - {name: outlet_id, type: INTEGER, description: "终端外键", role: fk}
+      - {name: sku_id, type: INTEGER, description: "商品外键", role: fk}
+      - {name: listed_date, type: DATE, description: "铺货生效日"}
+      - {name: delisted_date, type: DATE, description: "下架日，为空表示仍在架"}
+      - {name: base_velocity, type: DECIMAL, description: "基准日均动销支数，内部字段，业务问答不使用"}

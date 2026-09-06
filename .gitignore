@@ -1,0 +1,30 @@
+# 环境与密钥
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# 可再生成的数据产物：数仓 237MB、向量库、索引、取值字典
+# 建仓命令在 README，20 秒可重建，没有入库的理由
+data/warehouse.duckdb
+data/warehouse.duckdb.wal
+data/warehouse.duckdb.tmp
+data/qdrant/
+data/index/
+data/value_dict.json
+data/raw/
+
+# 第三方参考仓库，只读不改，clone 命令见 docs
+reference/
+
+# 前端
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+frontend/node_modules/.vite/
+
+# 模型权重（M5）
+*.pt
+runs/

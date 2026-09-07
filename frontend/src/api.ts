@@ -24,11 +24,13 @@ export async function askStream(
     const { done, value } = await reader.read()
     if (done) break
     buf += decoder.decode(value, { stream: true })
-    // SSE 以空行分帧，最后一段可能不完整，留在缓冲区等下一片
-    const frames = buf.split('\n\n')
+    // SSE 允许 \r\n / \n / \r 三种换行，sse-starlette 发的是 \r\n，
+    // 只按 '\n\n' 切会永远切不出帧。这里按整段缓冲区正则分帧，
+    // 半个换行符（如结尾停在 '\r'）会留在 buf 里等下一片，不会误判。
+    const frames = buf.split(/\r\n\r\n|\n\n|\r\r/)
     buf = frames.pop() ?? ''
     for (const frame of frames) {
-      const line = frame.split('\n').find((l) => l.startsWith('data:'))
+      const line = frame.split(/\r\n|\n|\r/).find((l) => l.startsWith('data:'))
       if (!line) continue
       try {
         onEvent(JSON.parse(line.slice(5).trim()) as AskEvent)

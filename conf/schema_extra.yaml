@@ -1,0 +1,1749 @@
+# 干扰表，仅用于 schema 压力测试（WIDE_SCHEMA=1 时并入检索语料）
+# 由 scripts/build_wide_schema.py 生成，请勿手工编辑
+tables:
+- name: fin_gl_entry
+  type: distractor
+  description: '[财务域] 总账分录明细。与渠道销售分析无关。'
+  columns:
+  - name: entry_id
+    type: INTEGER
+    description: entry_id
+  - name: voucher_no
+    type: INTEGER
+    description: voucher_no
+  - name: account_code
+    type: VARCHAR
+    description: account_code
+  - name: debit_amt
+    type: DECIMAL
+    description: debit_amt
+  - name: credit_amt
+    type: DECIMAL
+    description: credit_amt
+  - name: post_date
+    type: DATE
+    description: post_date
+  - name: cost_center
+    type: VARCHAR
+    description: cost_center
+- name: fin_account
+  type: distractor
+  description: '[财务域] 会计科目主数据。与渠道销售分析无关。'
+  columns:
+  - name: account_code
+    type: VARCHAR
+    description: account_code
+  - name: account_name
+    type: VARCHAR
+    description: account_name
+  - name: account_level
+    type: INTEGER
+    description: account_level
+  - name: parent_code
+    type: VARCHAR
+    description: parent_code
+  - name: is_leaf
+    type: BOOLEAN
+    description: is_leaf
+- name: fin_ar_invoice
+  type: distractor
+  description: '[财务域] 应收发票。与渠道销售分析无关。'
+  columns:
+  - name: invoice_id
+    type: INTEGER
+    description: invoice_id
+  - name: customer_code
+    type: VARCHAR
+    description: customer_code
+  - name: invoice_amt
+    type: DECIMAL
+    description: invoice_amt
+  - name: due_date
+    type: DATE
+    description: due_date
+  - name: settled_amt
+    type: DECIMAL
+    description: settled_amt
+  - name: status
+    type: VARCHAR
+    description: status
+- name: fin_ap_invoice
+  type: distractor
+  description: '[财务域] 应付发票。与渠道销售分析无关。'
+  columns:
+  - name: invoice_id
+    type: INTEGER
+    description: invoice_id
+  - name: vendor_code
+    type: VARCHAR
+    description: vendor_code
+  - name: invoice_amt
+    type: DECIMAL
+    description: invoice_amt
+  - name: due_date
+    type: DATE
+    description: due_date
+  - name: paid_amt
+    type: DECIMAL
+    description: paid_amt
+  - name: status
+    type: VARCHAR
+    description: status
+- name: fin_budget
+  type: distractor
+  description: '[财务域] 预算编制表。与渠道销售分析无关。'
+  columns:
+  - name: budget_id
+    type: INTEGER
+    description: budget_id
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: budget_year
+    type: VARCHAR
+    description: budget_year
+  - name: budget_amt
+    type: DECIMAL
+    description: budget_amt
+  - name: used_amt
+    type: DECIMAL
+    description: used_amt
+  - name: category
+    type: VARCHAR
+    description: category
+- name: fin_cost_center
+  type: distractor
+  description: '[财务域] 成本中心主数据。与渠道销售分析无关。'
+  columns:
+  - name: cost_center
+    type: VARCHAR
+    description: cost_center
+  - name: cc_name
+    type: VARCHAR
+    description: cc_name
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: owner
+    type: VARCHAR
+    description: owner
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+- name: fin_exchange_rate
+  type: distractor
+  description: '[财务域] 汇率表。与渠道销售分析无关。'
+  columns:
+  - name: rate_date
+    type: DECIMAL
+    description: rate_date
+  - name: currency_from
+    type: DATE
+    description: currency_from
+  - name: currency_to
+    type: DATE
+    description: currency_to
+  - name: rate
+    type: DECIMAL
+    description: rate
+- name: fin_settlement
+  type: distractor
+  description: '[财务域] 结算单。与渠道销售分析无关。'
+  columns:
+  - name: settle_id
+    type: INTEGER
+    description: settle_id
+  - name: dealer_code
+    type: VARCHAR
+    description: dealer_code
+  - name: settle_amt
+    type: DECIMAL
+    description: settle_amt
+  - name: settle_date
+    type: DATE
+    description: settle_date
+  - name: channel_type
+    type: VARCHAR
+    description: channel_type
+- name: fin_rebate
+  type: distractor
+  description: '[财务域] 返利计提。与渠道销售分析无关。'
+  columns:
+  - name: rebate_id
+    type: INTEGER
+    description: rebate_id
+  - name: dealer_code
+    type: VARCHAR
+    description: dealer_code
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: rebate_amt
+    type: DECIMAL
+    description: rebate_amt
+  - name: policy_code
+    type: VARCHAR
+    description: policy_code
+  - name: is_paid
+    type: BOOLEAN
+    description: is_paid
+- name: fin_tax_detail
+  type: distractor
+  description: '[财务域] 税务明细。与渠道销售分析无关。'
+  columns:
+  - name: tax_id
+    type: INTEGER
+    description: tax_id
+  - name: invoice_id
+    type: INTEGER
+    description: invoice_id
+  - name: tax_rate
+    type: DECIMAL
+    description: tax_rate
+  - name: tax_amt
+    type: DECIMAL
+    description: tax_amt
+  - name: tax_type
+    type: VARCHAR
+    description: tax_type
+- name: fin_cash_flow
+  type: distractor
+  description: '[财务域] 现金流水。与渠道销售分析无关。'
+  columns:
+  - name: flow_id
+    type: INTEGER
+    description: flow_id
+  - name: account_code
+    type: VARCHAR
+    description: account_code
+  - name: flow_amt
+    type: DECIMAL
+    description: flow_amt
+  - name: flow_date
+    type: DATE
+    description: flow_date
+  - name: direction
+    type: VARCHAR
+    description: direction
+- name: fin_period_close
+  type: distractor
+  description: '[财务域] 期末结账记录。与渠道销售分析无关。'
+  columns:
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: closed_by
+    type: VARCHAR
+    description: closed_by
+  - name: close_time
+    type: TIMESTAMP
+    description: close_time
+  - name: status
+    type: VARCHAR
+    description: status
+- name: hr_employee
+  type: distractor
+  description: '[人力资源域] 员工主数据。与渠道销售分析无关。'
+  columns:
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: emp_name
+    type: VARCHAR
+    description: emp_name
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: position
+    type: VARCHAR
+    description: position
+  - name: hire_date
+    type: DATE
+    description: hire_date
+  - name: status
+    type: VARCHAR
+    description: status
+- name: hr_department
+  type: distractor
+  description: '[人力资源域] 部门主数据。与渠道销售分析无关。'
+  columns:
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: dept_name
+    type: VARCHAR
+    description: dept_name
+  - name: parent_dept
+    type: VARCHAR
+    description: parent_dept
+  - name: manager_id
+    type: INTEGER
+    description: manager_id
+  - name: level
+    type: INTEGER
+    description: level
+- name: hr_attendance
+  type: distractor
+  description: '[人力资源域] 考勤记录。与渠道销售分析无关。'
+  columns:
+  - name: record_id
+    type: INTEGER
+    description: record_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: work_date
+    type: DATE
+    description: work_date
+  - name: check_in
+    type: TIMESTAMP
+    description: check_in
+  - name: check_out
+    type: TIMESTAMP
+    description: check_out
+  - name: status
+    type: VARCHAR
+    description: status
+- name: hr_payroll
+  type: distractor
+  description: '[人力资源域] 薪资发放。与渠道销售分析无关。'
+  columns:
+  - name: payroll_id
+    type: INTEGER
+    description: payroll_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: gross_pay
+    type: DECIMAL
+    description: gross_pay
+  - name: net_pay
+    type: DECIMAL
+    description: net_pay
+  - name: tax_amt
+    type: DECIMAL
+    description: tax_amt
+- name: hr_leave
+  type: distractor
+  description: '[人力资源域] 请假申请。与渠道销售分析无关。'
+  columns:
+  - name: leave_id
+    type: INTEGER
+    description: leave_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: leave_type
+    type: VARCHAR
+    description: leave_type
+  - name: start_date
+    type: DATE
+    description: start_date
+  - name: end_date
+    type: DATE
+    description: end_date
+  - name: days
+    type: INTEGER
+    description: days
+- name: hr_position
+  type: distractor
+  description: '[人力资源域] 岗位字典。与渠道销售分析无关。'
+  columns:
+  - name: position_code
+    type: VARCHAR
+    description: position_code
+  - name: position_name
+    type: VARCHAR
+    description: position_name
+  - name: job_family
+    type: VARCHAR
+    description: job_family
+  - name: grade
+    type: INTEGER
+    description: grade
+- name: hr_training
+  type: distractor
+  description: '[人力资源域] 培训记录。与渠道销售分析无关。'
+  columns:
+  - name: training_id
+    type: INTEGER
+    description: training_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: course_code
+    type: VARCHAR
+    description: course_code
+  - name: finish_date
+    type: DATE
+    description: finish_date
+  - name: score
+    type: INTEGER
+    description: score
+- name: hr_performance
+  type: distractor
+  description: '[人力资源域] 绩效考核。与渠道销售分析无关。'
+  columns:
+  - name: review_id
+    type: INTEGER
+    description: review_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: rating
+    type: VARCHAR
+    description: rating
+  - name: reviewer_id
+    type: INTEGER
+    description: reviewer_id
+- name: hr_recruit
+  type: distractor
+  description: '[人力资源域] 招聘需求。与渠道销售分析无关。'
+  columns:
+  - name: req_id
+    type: INTEGER
+    description: req_id
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: position_code
+    type: VARCHAR
+    description: position_code
+  - name: headcount
+    type: INTEGER
+    description: headcount
+  - name: open_date
+    type: DATE
+    description: open_date
+  - name: status
+    type: VARCHAR
+    description: status
+- name: hr_contract
+  type: distractor
+  description: '[人力资源域] 劳动合同。与渠道销售分析无关。'
+  columns:
+  - name: contract_id
+    type: INTEGER
+    description: contract_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: start_date
+    type: DATE
+    description: start_date
+  - name: end_date
+    type: DATE
+    description: end_date
+  - name: contract_type
+    type: VARCHAR
+    description: contract_type
+- name: scm_purchase_order
+  type: distractor
+  description: '[供应链与物流域] 采购订单。与渠道销售分析无关。'
+  columns:
+  - name: po_id
+    type: INTEGER
+    description: po_id
+  - name: vendor_code
+    type: VARCHAR
+    description: vendor_code
+  - name: order_date
+    type: DATE
+    description: order_date
+  - name: total_amt
+    type: DECIMAL
+    description: total_amt
+  - name: status
+    type: VARCHAR
+    description: status
+- name: scm_purchase_item
+  type: distractor
+  description: '[供应链与物流域] 采购订单行。与渠道销售分析无关。'
+  columns:
+  - name: po_id
+    type: INTEGER
+    description: po_id
+  - name: line_no
+    type: INTEGER
+    description: line_no
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: qty
+    type: INTEGER
+    description: qty
+  - name: unit_price
+    type: DECIMAL
+    description: unit_price
+- name: scm_vendor
+  type: distractor
+  description: '[供应链与物流域] 供应商主数据。与渠道销售分析无关。'
+  columns:
+  - name: vendor_code
+    type: VARCHAR
+    description: vendor_code
+  - name: vendor_name
+    type: VARCHAR
+    description: vendor_name
+  - name: vendor_type
+    type: VARCHAR
+    description: vendor_type
+  - name: region
+    type: VARCHAR
+    description: region
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+- name: scm_material
+  type: distractor
+  description: '[供应链与物流域] 物料主数据。与渠道销售分析无关。'
+  columns:
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: material_name
+    type: VARCHAR
+    description: material_name
+  - name: material_group
+    type: VARCHAR
+    description: material_group
+  - name: unit
+    type: VARCHAR
+    description: unit
+  - name: spec
+    type: VARCHAR
+    description: spec
+- name: scm_warehouse
+  type: distractor
+  description: '[供应链与物流域] 仓库主数据。与渠道销售分析无关。'
+  columns:
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: wh_name
+    type: VARCHAR
+    description: wh_name
+  - name: wh_type
+    type: VARCHAR
+    description: wh_type
+  - name: city
+    type: VARCHAR
+    description: city
+  - name: capacity
+    type: INTEGER
+    description: capacity
+- name: scm_stock_move
+  type: distractor
+  description: '[供应链与物流域] 库存移动。与渠道销售分析无关。'
+  columns:
+  - name: move_id
+    type: INTEGER
+    description: move_id
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: move_qty
+    type: INTEGER
+    description: move_qty
+  - name: move_date
+    type: DATE
+    description: move_date
+  - name: move_type
+    type: VARCHAR
+    description: move_type
+- name: scm_shipment
+  type: distractor
+  description: '[供应链与物流域] 发运单。与渠道销售分析无关。'
+  columns:
+  - name: shipment_id
+    type: INTEGER
+    description: shipment_id
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: dest_city
+    type: VARCHAR
+    description: dest_city
+  - name: ship_date
+    type: DATE
+    description: ship_date
+  - name: carrier_code
+    type: VARCHAR
+    description: carrier_code
+  - name: weight_kg
+    type: DECIMAL
+    description: weight_kg
+- name: scm_carrier
+  type: distractor
+  description: '[供应链与物流域] 承运商主数据。与渠道销售分析无关。'
+  columns:
+  - name: carrier_code
+    type: VARCHAR
+    description: carrier_code
+  - name: carrier_name
+    type: VARCHAR
+    description: carrier_name
+  - name: transport_mode
+    type: VARCHAR
+    description: transport_mode
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+- name: scm_delivery_note
+  type: distractor
+  description: '[供应链与物流域] 送货单。与渠道销售分析无关。'
+  columns:
+  - name: dn_id
+    type: INTEGER
+    description: dn_id
+  - name: shipment_id
+    type: INTEGER
+    description: shipment_id
+  - name: receiver
+    type: VARCHAR
+    description: receiver
+  - name: sign_date
+    type: DATE
+    description: sign_date
+  - name: status
+    type: VARCHAR
+    description: status
+- name: scm_transport_cost
+  type: distractor
+  description: '[供应链与物流域] 运输费用。与渠道销售分析无关。'
+  columns:
+  - name: cost_id
+    type: INTEGER
+    description: cost_id
+  - name: shipment_id
+    type: INTEGER
+    description: shipment_id
+  - name: freight_amt
+    type: DECIMAL
+    description: freight_amt
+  - name: fuel_surcharge
+    type: VARCHAR
+    description: fuel_surcharge
+  - name: settle_month
+    type: VARCHAR
+    description: settle_month
+- name: scm_safety_stock
+  type: distractor
+  description: '[供应链与物流域] 安全库存设置。与渠道销售分析无关。'
+  columns:
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: min_qty
+    type: INTEGER
+    description: min_qty
+  - name: max_qty
+    type: INTEGER
+    description: max_qty
+  - name: lead_days
+    type: INTEGER
+    description: lead_days
+- name: scm_return_order
+  type: distractor
+  description: '[供应链与物流域] 退货单。与渠道销售分析无关。'
+  columns:
+  - name: return_id
+    type: INTEGER
+    description: return_id
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: return_qty
+    type: INTEGER
+    description: return_qty
+  - name: return_date
+    type: DATE
+    description: return_date
+  - name: reason
+    type: VARCHAR
+    description: reason
+- name: mfg_work_order
+  type: distractor
+  description: '[生产制造域] 生产工单。与渠道销售分析无关。'
+  columns:
+  - name: wo_id
+    type: INTEGER
+    description: wo_id
+  - name: plant_code
+    type: VARCHAR
+    description: plant_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: plan_qty
+    type: INTEGER
+    description: plan_qty
+  - name: actual_qty
+    type: INTEGER
+    description: actual_qty
+  - name: start_date
+    type: DATE
+    description: start_date
+- name: mfg_plant
+  type: distractor
+  description: '[生产制造域] 工厂主数据。与渠道销售分析无关。'
+  columns:
+  - name: plant_code
+    type: VARCHAR
+    description: plant_code
+  - name: plant_name
+    type: VARCHAR
+    description: plant_name
+  - name: city
+    type: VARCHAR
+    description: city
+  - name: capacity_per_day
+    type: INTEGER
+    description: capacity_per_day
+- name: mfg_line
+  type: distractor
+  description: '[生产制造域] 产线主数据。与渠道销售分析无关。'
+  columns:
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: plant_code
+    type: VARCHAR
+    description: plant_code
+  - name: line_name
+    type: VARCHAR
+    description: line_name
+  - name: designed_speed
+    type: DECIMAL
+    description: designed_speed
+- name: mfg_bom
+  type: distractor
+  description: '[生产制造域] 物料清单。与渠道销售分析无关。'
+  columns:
+  - name: bom_id
+    type: INTEGER
+    description: bom_id
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: component_code
+    type: VARCHAR
+    description: component_code
+  - name: component_qty
+    type: INTEGER
+    description: component_qty
+- name: mfg_quality_check
+  type: distractor
+  description: '[生产制造域] 质检记录。与渠道销售分析无关。'
+  columns:
+  - name: check_id
+    type: INTEGER
+    description: check_id
+  - name: wo_id
+    type: INTEGER
+    description: wo_id
+  - name: check_date
+    type: DATE
+    description: check_date
+  - name: pass_qty
+    type: INTEGER
+    description: pass_qty
+  - name: defect_qty
+    type: INTEGER
+    description: defect_qty
+  - name: inspector
+    type: VARCHAR
+    description: inspector
+- name: mfg_defect_type
+  type: distractor
+  description: '[生产制造域] 缺陷类型字典。与渠道销售分析无关。'
+  columns:
+  - name: defect_code
+    type: VARCHAR
+    description: defect_code
+  - name: defect_name
+    type: VARCHAR
+    description: defect_name
+  - name: severity
+    type: INTEGER
+    description: severity
+  - name: category
+    type: VARCHAR
+    description: category
+- name: mfg_downtime
+  type: distractor
+  description: '[生产制造域] 停机记录。与渠道销售分析无关。'
+  columns:
+  - name: downtime_id
+    type: INTEGER
+    description: downtime_id
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: start_time
+    type: TIMESTAMP
+    description: start_time
+  - name: end_time
+    type: TIMESTAMP
+    description: end_time
+  - name: reason_code
+    type: VARCHAR
+    description: reason_code
+- name: mfg_shift
+  type: distractor
+  description: '[生产制造域] 班次定义。与渠道销售分析无关。'
+  columns:
+  - name: shift_code
+    type: VARCHAR
+    description: shift_code
+  - name: shift_name
+    type: VARCHAR
+    description: shift_name
+  - name: start_time
+    type: TIMESTAMP
+    description: start_time
+  - name: end_time
+    type: TIMESTAMP
+    description: end_time
+- name: mfg_yield_daily
+  type: distractor
+  description: '[生产制造域] 日产量汇总。与渠道销售分析无关。'
+  columns:
+  - name: stat_date
+    type: DATE
+    description: stat_date
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: output_qty
+    type: INTEGER
+    description: output_qty
+  - name: scrap_qty
+    type: INTEGER
+    description: scrap_qty
+  - name: yield_rate
+    type: DECIMAL
+    description: yield_rate
+- name: mfg_equipment
+  type: distractor
+  description: '[生产制造域] 设备台账。与渠道销售分析无关。'
+  columns:
+  - name: equip_code
+    type: VARCHAR
+    description: equip_code
+  - name: equip_name
+    type: VARCHAR
+    description: equip_name
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: install_date
+    type: DATE
+    description: install_date
+  - name: status
+    type: VARCHAR
+    description: status
+- name: mkt_campaign
+  type: distractor
+  description: '[市场营销域] 营销活动。与渠道销售分析无关。'
+  columns:
+  - name: campaign_id
+    type: INTEGER
+    description: campaign_id
+  - name: campaign_name
+    type: VARCHAR
+    description: campaign_name
+  - name: start_date
+    type: DATE
+    description: start_date
+  - name: end_date
+    type: DATE
+    description: end_date
+  - name: budget_amt
+    type: DECIMAL
+    description: budget_amt
+  - name: channel
+    type: VARCHAR
+    description: channel
+- name: mkt_ad_spend
+  type: distractor
+  description: '[市场营销域] 广告投放花费。与渠道销售分析无关。'
+  columns:
+  - name: spend_id
+    type: INTEGER
+    description: spend_id
+  - name: campaign_id
+    type: INTEGER
+    description: campaign_id
+  - name: media_code
+    type: VARCHAR
+    description: media_code
+  - name: spend_date
+    type: DATE
+    description: spend_date
+  - name: spend_amt
+    type: DECIMAL
+    description: spend_amt
+  - name: impressions
+    type: INTEGER
+    description: impressions
+- name: mkt_media
+  type: distractor
+  description: '[市场营销域] 媒体渠道字典。与渠道销售分析无关。'
+  columns:
+  - name: media_code
+    type: VARCHAR
+    description: media_code
+  - name: media_name
+    type: VARCHAR
+    description: media_name
+  - name: media_type
+    type: VARCHAR
+    description: media_type
+  - name: settle_mode
+    type: VARCHAR
+    description: settle_mode
+- name: mkt_coupon
+  type: distractor
+  description: '[市场营销域] 优惠券主数据。与渠道销售分析无关。'
+  columns:
+  - name: coupon_id
+    type: INTEGER
+    description: coupon_id
+  - name: coupon_name
+    type: VARCHAR
+    description: coupon_name
+  - name: discount_type
+    type: VARCHAR
+    description: discount_type
+  - name: face_value
+    type: DECIMAL
+    description: face_value
+  - name: valid_days
+    type: INTEGER
+    description: valid_days
+- name: mkt_coupon_usage
+  type: distractor
+  description: '[市场营销域] 优惠券核销。与渠道销售分析无关。'
+  columns:
+  - name: usage_id
+    type: INTEGER
+    description: usage_id
+  - name: coupon_id
+    type: INTEGER
+    description: coupon_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: use_time
+    type: TIMESTAMP
+    description: use_time
+  - name: order_no
+    type: INTEGER
+    description: order_no
+- name: mkt_member
+  type: distractor
+  description: '[市场营销域] 会员主数据。与渠道销售分析无关。'
+  columns:
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: member_name
+    type: VARCHAR
+    description: member_name
+  - name: level
+    type: INTEGER
+    description: level
+  - name: register_date
+    type: DATE
+    description: register_date
+  - name: points
+    type: INTEGER
+    description: points
+- name: mkt_member_point
+  type: distractor
+  description: '[市场营销域] 会员积分流水。与渠道销售分析无关。'
+  columns:
+  - name: flow_id
+    type: INTEGER
+    description: flow_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: point_change
+    type: VARCHAR
+    description: point_change
+  - name: flow_time
+    type: TIMESTAMP
+    description: flow_time
+  - name: source
+    type: VARCHAR
+    description: source
+- name: mkt_survey
+  type: distractor
+  description: '[市场营销域] 问卷调研。与渠道销售分析无关。'
+  columns:
+  - name: survey_id
+    type: INTEGER
+    description: survey_id
+  - name: survey_name
+    type: VARCHAR
+    description: survey_name
+  - name: publish_date
+    type: DATE
+    description: publish_date
+  - name: sample_size
+    type: INTEGER
+    description: sample_size
+- name: mkt_survey_answer
+  type: distractor
+  description: '[市场营销域] 问卷答案明细。与渠道销售分析无关。'
+  columns:
+  - name: answer_id
+    type: INTEGER
+    description: answer_id
+  - name: survey_id
+    type: INTEGER
+    description: survey_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: question_no
+    type: INTEGER
+    description: question_no
+  - name: answer_text
+    type: VARCHAR
+    description: answer_text
+- name: mkt_brand_index
+  type: distractor
+  description: '[市场营销域] 品牌健康度指数。与渠道销售分析无关。'
+  columns:
+  - name: stat_month
+    type: VARCHAR
+    description: stat_month
+  - name: brand_name
+    type: VARCHAR
+    description: brand_name
+  - name: awareness
+    type: VARCHAR
+    description: awareness
+  - name: preference
+    type: VARCHAR
+    description: preference
+  - name: nps
+    type: VARCHAR
+    description: nps
+- name: crm_ticket
+  type: distractor
+  description: '[客户服务域] 客服工单。与渠道销售分析无关。'
+  columns:
+  - name: ticket_id
+    type: INTEGER
+    description: ticket_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: channel
+    type: VARCHAR
+    description: channel
+  - name: create_time
+    type: TIMESTAMP
+    description: create_time
+  - name: close_time
+    type: TIMESTAMP
+    description: close_time
+  - name: status
+    type: VARCHAR
+    description: status
+- name: crm_ticket_category
+  type: distractor
+  description: '[客户服务域] 工单分类字典。与渠道销售分析无关。'
+  columns:
+  - name: category_code
+    type: VARCHAR
+    description: category_code
+  - name: category_name
+    type: VARCHAR
+    description: category_name
+  - name: parent_code
+    type: VARCHAR
+    description: parent_code
+  - name: sla_hours
+    type: VARCHAR
+    description: sla_hours
+- name: crm_complaint
+  type: distractor
+  description: '[客户服务域] 投诉记录。与渠道销售分析无关。'
+  columns:
+  - name: complaint_id
+    type: INTEGER
+    description: complaint_id
+  - name: ticket_id
+    type: INTEGER
+    description: ticket_id
+  - name: complaint_type
+    type: VARCHAR
+    description: complaint_type
+  - name: severity
+    type: INTEGER
+    description: severity
+  - name: handled_by
+    type: VARCHAR
+    description: handled_by
+- name: crm_agent
+  type: distractor
+  description: '[客户服务域] 客服坐席。与渠道销售分析无关。'
+  columns:
+  - name: agent_id
+    type: INTEGER
+    description: agent_id
+  - name: agent_name
+    type: VARCHAR
+    description: agent_name
+  - name: team_code
+    type: VARCHAR
+    description: team_code
+  - name: online_status
+    type: VARCHAR
+    description: online_status
+- name: crm_call_log
+  type: distractor
+  description: '[客户服务域] 通话记录。与渠道销售分析无关。'
+  columns:
+  - name: call_id
+    type: INTEGER
+    description: call_id
+  - name: agent_id
+    type: INTEGER
+    description: agent_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: call_time
+    type: TIMESTAMP
+    description: call_time
+  - name: duration_sec
+    type: INTEGER
+    description: duration_sec
+- name: crm_satisfaction
+  type: distractor
+  description: '[客户服务域] 满意度评价。与渠道销售分析无关。'
+  columns:
+  - name: eval_id
+    type: INTEGER
+    description: eval_id
+  - name: ticket_id
+    type: INTEGER
+    description: ticket_id
+  - name: score
+    type: INTEGER
+    description: score
+  - name: eval_time
+    type: TIMESTAMP
+    description: eval_time
+  - name: comment_text
+    type: VARCHAR
+    description: comment_text
+- name: crm_knowledge
+  type: distractor
+  description: '[客户服务域] 知识库条目。与渠道销售分析无关。'
+  columns:
+  - name: doc_id
+    type: INTEGER
+    description: doc_id
+  - name: title
+    type: VARCHAR
+    description: title
+  - name: category_code
+    type: VARCHAR
+    description: category_code
+  - name: update_time
+    type: TIMESTAMP
+    description: update_time
+  - name: view_count
+    type: INTEGER
+    description: view_count
+- name: crm_sla_stat
+  type: distractor
+  description: '[客户服务域] SLA 达成统计。与渠道销售分析无关。'
+  columns:
+  - name: stat_date
+    type: DATE
+    description: stat_date
+  - name: team_code
+    type: VARCHAR
+    description: team_code
+  - name: total_ticket
+    type: VARCHAR
+    description: total_ticket
+  - name: in_sla_ticket
+    type: VARCHAR
+    description: in_sla_ticket
+  - name: sla_rate
+    type: DECIMAL
+    description: sla_rate
+- name: ec_order
+  type: distractor
+  description: '[电商域] 电商订单。与渠道销售分析无关。'
+  columns:
+  - name: order_no
+    type: INTEGER
+    description: order_no
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: order_time
+    type: TIMESTAMP
+    description: order_time
+  - name: pay_amt
+    type: DECIMAL
+    description: pay_amt
+  - name: platform
+    type: VARCHAR
+    description: platform
+  - name: status
+    type: VARCHAR
+    description: status
+- name: ec_order_item
+  type: distractor
+  description: '[电商域] 电商订单行。与渠道销售分析无关。'
+  columns:
+  - name: order_no
+    type: INTEGER
+    description: order_no
+  - name: line_no
+    type: INTEGER
+    description: line_no
+  - name: item_code
+    type: VARCHAR
+    description: item_code
+  - name: qty
+    type: INTEGER
+    description: qty
+  - name: item_price
+    type: DECIMAL
+    description: item_price
+- name: ec_item
+  type: distractor
+  description: '[电商域] 电商商品。与渠道销售分析无关。'
+  columns:
+  - name: item_code
+    type: VARCHAR
+    description: item_code
+  - name: item_title
+    type: VARCHAR
+    description: item_title
+  - name: shop_code
+    type: VARCHAR
+    description: shop_code
+  - name: list_price
+    type: DECIMAL
+    description: list_price
+  - name: is_online
+    type: BOOLEAN
+    description: is_online
+- name: ec_shop
+  type: distractor
+  description: '[电商域] 店铺主数据。与渠道销售分析无关。'
+  columns:
+  - name: shop_code
+    type: VARCHAR
+    description: shop_code
+  - name: shop_name
+    type: VARCHAR
+    description: shop_name
+  - name: platform
+    type: VARCHAR
+    description: platform
+  - name: open_date
+    type: DATE
+    description: open_date
+- name: ec_traffic
+  type: distractor
+  description: '[电商域] 店铺流量。与渠道销售分析无关。'
+  columns:
+  - name: stat_date
+    type: DATE
+    description: stat_date
+  - name: shop_code
+    type: VARCHAR
+    description: shop_code
+  - name: uv
+    type: INTEGER
+    description: uv
+  - name: pv
+    type: INTEGER
+    description: pv
+  - name: conversion_rate
+    type: DECIMAL
+    description: conversion_rate
+- name: sys_user
+  type: distractor
+  description: '[系统与主数据域] 系统用户。与渠道销售分析无关。'
+  columns:
+  - name: user_id
+    type: INTEGER
+    description: user_id
+  - name: login_name
+    type: VARCHAR
+    description: login_name
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: role_code
+    type: VARCHAR
+    description: role_code
+  - name: last_login
+    type: VARCHAR
+    description: last_login
+- name: sys_role
+  type: distractor
+  description: '[系统与主数据域] 角色定义。与渠道销售分析无关。'
+  columns:
+  - name: role_code
+    type: VARCHAR
+    description: role_code
+  - name: role_name
+    type: VARCHAR
+    description: role_name
+  - name: scope
+    type: VARCHAR
+    description: scope
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+- name: sys_audit_log
+  type: distractor
+  description: '[系统与主数据域] 操作审计日志。与渠道销售分析无关。'
+  columns:
+  - name: log_id
+    type: INTEGER
+    description: log_id
+  - name: user_id
+    type: INTEGER
+    description: user_id
+  - name: action
+    type: VARCHAR
+    description: action
+  - name: target
+    type: VARCHAR
+    description: target
+  - name: action_time
+    type: TIMESTAMP
+    description: action_time
+- name: sys_dict
+  type: distractor
+  description: '[系统与主数据域] 通用字典。与渠道销售分析无关。'
+  columns:
+  - name: dict_code
+    type: VARCHAR
+    description: dict_code
+  - name: dict_type
+    type: VARCHAR
+    description: dict_type
+  - name: dict_label
+    type: VARCHAR
+    description: dict_label
+  - name: sort_no
+    type: INTEGER
+    description: sort_no
+- name: sys_job_run
+  type: distractor
+  description: '[系统与主数据域] 调度任务运行记录。与渠道销售分析无关。'
+  columns:
+  - name: run_id
+    type: INTEGER
+    description: run_id
+  - name: job_name
+    type: VARCHAR
+    description: job_name
+  - name: start_time
+    type: TIMESTAMP
+    description: start_time
+  - name: end_time
+    type: TIMESTAMP
+    description: end_time
+  - name: status
+    type: VARCHAR
+    description: status
+- name: sys_data_quality
+  type: distractor
+  description: '[系统与主数据域] 数据质量检查结果。与渠道销售分析无关。'
+  columns:
+  - name: check_id
+    type: INTEGER
+    description: check_id
+  - name: table_name
+    type: VARCHAR
+    description: table_name
+  - name: rule_name
+    type: VARCHAR
+    description: rule_name
+  - name: check_date
+    type: DATE
+    description: check_date
+  - name: fail_count
+    type: INTEGER
+    description: fail_count
+- name: sys_region
+  type: distractor
+  description: '[系统与主数据域] 行政区划字典。与渠道销售分析无关。'
+  columns:
+  - name: region_code
+    type: VARCHAR
+    description: region_code
+  - name: region_name
+    type: VARCHAR
+    description: region_name
+  - name: parent_code
+    type: VARCHAR
+    description: parent_code
+  - name: level
+    type: INTEGER
+    description: level
+- name: sys_calendar
+  type: distractor
+  description: '[系统与主数据域] 系统日历。与渠道销售分析无关。'
+  columns:
+  - name: cal_date
+    type: DATE
+    description: cal_date
+  - name: is_workday
+    type: BOOLEAN
+    description: is_workday
+  - name: holiday_name
+    type: VARCHAR
+    description: holiday_name
+  - name: week_of_year
+    type: INTEGER
+    description: week_of_year
+- name: fact_sales_archive
+  type: distractor
+  description: 销售明细归档表，存放 2023 年及以前的历史数据，当前分析不应使用
+  columns:
+  - name: date_key
+    type: INTEGER
+    description: date_key
+  - name: outlet_id
+    type: INTEGER
+    description: outlet_id
+  - name: sku_id
+    type: INTEGER
+    description: sku_id
+  - name: dealer_id
+    type: INTEGER
+    description: dealer_id
+  - name: qty
+    type: INTEGER
+    description: qty
+  - name: gross_amount
+    type: DECIMAL
+    description: gross_amount
+  - name: net_amount
+    type: DECIMAL
+    description: net_amount
+  - name: is_promo
+    type: BOOLEAN
+    description: is_promo
+- name: fact_sales_daily_snapshot
+  type: distractor
+  description: 销售日快照，按天全量重算，含中间计算列，非事实明细
+  columns:
+  - name: snapshot_date
+    type: DATE
+    description: snapshot_date
+  - name: outlet_id
+    type: INTEGER
+    description: outlet_id
+  - name: sku_id
+    type: INTEGER
+    description: sku_id
+  - name: qty
+    type: INTEGER
+    description: qty
+  - name: net_amount
+    type: DECIMAL
+    description: net_amount
+  - name: calc_version
+    type: VARCHAR
+    description: calc_version
+- name: fact_sales_2024
+  type: distractor
+  description: 2024 年销售分区表，已并入主表，保留用于回溯核对
+  columns:
+  - name: date_key
+    type: INTEGER
+    description: date_key
+  - name: outlet_id
+    type: INTEGER
+    description: outlet_id
+  - name: sku_id
+    type: INTEGER
+    description: sku_id
+  - name: qty
+    type: INTEGER
+    description: qty
+  - name: net_amount
+    type: DECIMAL
+    description: net_amount
+- name: fact_sales_draft
+  type: distractor
+  description: 销售暂存表，ETL 中间态，未经清洗
+  columns:
+  - name: date_key
+    type: INTEGER
+    description: date_key
+  - name: outlet_id
+    type: INTEGER
+    description: outlet_id
+  - name: sku_id
+    type: INTEGER
+    description: sku_id
+  - name: qty
+    type: INTEGER
+    description: qty
+  - name: net_amount
+    type: DECIMAL
+    description: net_amount
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+- name: fact_sales_adjusted
+  type: distractor
+  description: 销售调整表，仅存放冲销与调账记录
+  columns:
+  - name: adjust_id
+    type: INTEGER
+    description: adjust_id
+  - name: date_key
+    type: INTEGER
+    description: date_key
+  - name: outlet_id
+    type: INTEGER
+    description: outlet_id
+  - name: adjust_amount
+    type: DECIMAL
+    description: adjust_amount
+  - name: adjust_reason
+    type: VARCHAR
+    description: adjust_reason
+- name: dim_outlet_history
+  type: distractor
+  description: 终端维度历史拉链表，含生效与失效时间，查当前状态不应使用
+  columns:
+  - name: outlet_id
+    type: INTEGER
+    description: outlet_id
+  - name: outlet_name
+    type: VARCHAR
+    description: outlet_name
+  - name: channel
+    type: VARCHAR
+    description: channel
+  - name: region
+    type: VARCHAR
+    description: region
+  - name: valid_from
+    type: DATE
+    description: valid_from
+  - name: valid_to
+    type: DATE
+    description: valid_to
+  - name: is_current
+    type: BOOLEAN
+    description: is_current
+- name: dim_outlet_bak
+  type: distractor
+  description: 终端维度备份表，某次迁移前的快照
+  columns:
+  - name: outlet_id
+    type: INTEGER
+    description: outlet_id
+  - name: outlet_code
+    type: VARCHAR
+    description: outlet_code
+  - name: outlet_name
+    type: VARCHAR
+    description: outlet_name
+  - name: channel
+    type: VARCHAR
+    description: channel
+  - name: region
+    type: VARCHAR
+    description: region
+  - name: backup_time
+    type: TIMESTAMP
+    description: backup_time
+- name: dim_product_draft
+  type: distractor
+  description: 商品维度草稿表，新品上市前的暂存数据
+  columns:
+  - name: sku_id
+    type: INTEGER
+    description: sku_id
+  - name: sku_name
+    type: VARCHAR
+    description: sku_name
+  - name: brand
+    type: VARCHAR
+    description: brand
+  - name: category
+    type: VARCHAR
+    description: category
+  - name: draft_status
+    type: VARCHAR
+    description: draft_status
+- name: dim_product_v2
+  type: distractor
+  description: 商品维度新版本，尚未切换，字段口径与主表不同
+  columns:
+  - name: sku_id
+    type: INTEGER
+    description: sku_id
+  - name: sku_name
+    type: VARCHAR
+    description: sku_name
+  - name: brand_new
+    type: VARCHAR
+    description: brand_new
+  - name: category_new
+    type: VARCHAR
+    description: category_new
+  - name: spec_ml
+    type: VARCHAR
+    description: spec_ml
+  - name: effective_date
+    type: DATE
+    description: effective_date
+- name: dim_dealer_history
+  type: distractor
+  description: 经销商维度历史拉链表
+  columns:
+  - name: dealer_id
+    type: INTEGER
+    description: dealer_id
+  - name: dealer_name
+    type: VARCHAR
+    description: dealer_name
+  - name: dealer_level
+    type: INTEGER
+    description: dealer_level
+  - name: valid_from
+    type: DATE
+    description: valid_from
+  - name: valid_to
+    type: DATE
+    description: valid_to
+  - name: is_current
+    type: BOOLEAN
+    description: is_current
+- name: dim_rep_history
+  type: distractor
+  description: 业务代表维度历史拉链表
+  columns:
+  - name: rep_id
+    type: INTEGER
+    description: rep_id
+  - name: rep_name
+    type: VARCHAR
+    description: rep_name
+  - name: region
+    type: VARCHAR
+    description: region
+  - name: valid_from
+    type: DATE
+    description: valid_from
+  - name: valid_to
+    type: DATE
+    description: valid_to
+  - name: is_current
+    type: BOOLEAN
+    description: is_current
+- name: dim_date_fiscal
+  type: distractor
+  description: 财年日历维度，财年起止与自然年不同，销售分析不应使用
+  columns:
+  - name: date_key
+    type: INTEGER
+    description: date_key
+  - name: fiscal_year
+    type: VARCHAR
+    description: fiscal_year
+  - name: fiscal_quarter
+    type: VARCHAR
+    description: fiscal_quarter
+  - name: fiscal_month
+    type: VARCHAR
+    description: fiscal_month
+  - name: fiscal_week
+    type: VARCHAR
+    description: fiscal_week
+- name: rel_outlet_sku_snapshot
+  type: distractor
+  description: 终端商品铺货关系月度快照
+  columns:
+  - name: snapshot_month
+    type: VARCHAR
+    description: snapshot_month
+  - name: outlet_id
+    type: INTEGER
+    description: outlet_id
+  - name: sku_id
+    type: INTEGER
+    description: sku_id
+  - name: is_listed
+    type: BOOLEAN
+    description: is_listed
+- name: fact_visit_plan
+  type: distractor
+  description: 拜访计划表，存放计划而非实际执行的拜访
+  columns:
+  - name: plan_id
+    type: INTEGER
+    description: plan_id
+  - name: date_key
+    type: INTEGER
+    description: date_key
+  - name: rep_id
+    type: INTEGER
+    description: rep_id
+  - name: outlet_id
+    type: INTEGER
+    description: outlet_id
+  - name: plan_type
+    type: VARCHAR
+    description: plan_type
+- name: fact_inventory_daily
+  type: distractor
+  description: 库存日快照，主表为月末快照，两者粒度不同不可混用
+  columns:
+  - name: stat_date
+    type: DATE
+    description: stat_date
+  - name: dealer_id
+    type: INTEGER
+    description: dealer_id
+  - name: sku_id
+    type: INTEGER
+    description: sku_id
+  - name: on_hand_qty
+    type: INTEGER
+    description: on_hand_qty
+  - name: in_transit_qty
+    type: INTEGER
+    description: in_transit_qty

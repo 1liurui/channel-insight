@@ -17,7 +17,7 @@ MIN_TABLE_RATIO = 0.15
 @timed("recall_column")
 def recall_column(state: AgentState) -> dict:
     q = state.get("rewritten") or state["question"]
-    hits = recall("column", q, k=TOP_COLUMN, hybrid=state.get("use_hybrid", True))
+    hits = recall("column", q, k=TOP_COLUMN, hybrid=state.get("use_hybrid", False))
     return {"column_hits": [{"uid": c.uid, "score": c.score, **c.payload} for c in hits]}
 
 
@@ -34,7 +34,7 @@ def recall_metric(state: AgentState) -> dict:
     把字面命中的指标提到最前；没有字面命中时才完全交给向量召回。
     """
     q = state.get("rewritten") or state["question"]
-    hits = recall("metric", q, k=TOP_METRIC, hybrid=state.get("use_hybrid", True))
+    hits = recall("metric", q, k=TOP_METRIC, hybrid=state.get("use_hybrid", False))
     out = [{"uid": c.uid, "score": c.score, **c.payload} for c in hits]
 
     literal = extract(q).metrics
@@ -58,6 +58,13 @@ def fuse_candidates(state: AgentState) -> dict:
     只给 SQL 生成看命中的零散列会导致 JOIN 写错——列必须以「表」为单位整块给出，
     因此这里的产物是表清单而非列清单。
     """
+    if not state.get("use_retrieval", True):
+        # 消融：完全不做 schema linking，把全部表交给 SQL 生成。
+        # 用来回答「检索层该不该存在」——若与主方案无差异，
+        # 说明在本规模上召回层可以整个去掉，保留它只为可扩展性。
+        from app.retrieval.corpus import column_units
+        return {"tables": sorted({u.payload["table"] for u in column_units()})}
+
     score: dict[str, float] = {}
     for c in state.get("column_hits", []):
         score[c["table"]] = score.get(c["table"], 0.0) + c["score"]

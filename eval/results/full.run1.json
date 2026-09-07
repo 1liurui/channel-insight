@@ -12,7 +12,7 @@
   "reason": "",
   "sql": "SELECT \n  SUM(s.net_amount) AS 总净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.year_month = '2026-08'",
   "retry": 0,
-  "latency_ms": 3202.4201250005717,
+  "latency_ms": 2287.957374999678,
   "tables": [
    "fact_sales",
    "dim_date"
@@ -29,14 +29,13 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n  dl.region AS 大区,\n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\nGROUP BY dl.region",
+  "sql": "SELECT\n  dl.region AS 大区,\n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY dl.region",
   "retry": 0,
-  "latency_ms": 3347.862874999919,
+  "latency_ms": 2181.7086250011926,
   "tables": [
    "fact_sales",
    "dim_outlet",
    "dim_dealer",
-   "dim_rep",
    "dim_date"
   ]
  },
@@ -51,14 +50,14 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT \n  o.channel AS 渠道,\n  COUNT(DISTINCT o.outlet_id) AS 有效终端数\nFROM dim_outlet o\nWHERE o.is_active = TRUE\nGROUP BY o.channel",
+  "sql": "SELECT \n  o.channel,\n  COUNT(DISTINCT o.outlet_id) AS 有效终端数\nFROM dim_outlet o\nWHERE o.is_active = TRUE\nGROUP BY o.channel",
   "retry": 0,
-  "latency_ms": 2619.293292000293,
+  "latency_ms": 2250.9739590022946,
   "tables": [
    "dim_outlet",
-   "rel_outlet_sku",
    "fact_sales",
-   "dim_rep",
+   "rel_outlet_sku",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -73,13 +72,13 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n  p.category AS 品类,\n  SUM(s.qty) AS 总销量支\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nGROUP BY p.category",
+  "sql": "SELECT\n  p.category AS 品类,\n  SUM(s.qty) AS 总销量支数\nFROM fact_sales s\nJOIN dim_product p ON s.sku_id = p.sku_id\nGROUP BY p.category",
   "retry": 0,
-  "latency_ms": 3304.0030829997704,
+  "latency_ms": 2032.8197499984526,
   "tables": [
    "fact_sales",
-   "rel_outlet_sku",
    "dim_product",
+   "rel_outlet_sku",
    "dim_date"
   ]
  },
@@ -96,12 +95,11 @@
   "reason": "",
   "sql": "SELECT COUNT(DISTINCT s.outlet_id) AS 动销终端数\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.year_month = '2026-08'",
   "retry": 0,
-  "latency_ms": 1176.7107499999838,
+  "latency_ms": 869.3571250005334,
   "tables": [
    "fact_sales",
-   "dim_outlet",
    "rel_outlet_sku",
-   "dim_rep",
+   "dim_outlet",
    "dim_date"
   ]
  },
@@ -118,11 +116,10 @@
   "reason": "",
   "sql": "SELECT \n  dl.dealer_level AS 经销商等级,\n  COUNT(DISTINCT dl.dealer_id) AS 经销商数量\nFROM dim_dealer dl\nGROUP BY dl.dealer_level",
   "retry": 0,
-  "latency_ms": 1557.685792000484,
+  "latency_ms": 982.1033750013157,
   "tables": [
    "dim_dealer",
    "fact_sales",
-   "fact_inventory",
    "dim_outlet",
    "rel_outlet_sku",
    "dim_date"
@@ -141,11 +138,12 @@
   "reason": "",
   "sql": "SELECT\n  p.brand AS 品牌,\n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_product p ON s.sku_id = p.sku_id\nGROUP BY p.brand\nORDER BY 净销额 DESC",
   "retry": 0,
-  "latency_ms": 1521.1295839999366,
+  "latency_ms": 1146.15566700013,
   "tables": [
-   "dim_dealer",
    "fact_sales",
    "dim_product",
+   "dim_dealer",
+   "dim_outlet",
    "dim_date"
   ]
  },
@@ -160,11 +158,12 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT \n  SUM(s.net_amount) FILTER (WHERE s.is_promo) / NULLIF(SUM(s.net_amount), 0) AS 促销期净销额占比\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key",
+  "sql": "SELECT \n    SUM(s.net_amount) FILTER (WHERE s.is_promo) / NULLIF(SUM(s.net_amount), 0) AS 促销期净销额占比\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'",
   "retry": 0,
-  "latency_ms": 1927.2402500009775,
+  "latency_ms": 1050.561915999424,
   "tables": [
    "fact_sales",
+   "fact_promo_cost",
    "dim_date"
   ]
  },
@@ -179,13 +178,13 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n  p.package_type AS 包装形式,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY p.package_type",
+  "sql": "SELECT\n  p.package_type AS 包装形式,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_product p ON s.sku_id = p.sku_id\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY p.package_type",
   "retry": 0,
-  "latency_ms": 2057.6292919995467,
+  "latency_ms": 1259.2437499988591,
   "tables": [
    "fact_sales",
-   "rel_outlet_sku",
    "dim_product",
+   "rel_outlet_sku",
    "dim_date"
   ]
  },
@@ -202,10 +201,10 @@
   "reason": "",
   "sql": "SELECT COUNT(*) AS 在职业务代表人数\nFROM dim_rep\nWHERE is_active = TRUE",
   "retry": 0,
-  "latency_ms": 2026.7088340006012,
+  "latency_ms": 935.5008750026172,
   "tables": [
-   "dim_rep",
    "fact_visit",
+   "dim_rep",
    "dim_product",
    "dim_date"
   ]
@@ -221,9 +220,9 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT \n  COUNT(*) AS 拜访次数\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nWHERE d.year_month = '2026-08'",
+  "sql": "SELECT COUNT(*) AS 拜访次数\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nWHERE d.year_month = '2026-08'",
   "retry": 0,
-  "latency_ms": 802.2782089992688,
+  "latency_ms": 871.1584160009807,
   "tables": [
    "fact_visit",
    "dim_date"
@@ -240,12 +239,12 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH c AS (\n  SELECT \n    pc.promo_type,\n    SUM(pc.cost_amount) AS 费用合计\n  FROM fact_promo_cost pc\n  GROUP BY pc.promo_type\n)\nSELECT \n  promo_type AS 促销形式,\n  费用合计\nFROM c\nORDER BY 费用合计 DESC",
+  "sql": "SELECT \n  pc.promo_type AS 促销形式,\n  SUM(pc.cost_amount) AS 费用合计\nFROM fact_promo_cost pc\nJOIN dim_date d ON pc.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY pc.promo_type\nORDER BY 费用合计 DESC",
   "retry": 0,
-  "latency_ms": 1519.7012919998087,
+  "latency_ms": 854.7885000007227,
   "tables": [
-   "fact_promo_cost",
    "fact_sales",
+   "fact_promo_cost",
    "dim_product",
    "dim_date"
   ]
@@ -261,14 +260,14 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT o.region AS 大区, COUNT(DISTINCT o.outlet_id) AS 有效终端数\nFROM dim_outlet o\nWHERE o.is_active = TRUE\nGROUP BY o.region",
+  "sql": "SELECT\n  o.region AS 大区,\n  COUNT(DISTINCT o.outlet_id) AS 有效终端数\nFROM dim_outlet o\nWHERE o.is_active = TRUE\nGROUP BY o.region",
   "retry": 0,
-  "latency_ms": 1273.6587910003436,
+  "latency_ms": 1060.6676659990626,
   "tables": [
    "dim_outlet",
-   "dim_rep",
-   "rel_outlet_sku",
    "fact_sales",
+   "rel_outlet_sku",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -285,7 +284,7 @@
   "reason": "",
   "sql": "SELECT COUNT(*) AS 新品数量\nFROM dim_product p\nWHERE p.is_new_product = TRUE\n  AND p.is_active = TRUE",
   "retry": 0,
-  "latency_ms": 1136.3281249996362,
+  "latency_ms": 861.7233340009989,
   "tables": [
    "dim_product",
    "rel_outlet_sku",
@@ -305,12 +304,12 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT \n  d.year_month AS 月份,\n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.year = 2026 AND d.month BETWEEN 1 AND 6\nGROUP BY d.year_month\nORDER BY d.year_month",
+  "sql": "SELECT\n  d.year_month AS 年月,\n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.year = 2026 AND d.month BETWEEN 1 AND 6\nGROUP BY d.year_month\nORDER BY d.year_month",
   "retry": 0,
-  "latency_ms": 1527.4734999984503,
+  "latency_ms": 1175.1270000022487,
   "tables": [
-   "dim_date",
-   "fact_sales"
+   "fact_sales",
+   "dim_date"
   ]
  },
  {
@@ -324,13 +323,14 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT \n  o.outlet_grade AS 门店等级,\n  COUNT(DISTINCT o.outlet_id) AS 有效终端数量\nFROM dim_outlet o\nWHERE o.is_active = TRUE\nGROUP BY o.outlet_grade\nORDER BY o.outlet_grade",
+  "sql": "SELECT \n  o.outlet_grade AS 门店等级,\n  COUNT(*) AS 有效终端数量\nFROM dim_outlet o\nWHERE o.is_active = TRUE\nGROUP BY o.outlet_grade",
   "retry": 0,
-  "latency_ms": 931.672749999052,
+  "latency_ms": 844.7260419998202,
   "tables": [
    "dim_outlet",
-   "rel_outlet_sku",
    "fact_sales",
+   "dim_dealer",
+   "rel_outlet_sku",
    "dim_date"
   ]
  },
@@ -347,7 +347,7 @@
   "reason": "",
   "sql": "SELECT \n  SUM(s.discount_amount) AS 折扣总额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'",
   "retry": 0,
-  "latency_ms": 1434.8199169999134,
+  "latency_ms": 836.9597919991065,
   "tables": [
    "fact_sales",
    "dim_date"
@@ -364,14 +364,14 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n  o.province AS 省份,\n  COUNT(DISTINCT o.outlet_id) AS 有效终端数\nFROM dim_outlet o\nWHERE o.is_active = TRUE\nGROUP BY o.province",
+  "sql": "SELECT\n  o.province AS 省份,\n  COUNT(DISTINCT o.outlet_id) AS 有效终端数\nFROM dim_outlet o\nWHERE o.is_active = TRUE\nGROUP BY o.province\nORDER BY o.province",
   "retry": 0,
-  "latency_ms": 1406.5515830006916,
+  "latency_ms": 996.1309579994122,
   "tables": [
    "dim_outlet",
-   "dim_rep",
-   "rel_outlet_sku",
    "fact_sales",
+   "rel_outlet_sku",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -386,13 +386,14 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n  d.full_date AS 日期,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.year_month = '2026-08'\nGROUP BY d.full_date\nORDER BY d.full_date",
+  "sql": "SELECT\n  d.full_date AS 日期,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.year = 2026 AND d.month = 8\nGROUP BY d.full_date\nORDER BY d.full_date",
   "retry": 0,
-  "latency_ms": 1141.1480829992797,
+  "latency_ms": 761.7325419996632,
   "tables": [
    "fact_sales",
    "dim_date",
-   "rel_outlet_sku"
+   "rel_outlet_sku",
+   "dim_product"
   ]
  },
  {
@@ -406,14 +407,13 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT \n    SUM(fi.qty_on_hand) AS 总在库量\nFROM fact_inventory fi\nJOIN dim_date d ON fi.date_key = d.date_key\nWHERE d.year_month = '2026-08'",
+  "sql": "SELECT \n    SUM(fi.qty_on_hand) AS 经销商总在库量\nFROM fact_inventory fi\nJOIN dim_date d ON fi.date_key = d.date_key\nWHERE d.year_month = '2026-08'",
   "retry": 0,
-  "latency_ms": 1501.0558330013737,
+  "latency_ms": 980.9569170029135,
   "tables": [
-   "dim_dealer",
-   "fact_inventory",
    "fact_sales",
    "rel_outlet_sku",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -430,11 +430,12 @@
   "reason": "",
   "sql": "SELECT \n  p.category AS 品类,\n  COUNT(DISTINCT p.sku_id) AS SKU数量\nFROM dim_product p\nWHERE p.is_active = TRUE\nGROUP BY p.category\nORDER BY p.category",
   "retry": 0,
-  "latency_ms": 1319.0432080009487,
+  "latency_ms": 931.7697920014325,
   "tables": [
    "dim_product",
-   "rel_outlet_sku",
    "fact_sales",
+   "dim_outlet",
+   "rel_outlet_sku",
    "dim_date"
   ]
  },
@@ -451,7 +452,7 @@
   "reason": "",
   "sql": "SELECT \n    SUM(s.net_amount) / NULLIF(SUM(s.qty), 0) AS 平均每支售价\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'",
   "retry": 0,
-  "latency_ms": 1089.6882920005737,
+  "latency_ms": 1433.4873750012775,
   "tables": [
    "dim_product",
    "fact_sales",
@@ -469,14 +470,15 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n  o.channel AS 渠道,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY o.channel\nORDER BY 销量 DESC",
+  "sql": "SELECT\n  o.channel AS 渠道,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nGROUP BY o.channel",
   "retry": 0,
-  "latency_ms": 1075.519833000726,
+  "latency_ms": 805.7151249995513,
   "tables": [
    "fact_sales",
    "rel_outlet_sku",
-   "dim_outlet",
    "dim_dealer",
+   "dim_product",
+   "dim_outlet",
    "dim_date"
   ]
  },
@@ -493,7 +495,7 @@
   "reason": "",
   "sql": "SELECT COUNT(DISTINCT fv.outlet_id) AS 被拜访终端数\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nWHERE d.year_month = '2026-08'\n  AND fv.is_executed = TRUE",
   "retry": 0,
-  "latency_ms": 2098.3349999987695,
+  "latency_ms": 1105.4890000013984,
   "tables": [
    "fact_visit",
    "dim_rep",
@@ -511,9 +513,9 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT \n  r.team,\n  COUNT(*) AS 在职业务代表数\nFROM dim_rep r\nWHERE r.is_active = TRUE\nGROUP BY r.team",
+  "sql": "SELECT \n  r.team AS 团队,\n  COUNT(*) AS 在职业务代表数\nFROM dim_rep r\nWHERE r.is_active = TRUE\nGROUP BY r.team",
   "retry": 0,
-  "latency_ms": 1200.2642499992362,
+  "latency_ms": 1027.6193330028036,
   "tables": [
    "dim_rep",
    "fact_visit",
@@ -532,14 +534,14 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n    SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE d.year_month = '2026-08'\n  AND o.region = '华东'",
+  "sql": "SELECT \n    SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\nWHERE d.year_month = '2026-08'\n  AND dl.region = '华东'",
   "retry": 0,
-  "latency_ms": 1290.3353330002574,
+  "latency_ms": 915.3442909992009,
   "tables": [
    "fact_sales",
-   "dim_date",
    "dim_dealer",
-   "dim_outlet"
+   "dim_outlet",
+   "dim_date"
   ]
  },
  {
@@ -553,15 +555,14 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE p.brand = '清源'\n  AND o.channel = '便利店'\n  AND d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'",
+  "sql": "SELECT \n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE p.brand = '清源'\n  AND o.channel = '便利店'",
   "retry": 0,
-  "latency_ms": 1897.9550420008309,
+  "latency_ms": 945.1073329983046,
   "tables": [
-   "dim_product",
-   "dim_dealer",
    "fact_sales",
-   "rel_outlet_sku",
    "dim_outlet",
+   "rel_outlet_sku",
+   "dim_product",
    "dim_date"
   ]
  },
@@ -578,7 +579,7 @@
   "reason": "",
   "sql": "SELECT\n  dl.region AS 大区,\n  o.channel AS 渠道,\n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nJOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY dl.region, o.channel\nORDER BY dl.region, o.channel",
   "retry": 0,
-  "latency_ms": 1728.1808330008062,
+  "latency_ms": 1152.1297920007783,
   "tables": [
    "fact_sales",
    "dim_outlet",
@@ -599,10 +600,10 @@
   "reason": "",
   "sql": "SELECT\n  dl.dealer_name AS 经销商名称,\n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY dl.dealer_name\nORDER BY 净销额 DESC\nLIMIT 10",
   "retry": 0,
-  "latency_ms": 2698.983917000078,
+  "latency_ms": 1089.8842089991376,
   "tables": [
-   "dim_dealer",
    "fact_sales",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -619,12 +620,13 @@
   "reason": "",
   "sql": "SELECT\n  p.category AS 品类,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE d.year_month = '2026-08'\nGROUP BY p.category",
   "retry": 0,
-  "latency_ms": 1547.9951659999642,
+  "latency_ms": 986.7681249997986,
   "tables": [
    "fact_sales",
-   "dim_date",
+   "dim_product",
    "rel_outlet_sku",
-   "dim_product"
+   "dim_outlet",
+   "dim_date"
   ]
  },
  {
@@ -638,12 +640,12 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n  r.region AS 大区,\n  COUNT(*) FILTER (WHERE fv.is_executed) AS 实际到店拜访次数\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nJOIN dim_rep r ON fv.rep_id = r.rep_id\nGROUP BY r.region",
+  "sql": "SELECT\n  o.region AS 大区,\n  COUNT(*) FILTER (WHERE fv.is_executed) AS 实际到店拜访次数合计\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nJOIN dim_outlet o ON fv.outlet_id = o.outlet_id\nGROUP BY o.region",
   "retry": 0,
-  "latency_ms": 1241.1417920011445,
+  "latency_ms": 1563.5174580020248,
   "tables": [
    "fact_visit",
-   "dim_rep",
+   "dim_outlet",
    "dim_date"
   ]
  },
@@ -658,14 +660,14 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n    p.category AS 品类,\n    SUM(f.qty_on_hand) AS 在库量\nFROM fact_inventory f\nJOIN dim_date d ON f.date_key = d.date_key\nJOIN dim_product p ON f.sku_id = p.sku_id\nWHERE d.year_month = '2026-08'\nGROUP BY p.category",
+  "sql": "SELECT\n  p.category AS 品类,\n  SUM(fi.qty_on_hand) AS 在库量\nFROM fact_inventory fi\nJOIN dim_date d ON fi.date_key = d.date_key\nJOIN dim_product p ON fi.sku_id = p.sku_id\nWHERE d.year_month = '2026-08'\nGROUP BY p.category",
   "retry": 0,
-  "latency_ms": 978.238917001363,
+  "latency_ms": 1064.1558329989493,
   "tables": [
    "dim_date",
-   "dim_product",
-   "rel_outlet_sku",
    "fact_inventory",
+   "rel_outlet_sku",
+   "dim_product",
    "dim_outlet"
   ]
  },
@@ -680,9 +682,9 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH c AS (\n  SELECT o.region, SUM(pc.cost_amount) AS 促销费用合计\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  JOIN dim_outlet o ON pc.outlet_id = o.outlet_id\n  GROUP BY o.region\n)\nSELECT region AS 大区, 促销费用合计\nFROM c\nORDER BY 促销费用合计 DESC",
+  "sql": "WITH c AS (\n  SELECT o.region, SUM(pc.cost_amount) AS 促销费用合计\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  JOIN dim_outlet o ON pc.outlet_id = o.outlet_id\n  GROUP BY o.region\n)\nSELECT region, 促销费用合计\nFROM c\nORDER BY region",
   "retry": 0,
-  "latency_ms": 1246.6174159999355,
+  "latency_ms": 1204.0041250002105,
   "tables": [
    "fact_promo_cost",
    "fact_sales",
@@ -702,12 +704,15 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT \n  AVG(daily_qty) AS 周末日均销量\nFROM (\n  SELECT \n    d.full_date,\n    SUM(s.qty) AS daily_qty\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  WHERE d.is_weekend = TRUE\n  GROUP BY d.full_date\n) t",
+  "sql": "WITH weekend_sales AS (\n    SELECT \n        s.qty,\n        d.full_date\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.is_weekend = TRUE\n)\nSELECT \n    SUM(qty) / COUNT(DISTINCT full_date) AS 周末日均销量\nFROM weekend_sales",
   "retry": 0,
-  "latency_ms": 967.4870420003572,
+  "latency_ms": 822.1959579968825,
   "tables": [
+   "fact_inventory",
    "fact_sales",
    "rel_outlet_sku",
+   "dim_outlet",
+   "dim_product",
    "dim_date"
   ]
  },
@@ -724,13 +729,12 @@
   "reason": "",
   "sql": "SELECT \n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE d.year_month = '2026-08'\n  AND o.channel = '大卖场'\n  AND p.category = '碳酸饮料'",
   "retry": 0,
-  "latency_ms": 2174.2315419996885,
+  "latency_ms": 1406.0147909985972,
   "tables": [
    "fact_sales",
-   "dim_date",
    "dim_product",
    "dim_outlet",
-   "dim_dealer"
+   "dim_date"
   ]
  },
  {
@@ -744,12 +748,13 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH sku_sales AS (\n    SELECT \n        p.sku_id,\n        p.sku_name,\n        SUM(s.qty) AS 总销量\n    FROM fact_sales s\n    JOIN dim_product p ON s.sku_id = p.sku_id\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY p.sku_id, p.sku_name\n)\nSELECT \n    sku_name AS 单品名称,\n    总销量\nFROM sku_sales\nORDER BY 总销量 DESC\nLIMIT 10",
+  "sql": "SELECT\n  p.sku_name AS 单品名称,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_product p ON s.sku_id = p.sku_id\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY p.sku_name\nORDER BY 销量 DESC\nLIMIT 10",
   "retry": 0,
-  "latency_ms": 1396.7706669991458,
+  "latency_ms": 1010.3753750008764,
   "tables": [
-   "dim_product",
    "fact_sales",
+   "dim_product",
+   "rel_outlet_sku",
    "dim_date"
   ]
  },
@@ -758,21 +763,19 @@
   "tier": 2,
   "question": "每个品牌被多少家终端铺货",
   "config": "full",
-  "correct": false,
+  "correct": true,
   "executed": true,
-  "error_type": "召回缺失",
+  "error_type": "",
   "error_detail": "",
   "api_error": false,
-  "reason": "行数不同 gold=6 pred=1",
-  "sql": "SELECT \n  COUNT(DISTINCT r.outlet_id) AS 铺货终端数\nFROM rel_outlet_sku r\nJOIN dim_outlet o ON r.outlet_id = o.outlet_id\nWHERE o.is_active = TRUE\n  AND (r.delisted_date IS NULL OR r.delisted_date >= DATE '2026-09-04')",
-  "retry": 2,
-  "latency_ms": 4308.1565410011535,
+  "reason": "",
+  "sql": "SELECT\n  p.brand AS 品牌,\n  COUNT(DISTINCT r.outlet_id) AS 铺货终端数\nFROM rel_outlet_sku r\nJOIN dim_product p ON r.sku_id = p.sku_id\nJOIN dim_outlet o ON r.outlet_id = o.outlet_id\nWHERE o.is_active = TRUE\nGROUP BY p.brand\nORDER BY 铺货终端数 DESC",
+  "retry": 0,
+  "latency_ms": 894.9179160008498,
   "tables": [
-   "rel_outlet_sku",
-   "dim_dealer",
    "dim_outlet",
-   "fact_sales",
-   "dim_date"
+   "rel_outlet_sku",
+   "dim_product"
   ]
  },
  {
@@ -788,11 +791,12 @@
   "reason": "",
   "sql": "SELECT\n  o.city AS 城市,\n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE o.province = '江苏'\nGROUP BY o.city",
   "retry": 0,
-  "latency_ms": 1291.534333000527,
+  "latency_ms": 1134.780292002688,
   "tables": [
    "fact_sales",
    "dim_outlet",
    "dim_dealer",
+   "rel_outlet_sku",
    "dim_date"
   ]
  },
@@ -807,12 +811,15 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n  d.season AS 季节,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nGROUP BY d.season\nORDER BY d.season",
+  "sql": "SELECT\n  d.season AS 季节,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nGROUP BY d.season",
   "retry": 0,
-  "latency_ms": 1078.9296669991018,
+  "latency_ms": 784.7374169978139,
   "tables": [
    "fact_sales",
    "rel_outlet_sku",
+   "dim_dealer",
+   "dim_product",
+   "dim_outlet",
    "dim_date"
   ]
  },
@@ -829,13 +836,13 @@
   "reason": "",
   "sql": "SELECT \n  SUM(s.net_amount) AS 新品净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE p.is_new_product = TRUE\n  AND d.year_month = '2026-08'",
   "retry": 0,
-  "latency_ms": 1126.5525840008195,
+  "latency_ms": 805.1543750007113,
   "tables": [
    "fact_sales",
-   "dim_date",
    "dim_product",
    "rel_outlet_sku",
-   "dim_outlet"
+   "dim_outlet",
+   "dim_date"
   ]
  },
  {
@@ -843,18 +850,19 @@
   "tier": 2,
   "question": "各渠道的拜访次数",
   "config": "full",
-  "correct": true,
+  "correct": false,
   "executed": true,
-  "error_type": "",
+  "error_type": "召回缺失",
   "error_detail": "",
   "api_error": false,
-  "reason": "",
-  "sql": "SELECT\n  o.channel AS 渠道,\n  COUNT(*) AS 拜访次数\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nJOIN dim_rep r ON fv.rep_id = r.rep_id\nJOIN dim_outlet o ON fv.outlet_id = o.outlet_id\nGROUP BY o.channel",
+  "reason": "行数不同 gold=6 pred=81",
+  "sql": "SELECT \n  dl.dealer_name AS 经销商,\n  COUNT(*) AS 拜访次数\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nJOIN dim_rep r ON fv.rep_id = r.rep_id\nJOIN dim_dealer dl ON r.region = dl.region AND r.city = dl.city\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY dl.dealer_name",
   "retry": 0,
-  "latency_ms": 1557.0375829993282,
+  "latency_ms": 1210.357167001348,
   "tables": [
    "fact_visit",
    "dim_rep",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -871,7 +879,7 @@
   "reason": "",
   "sql": "SELECT \n  SUM(s.net_amount) / NULLIF(COUNT(DISTINCT d.full_date), 0) AS 节假日日均净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.is_holiday = TRUE",
   "retry": 0,
-  "latency_ms": 980.5523750001157,
+  "latency_ms": 914.2866670008516,
   "tables": [
    "fact_sales",
    "dim_date"
@@ -888,13 +896,15 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n  p.flavor AS 口味,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY p.flavor\nORDER BY 销量 DESC\nLIMIT 10",
+  "sql": "SELECT \n  p.flavor AS 口味,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY p.flavor\nORDER BY 销量 DESC\nLIMIT 10",
   "retry": 0,
-  "latency_ms": 1587.093416001153,
+  "latency_ms": 1555.787875000533,
   "tables": [
    "fact_sales",
-   "rel_outlet_sku",
    "dim_product",
+   "dim_dealer",
+   "rel_outlet_sku",
+   "dim_outlet",
    "dim_date"
   ]
  },
@@ -911,11 +921,11 @@
   "reason": "",
   "sql": "SELECT \n  dl.dealer_name AS 经销商名称,\n  SUM(fi.near_expiry_qty) AS 临期库存量\nFROM fact_inventory fi\nJOIN dim_date d ON fi.date_key = d.date_key\nJOIN dim_dealer dl ON fi.dealer_id = dl.dealer_id\nWHERE d.year_month = '2026-08'\nGROUP BY dl.dealer_name\nORDER BY 临期库存量 DESC\nLIMIT 10",
   "retry": 0,
-  "latency_ms": 1317.5455419986974,
+  "latency_ms": 1359.6037079987582,
   "tables": [
    "fact_inventory",
    "dim_dealer",
-   "fact_sales",
+   "rel_outlet_sku",
    "dim_date"
   ]
  },
@@ -932,7 +942,7 @@
   "reason": "",
   "sql": "WITH c AS (\n  SELECT \n    o.region,\n    pc.promo_type,\n    SUM(pc.cost_amount) AS 费用\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  JOIN dim_outlet o ON pc.outlet_id = o.outlet_id\n  GROUP BY 1, 2\n)\nSELECT \n  region AS 大区,\n  promo_type AS 促销形式,\n  费用\nFROM c\nORDER BY region, promo_type",
   "retry": 0,
-  "latency_ms": 1666.6473749992292,
+  "latency_ms": 1256.286292002187,
   "tables": [
    "fact_promo_cost",
    "fact_sales",
@@ -952,12 +962,13 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT \n  o.outlet_grade AS 门店等级,\n  SUM(s.net_amount) AS 净销额,\n  COUNT(DISTINCT o.outlet_id) AS 终端数\nFROM fact_sales s\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY o.outlet_grade\nORDER BY o.outlet_grade",
+  "sql": "SELECT\n  o.outlet_grade AS 门店等级,\n  SUM(s.net_amount) AS 净销额,\n  COUNT(DISTINCT o.outlet_id) AS 终端数\nFROM fact_sales s\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY o.outlet_grade\nORDER BY o.outlet_grade",
   "retry": 0,
-  "latency_ms": 2517.7541249995556,
+  "latency_ms": 1010.6825000002573,
   "tables": [
    "dim_outlet",
    "fact_sales",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -974,7 +985,7 @@
   "reason": "有序比对不一致",
   "sql": "SELECT \n    r.rep_name AS 业务代表,\n    COUNT(*) AS 拜访次数\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nJOIN dim_rep r ON fv.rep_id = r.rep_id\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY r.rep_name\nORDER BY 拜访次数 DESC\nLIMIT 10",
   "retry": 0,
-  "latency_ms": 2388.8169590009056,
+  "latency_ms": 1019.1780000022845,
   "tables": [
    "fact_visit",
    "dim_rep",
@@ -992,13 +1003,13 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n  p.spec_ml AS 规格毫升数,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nGROUP BY p.spec_ml\nORDER BY p.spec_ml",
+  "sql": "SELECT\n  p.spec_ml AS 规格毫升数,\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_product p ON s.sku_id = p.sku_id\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY p.spec_ml\nORDER BY p.spec_ml",
   "retry": 0,
-  "latency_ms": 1427.3811670009309,
+  "latency_ms": 1447.0313330020872,
   "tables": [
    "fact_sales",
-   "rel_outlet_sku",
    "dim_product",
+   "rel_outlet_sku",
    "dim_date"
   ]
  },
@@ -1013,13 +1024,12 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n  dl.dealer_level AS 经销商等级,\n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY dl.dealer_level\nORDER BY dl.dealer_level",
+  "sql": "SELECT\n  dl.dealer_level AS 经销商等级,\n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY dl.dealer_level",
   "retry": 0,
-  "latency_ms": 2050.558999999339,
+  "latency_ms": 1187.9457920003915,
   "tables": [
-   "dim_dealer",
    "fact_sales",
-   "dim_outlet",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -1034,9 +1044,9 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n  r.region AS 大区,\n  COUNT(*) FILTER (WHERE fv.has_display_fix) AS 陈列整改拜访次数\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nJOIN dim_rep r ON fv.rep_id = r.rep_id\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY r.region",
+  "sql": "SELECT \n  r.region AS 大区,\n  COUNT(*) FILTER (WHERE f.has_display_fix) AS 陈列整改拜访次数\nFROM fact_visit f\nJOIN dim_date d ON f.date_key = d.date_key\nJOIN dim_rep r ON f.rep_id = r.rep_id\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY r.region",
   "retry": 0,
-  "latency_ms": 1146.2111250002636,
+  "latency_ms": 1165.7237090003036,
   "tables": [
    "fact_visit",
    "dim_rep",
@@ -1048,20 +1058,21 @@
   "tier": 3,
   "question": "每个大区销量最高的单品是哪个",
   "config": "full",
-  "correct": false,
+  "correct": true,
   "executed": true,
-  "error_type": "逻辑错误",
+  "error_type": "",
   "error_detail": "",
   "api_error": false,
-  "reason": "列数不同 gold=2 pred=3",
-  "sql": "WITH ranked AS (\n  SELECT \n    o.region,\n    p.sku_name,\n    SUM(s.qty) AS 销量,\n    ROW_NUMBER() OVER (PARTITION BY o.region ORDER BY SUM(s.qty) DESC) AS rn\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n  JOIN dim_product p ON s.sku_id = p.sku_id\n  WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n  GROUP BY o.region, p.sku_name\n)\nSELECT region, sku_name, 销量\nFROM ranked\nWHERE rn = 1\nORDER BY region",
+  "reason": "",
+  "sql": "WITH sales_by_region_sku AS (\n    SELECT \n        o.region,\n        p.sku_name,\n        SUM(s.qty) AS 销量\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    JOIN dim_product p ON s.sku_id = p.sku_id\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY o.region, p.sku_name\n),\nranked AS (\n    SELECT \n        region,\n        sku_name,\n        销量,\n        ROW_NUMBER() OVER (PARTITION BY region ORDER BY 销量 DESC) AS rn\n    FROM sales_by_region_sku\n)\nSELECT \n    region AS 大区,\n    sku_name AS 单品\nFROM ranked\nWHERE rn = 1\nORDER BY region",
   "retry": 0,
-  "latency_ms": 1463.5517499991693,
+  "latency_ms": 1624.7830409993185,
   "tables": [
-   "dim_product",
    "fact_sales",
+   "dim_product",
    "rel_outlet_sku",
    "dim_outlet",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -1076,13 +1087,13 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n  o.channel AS 渠道,\n  SUM(s.net_amount) / NULLIF(SUM(SUM(s.net_amount)) OVER (), 0) AS 净销额占比\nFROM fact_sales s\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY o.channel\nORDER BY 净销额占比 DESC",
+  "sql": "SELECT\n  o.channel AS 渠道,\n  SUM(s.net_amount) / NULLIF(SUM(SUM(s.net_amount)) OVER (), 0) AS 净销额占比\nFROM fact_sales s\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nJOIN dim_date d ON s.date_key = d.date_key\nGROUP BY o.channel\nORDER BY 净销额占比 DESC",
   "retry": 0,
-  "latency_ms": 1670.8169169996836,
+  "latency_ms": 1078.5543749989301,
   "tables": [
    "fact_sales",
-   "dim_outlet",
    "dim_dealer",
+   "dim_outlet",
    "dim_product",
    "dim_date"
   ]
@@ -1092,19 +1103,21 @@
   "tier": 3,
   "question": "哪些品牌的净销额占比超过百分之十",
   "config": "full",
-  "correct": true,
+  "correct": false,
   "executed": true,
-  "error_type": "",
+  "error_type": "逻辑错误",
   "error_detail": "",
   "api_error": false,
-  "reason": "",
-  "sql": "WITH brand_sales AS (\n    SELECT \n        p.brand,\n        SUM(s.net_amount) AS brand_net_amount\n    FROM fact_sales s\n    JOIN dim_product p ON s.sku_id = p.sku_id\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY p.brand\n),\ntotal_sales AS (\n    SELECT SUM(net_amount) AS total_net_amount\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n)\nSELECT \n    bs.brand\nFROM brand_sales bs\nCROSS JOIN total_sales ts\nWHERE bs.brand_net_amount / NULLIF(ts.total_net_amount, 0) > 0.10",
+  "reason": "列数不同 gold=1 pred=2",
+  "sql": "WITH brand_sales AS (\n    SELECT \n        p.brand,\n        SUM(s.net_amount) AS brand_net_amount\n    FROM fact_sales s\n    JOIN dim_product p ON s.sku_id = p.sku_id\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY p.brand\n),\ntotal_sales AS (\n    SELECT SUM(net_amount) AS total_net_amount\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n)\nSELECT \n    bs.brand,\n    bs.brand_net_amount / ts.total_net_amount AS 净销额占比\nFROM brand_sales bs\nCROSS JOIN total_sales ts\nWHERE bs.brand_net_amount / ts.total_net_amount > 0.10",
   "retry": 0,
-  "latency_ms": 1768.7315420007508,
+  "latency_ms": 1566.3651659997413,
   "tables": [
-   "dim_dealer",
    "fact_sales",
    "dim_product",
+   "rel_outlet_sku",
+   "dim_dealer",
+   "dim_outlet",
    "dim_date"
   ]
  },
@@ -1119,12 +1132,13 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH avg_net AS (\n    SELECT AVG(total_net) AS avg_total\n    FROM (\n        SELECT s.outlet_id, SUM(s.net_amount) AS total_net\n        FROM fact_sales s\n        JOIN dim_date d ON s.date_key = d.date_key\n        WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n        GROUP BY s.outlet_id\n    ) t\n)\nSELECT COUNT(*) AS 终端数\nFROM (\n    SELECT s.outlet_id\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY s.outlet_id\n    HAVING SUM(s.net_amount) > (SELECT avg_total FROM avg_net)\n) o",
+  "sql": "SELECT COUNT(*) AS 终端数\nFROM (\n    SELECT s.outlet_id\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    GROUP BY s.outlet_id\n    HAVING SUM(s.net_amount) > (\n        SELECT AVG(终端净销额)\n        FROM (\n            SELECT SUM(s2.net_amount) AS 终端净销额\n            FROM fact_sales s2\n            JOIN dim_date d2 ON s2.date_key = d2.date_key\n            GROUP BY s2.outlet_id\n        ) t\n    )\n) sub",
   "retry": 0,
-  "latency_ms": 1324.7846250014845,
+  "latency_ms": 1523.765583999193,
   "tables": [
    "dim_outlet",
    "fact_sales",
+   "dim_dealer",
    "rel_outlet_sku",
    "dim_date"
   ]
@@ -1140,9 +1154,9 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH ranked AS (\n  SELECT\n    p.category,\n    p.sku_name,\n    SUM(s.qty) AS 销量,\n    ROW_NUMBER() OVER (PARTITION BY p.category ORDER BY SUM(s.qty) DESC) AS rn\n  FROM fact_sales s\n  JOIN dim_product p ON s.sku_id = p.sku_id\n  JOIN dim_date d ON s.date_key = d.date_key\n  WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n  GROUP BY p.category, p.sku_name\n)\nSELECT category AS 品类, sku_name AS 单品, 销量\nFROM ranked\nWHERE rn <= 3\nORDER BY category, 销量 DESC",
+  "sql": "WITH ranked AS (\n  SELECT \n    p.category,\n    p.sku_name,\n    SUM(s.qty) AS 销量,\n    ROW_NUMBER() OVER (PARTITION BY p.category ORDER BY SUM(s.qty) DESC) AS rn\n  FROM fact_sales s\n  JOIN dim_product p ON s.sku_id = p.sku_id\n  JOIN dim_date d ON s.date_key = d.date_key\n  WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n  GROUP BY p.category, p.sku_name\n)\nSELECT category AS 品类, sku_name AS 单品, 销量\nFROM ranked\nWHERE rn <= 3\nORDER BY category, 销量 DESC",
   "retry": 0,
-  "latency_ms": 1978.9932500007126,
+  "latency_ms": 1496.236291997775,
   "tables": [
    "dim_product",
    "fact_sales",
@@ -1161,14 +1175,15 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH monthly_sales AS (\n    SELECT\n        p.category,\n        d.year_month,\n        SUM(s.qty) AS total_qty\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_product p ON s.sku_id = p.sku_id\n    WHERE d.year_month IN ('2026-07', '2026-08')\n    GROUP BY p.category, d.year_month\n)\nSELECT\n    a.category AS 品类\nFROM monthly_sales a\nJOIN monthly_sales b\n    ON a.category = b.category\n    AND a.year_month = '2026-08'\n    AND b.year_month = '2026-07'\nWHERE a.total_qty > b.total_qty",
+  "sql": "WITH monthly_sales AS (\n    SELECT\n        p.category AS 品类,\n        d.year_month AS 年月,\n        SUM(s.qty) AS 销量\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_product p ON s.sku_id = p.sku_id\n    WHERE d.year_month IN ('2026-07', '2026-08')\n    GROUP BY p.category, d.year_month\n)\nSELECT\n    a.品类\nFROM monthly_sales a\nJOIN monthly_sales b\n    ON a.品类 = b.品类\n    AND a.年月 = '2026-08'\n    AND b.年月 = '2026-07'\nWHERE a.销量 > b.销量",
   "retry": 0,
-  "latency_ms": 1186.398834001011,
+  "latency_ms": 1611.7360000025656,
   "tables": [
    "fact_sales",
    "rel_outlet_sku",
-   "dim_date",
-   "dim_product"
+   "dim_product",
+   "dim_outlet",
+   "dim_date"
   ]
  },
  {
@@ -1182,13 +1197,13 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH region_sales AS (\n    SELECT \n        dl.region AS 大区,\n        SUM(s.net_amount) AS 净销额\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY dl.region\n),\ntotal AS (\n    SELECT SUM(净销额) AS 总净销额\n    FROM region_sales\n)\nSELECT \n    rs.大区,\n    rs.净销额,\n    SUM(rs.净销额) OVER (ORDER BY rs.净销额 DESC) / NULLIF(t.总净销额, 0) AS 累计占比\nFROM region_sales rs\nCROSS JOIN total t\nORDER BY rs.净销额 DESC",
+  "sql": "WITH region_sales AS (\n    SELECT \n        dl.region AS 大区,\n        SUM(s.net_amount) AS 净销额\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY dl.region\n),\ntotal_sales AS (\n    SELECT SUM(净销额) AS 总净销额\n    FROM region_sales\n)\nSELECT \n    rs.大区,\n    rs.净销额,\n    SUM(rs.净销额) OVER (ORDER BY rs.净销额 DESC) / ts.总净销额 AS 累计占比\nFROM region_sales rs\nCROSS JOIN total_sales ts\nORDER BY rs.净销额 DESC",
   "retry": 0,
-  "latency_ms": 2141.051167000114,
+  "latency_ms": 1791.7689169989899,
   "tables": [
    "fact_sales",
-   "dim_dealer",
    "dim_outlet",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -1197,19 +1212,20 @@
   "tier": 3,
   "question": "有多少个终端和单品的铺货组合在2026年8月完全没有销售",
   "config": "full",
-  "correct": true,
+  "correct": false,
   "executed": true,
-  "error_type": "",
+  "error_type": "逻辑错误",
   "error_detail": "",
   "api_error": false,
-  "reason": "",
-  "sql": "SELECT COUNT(*) AS 无动销铺货组合数\nFROM rel_outlet_sku ros\nWHERE ros.listed_date <= DATE '2026-08-31'\n  AND (ros.delisted_date IS NULL OR ros.delisted_date >= DATE '2026-08-01')\n  AND NOT EXISTS (\n    SELECT 1\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE s.outlet_id = ros.outlet_id\n      AND s.sku_id = ros.sku_id\n      AND d.full_date BETWEEN DATE '2026-08-01' AND DATE '2026-08-31'\n  )",
+  "reason": "多重集比对不一致",
+  "sql": "SELECT COUNT(*) AS 无销售铺货组合数\nFROM rel_outlet_sku r\nLEFT JOIN fact_sales s\n  ON r.outlet_id = s.outlet_id\n AND r.sku_id = s.sku_id\nLEFT JOIN dim_date d\n  ON s.date_key = d.date_key\n AND d.full_date BETWEEN DATE '2026-08-01' AND DATE '2026-08-31'\nWHERE s.outlet_id IS NULL",
   "retry": 0,
-  "latency_ms": 1683.9546669998526,
+  "latency_ms": 1590.4809999992722,
   "tables": [
    "rel_outlet_sku",
    "fact_sales",
-   "dim_rep",
+   "dim_outlet",
+   "dim_product",
    "dim_date"
   ]
  },
@@ -1224,9 +1240,9 @@
   "error_detail": "",
   "api_error": false,
   "reason": "行数不同 gold=6 pred=7",
-  "sql": "WITH rep_visits AS (\n    SELECT \n        r.rep_id,\n        r.rep_name,\n        COUNT(*) FILTER (WHERE fv.is_executed) AS effective_visits\n    FROM fact_visit fv\n    JOIN dim_date d ON fv.date_key = d.date_key\n    JOIN dim_rep r ON fv.rep_id = r.rep_id\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY r.rep_id, r.rep_name\n),\navg_visits AS (\n    SELECT AVG(effective_visits) AS avg_effective_visits\n    FROM rep_visits\n)\nSELECT \n    rv.rep_name AS 业务代表\nFROM rep_visits rv\nCROSS JOIN avg_visits av\nWHERE rv.effective_visits > av.avg_effective_visits\nORDER BY rv.rep_name",
+  "sql": "WITH rep_visits AS (\n    SELECT \n        r.rep_id,\n        r.rep_name,\n        COUNT(*) FILTER (WHERE fv.is_executed) AS valid_visit_count\n    FROM fact_visit fv\n    JOIN dim_rep r ON fv.rep_id = r.rep_id\n    JOIN dim_date d ON fv.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY r.rep_id, r.rep_name\n),\navg_visits AS (\n    SELECT AVG(valid_visit_count) AS avg_valid_visits\n    FROM rep_visits\n)\nSELECT \n    rv.rep_name\nFROM rep_visits rv\nCROSS JOIN avg_visits av\nWHERE rv.valid_visit_count > av.avg_valid_visits",
   "retry": 0,
-  "latency_ms": 1815.8760829992389,
+  "latency_ms": 1598.6707080010092,
   "tables": [
    "fact_visit",
    "dim_rep",
@@ -1244,9 +1260,9 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH dealer_outlet_sales AS (\n    SELECT \n        dl.dealer_name,\n        o.outlet_name,\n        SUM(s.net_amount) AS 净销额\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    JOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\n    GROUP BY dl.dealer_name, o.outlet_name\n),\nranked AS (\n    SELECT \n        dealer_name,\n        outlet_name,\n        净销额,\n        ROW_NUMBER() OVER (PARTITION BY dealer_name ORDER BY 净销额 DESC) AS rn\n    FROM dealer_outlet_sales\n)\nSELECT \n    dealer_name,\n    outlet_name,\n    净销额\nFROM ranked\nWHERE rn = 1\nORDER BY dealer_name",
+  "sql": "WITH dealer_outlet_sales AS (\n    SELECT\n        dl.dealer_name,\n        o.outlet_name,\n        SUM(s.net_amount) AS 净销额\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    JOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY dl.dealer_name, o.outlet_name\n),\nranked AS (\n    SELECT\n        dealer_name,\n        outlet_name,\n        净销额,\n        ROW_NUMBER() OVER (PARTITION BY dealer_name ORDER BY 净销额 DESC) AS rn\n    FROM dealer_outlet_sales\n)\nSELECT dealer_name, outlet_name, 净销额\nFROM ranked\nWHERE rn = 1\nORDER BY dealer_name",
   "retry": 0,
-  "latency_ms": 2214.386375000686,
+  "latency_ms": 1504.8947079994832,
   "tables": [
    "dim_dealer",
    "fact_sales",
@@ -1259,18 +1275,19 @@
   "tier": 3,
   "question": "2026年各月净销额及占全年的比例",
   "config": "full",
-  "correct": true,
+  "correct": false,
   "executed": true,
-  "error_type": "",
+  "error_type": "逻辑错误",
   "error_detail": "",
   "api_error": false,
-  "reason": "",
-  "sql": "WITH monthly AS (\n    SELECT \n        d.year_month,\n        SUM(s.net_amount) AS 净销额\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.year = 2026\n    GROUP BY d.year_month\n),\ntotal AS (\n    SELECT SUM(净销额) AS 全年净销额\n    FROM monthly\n)\nSELECT \n    m.year_month AS 月份,\n    m.净销额,\n    m.净销额 / NULLIF(t.全年净销额, 0) AS 占全年比例\nFROM monthly m\nCROSS JOIN total t\nORDER BY m.year_month",
+  "reason": "有序比对不一致",
+  "sql": "WITH monthly AS (\n    SELECT\n        d.year_month,\n        SUM(s.net_amount) AS 净销额\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.year = 2026\n    GROUP BY d.year_month\n),\ntotal AS (\n    SELECT SUM(净销额) AS 全年净销额\n    FROM monthly\n)\nSELECT\n    m.year_month AS 月份,\n    m.净销额,\n    ROUND(m.净销额 / t.全年净销额 * 100, 2) AS 占全年比例\nFROM monthly m\nCROSS JOIN total t\nORDER BY m.year_month",
   "retry": 0,
-  "latency_ms": 1883.4792079996987,
+  "latency_ms": 1621.4660830009962,
   "tables": [
-   "dim_date",
-   "fact_sales"
+   "fact_sales",
+   "rel_outlet_sku",
+   "dim_date"
   ]
  },
  {
@@ -1284,12 +1301,12 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH total AS (\n    SELECT SUM(s.net_amount) AS total_net\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n),\ntop20 AS (\n    SELECT p.sku_name, SUM(s.net_amount) AS top_net\n    FROM fact_sales s\n    JOIN dim_product p ON s.sku_id = p.sku_id\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY p.sku_name\n    ORDER BY top_net DESC\n    LIMIT 20\n)\nSELECT SUM(top20.top_net) / NULLIF((SELECT total_net FROM total), 0) AS 销额占比\nFROM top20",
+  "sql": "WITH total AS (\n  SELECT SUM(s.net_amount) AS total_net\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n),\ntop20 AS (\n  SELECT p.sku_name, SUM(s.net_amount) AS top_net\n  FROM fact_sales s\n  JOIN dim_product p ON s.sku_id = p.sku_id\n  JOIN dim_date d ON s.date_key = d.date_key\n  WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n  GROUP BY p.sku_name\n  ORDER BY top_net DESC\n  LIMIT 20\n)\nSELECT SUM(t.top_net) / NULLIF((SELECT total_net FROM total), 0) AS 销额占比\nFROM top20 t",
   "retry": 0,
-  "latency_ms": 1824.184459001117,
+  "latency_ms": 1518.0520829999296,
   "tables": [
-   "dim_product",
    "fact_sales",
+   "dim_product",
    "dim_date"
   ]
  },
@@ -1298,20 +1315,21 @@
   "tier": 3,
   "question": "有多少家终端在2026年7月和8月都有销售",
   "config": "full",
-  "correct": true,
+  "correct": false,
   "executed": true,
-  "error_type": "",
+  "error_type": "逻辑错误",
   "error_detail": "",
   "api_error": false,
-  "reason": "",
-  "sql": "SELECT COUNT(DISTINCT o.outlet_id) AS 终端数\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE d.year_month IN ('2026-07', '2026-08')\nHAVING COUNT(DISTINCT CASE WHEN d.year_month = '2026-07' THEN s.outlet_id END) > 0\n   AND COUNT(DISTINCT CASE WHEN d.year_month = '2026-08' THEN s.outlet_id END) > 0",
+  "reason": "行数不同 gold=1 pred=1825",
+  "sql": "SELECT COUNT(DISTINCT o.outlet_id) AS 终端数\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE d.year_month IN ('2026-07', '2026-08')\nGROUP BY o.outlet_id\nHAVING COUNT(DISTINCT d.year_month) = 2",
   "retry": 0,
-  "latency_ms": 1068.185000000085,
+  "latency_ms": 1179.8634590013535,
   "tables": [
+   "rel_outlet_sku",
    "fact_sales",
    "dim_outlet",
-   "rel_outlet_sku",
-   "dim_rep",
+   "dim_product",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -1328,12 +1346,11 @@
   "reason": "",
   "sql": "SELECT o.city\nFROM dim_outlet o\nWHERE o.is_active = TRUE\nGROUP BY o.city\nHAVING COUNT(DISTINCT o.outlet_id) > 50",
   "retry": 0,
-  "latency_ms": 793.2984170001873,
+  "latency_ms": 655.0200839992613,
   "tables": [
    "dim_outlet",
    "rel_outlet_sku",
    "fact_sales",
-   "dim_rep",
    "dim_date"
   ]
  },
@@ -1348,11 +1365,12 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH outlet_sales AS (\n    SELECT \n        o.channel,\n        o.outlet_id,\n        SUM(s.net_amount) AS outlet_net_amount\n    FROM fact_sales s\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY o.channel, o.outlet_id\n)\nSELECT \n    channel,\n    MEDIAN(outlet_net_amount) AS 净销额中位数\nFROM outlet_sales\nGROUP BY channel\nORDER BY channel",
+  "sql": "WITH channel_sales AS (\n    SELECT \n        o.channel AS 渠道,\n        o.outlet_id AS 终端,\n        SUM(s.net_amount) AS 净销额\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY o.channel, o.outlet_id\n)\nSELECT \n    渠道,\n    MEDIAN(净销额) AS 净销额中位数\nFROM channel_sales\nGROUP BY 渠道\nORDER BY 渠道",
   "retry": 0,
-  "latency_ms": 1278.8564160000533,
+  "latency_ms": 1514.0585000008286,
   "tables": [
    "fact_sales",
+   "dim_dealer",
    "dim_outlet",
    "dim_date"
   ]
@@ -1362,20 +1380,20 @@
   "tier": 3,
   "question": "每个城市销额最高的渠道是哪个",
   "config": "full",
-  "correct": true,
+  "correct": false,
   "executed": true,
-  "error_type": "",
+  "error_type": "逻辑错误",
   "error_detail": "",
   "api_error": false,
-  "reason": "",
-  "sql": "WITH city_channel_sales AS (\n    SELECT \n        o.city,\n        o.channel,\n        SUM(s.net_amount) AS 净销额\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY o.city, o.channel\n),\nranked AS (\n    SELECT \n        city,\n        channel,\n        净销额,\n        ROW_NUMBER() OVER (PARTITION BY city ORDER BY 净销额 DESC) AS rn\n    FROM city_channel_sales\n)\nSELECT \n    city AS 城市,\n    channel AS 渠道\nFROM ranked\nWHERE rn = 1\nORDER BY city",
+  "reason": "列数不同 gold=2 pred=3",
+  "sql": "WITH city_channel_sales AS (\n    SELECT \n        o.city,\n        o.channel,\n        SUM(s.net_amount) AS net_sales\n    FROM fact_sales s\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY o.city, o.channel\n),\nranked AS (\n    SELECT \n        city,\n        channel,\n        net_sales,\n        ROW_NUMBER() OVER (PARTITION BY city ORDER BY net_sales DESC) AS rn\n    FROM city_channel_sales\n)\nSELECT \n    city AS 城市,\n    channel AS 渠道,\n    net_sales AS 净销额\nFROM ranked\nWHERE rn = 1\nORDER BY city",
   "retry": 0,
-  "latency_ms": 1804.5858750010666,
+  "latency_ms": 1625.5459169988171,
   "tables": [
    "dim_outlet",
    "fact_sales",
    "dim_dealer",
-   "dim_rep",
+   "rel_outlet_sku",
    "dim_date"
   ]
  },
@@ -1390,14 +1408,14 @@
   "error_detail": "",
   "api_error": false,
   "reason": "有序比对不一致",
-  "sql": "WITH brand_sales AS (\n    SELECT\n        p.brand,\n        SUM(s.net_amount) AS 净销额\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_product p ON s.sku_id = p.sku_id\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY p.brand\n),\nranked AS (\n    SELECT\n        brand,\n        净销额,\n        RANK() OVER (ORDER BY 净销额 DESC) AS 排名\n    FROM brand_sales\n)\nSELECT\n    brand AS 品牌,\n    排名,\n    净销额 - FIRST_VALUE(净销额) OVER (ORDER BY 排名) AS 与第一名差额\nFROM ranked\nORDER BY 排名",
+  "sql": "WITH brand_sales AS (\n    SELECT\n        p.brand,\n        SUM(s.net_amount) AS 净销额\n    FROM fact_sales s\n    JOIN dim_product p ON s.sku_id = p.sku_id\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY p.brand\n),\nranked AS (\n    SELECT\n        brand,\n        净销额,\n        RANK() OVER (ORDER BY 净销额 DESC) AS 排名\n    FROM brand_sales\n)\nSELECT\n    brand AS 品牌,\n    排名,\n    净销额 - FIRST_VALUE(净销额) OVER (ORDER BY 排名) AS 与第一名差额\nFROM ranked\nORDER BY 排名",
   "retry": 0,
-  "latency_ms": 1674.0095419991121,
+  "latency_ms": 1515.5200000008335,
   "tables": [
-   "dim_dealer",
    "fact_sales",
-   "dim_product",
    "rel_outlet_sku",
+   "dim_product",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -1406,19 +1424,19 @@
   "tier": 3,
   "question": "2026年8月新品销额占各大区总销额的比例",
   "config": "full",
-  "correct": true,
+  "correct": false,
   "executed": true,
-  "error_type": "",
+  "error_type": "逻辑错误",
   "error_detail": "",
   "api_error": false,
-  "reason": "",
-  "sql": "SELECT\n  o.region AS 大区,\n  SUM(CASE WHEN p.is_new_product THEN s.net_amount ELSE 0 END) / NULLIF(SUM(s.net_amount), 0) AS 新品销额占比\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE d.year_month = '2026-08'\nGROUP BY o.region",
+  "reason": "多重集比对不一致",
+  "sql": "WITH new_product_sales AS (\n    SELECT \n        o.region,\n        SUM(s.net_amount) AS new_product_amount\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    JOIN dim_product p ON s.sku_id = p.sku_id\n    WHERE d.year_month = '2026-08'\n      AND p.is_new_product = TRUE\n    GROUP BY o.region\n),\ntotal_sales AS (\n    SELECT \n        o.region,\n        SUM(s.net_amount) AS total_amount\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    WHERE d.year_month = '2026-08'\n    GROUP BY o.region\n)\nSELECT \n    t.region AS 大区,\n    ROUND(n.new_product_amount / NULLIF(t.total_amount, 0) * 100, 2) AS 新品销额占比\nFROM total_sales t\nLEFT JOIN new_product_sales n ON t.region = n.region\nORDER BY t.region",
   "retry": 0,
-  "latency_ms": 1464.49791699888,
+  "latency_ms": 1935.3668750009092,
   "tables": [
    "fact_sales",
-   "dim_product",
    "rel_outlet_sku",
+   "dim_product",
    "dim_outlet",
    "dim_date"
   ]
@@ -1433,13 +1451,15 @@
   "error_type": "逻辑错误",
   "error_detail": "",
   "api_error": false,
-  "reason": "行数不同 gold=33 pred=24",
-  "sql": "SELECT dl.dealer_name\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY dl.dealer_name\nHAVING SUM(CASE WHEN s.is_promo THEN s.net_amount ELSE 0 END) / NULLIF(SUM(s.net_amount), 0) > 0.19",
+  "reason": "多重集比对不一致",
+  "sql": "SELECT dl.dealer_name\nFROM (\n    SELECT s.dealer_id,\n           SUM(s.net_amount) FILTER (WHERE s.is_promo) AS promo_net_amount,\n           SUM(s.net_amount) AS total_net_amount\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY s.dealer_id\n) t\nJOIN dim_dealer dl ON t.dealer_id = dl.dealer_id\nWHERE t.promo_net_amount / NULLIF(t.total_net_amount, 0) > 0.19",
   "retry": 0,
-  "latency_ms": 1328.8470000006782,
+  "latency_ms": 1343.3490000024904,
   "tables": [
    "dim_dealer",
    "fact_sales",
+   "rel_outlet_sku",
+   "fact_promo_cost",
    "dim_date"
   ]
  },
@@ -1454,12 +1474,13 @@
   "error_detail": "",
   "api_error": false,
   "reason": "有序比对不一致",
-  "sql": "SELECT\n  p.category AS 品类,\n  p.sku_name AS 单品名称,\n  p.list_price AS 标准零售价\nFROM dim_product p\nWHERE p.list_price = (\n  SELECT MAX(p2.list_price)\n  FROM dim_product p2\n  WHERE p2.category = p.category\n)\nORDER BY p.category",
+  "sql": "SELECT \n  p.category AS 品类,\n  p.sku_name AS 单品,\n  p.list_price AS 标准零售价\nFROM dim_product p\nWHERE p.list_price = (\n  SELECT MAX(p2.list_price)\n  FROM dim_product p2\n  WHERE p2.category = p.category\n)\nORDER BY p.category",
   "retry": 0,
-  "latency_ms": 1078.2067500003905,
+  "latency_ms": 1220.5011250007374,
   "tables": [
    "dim_product",
    "fact_sales",
+   "dim_outlet",
    "dim_date"
   ]
  },
@@ -1476,11 +1497,12 @@
   "reason": "",
   "sql": "WITH monthly_active AS (\n    SELECT\n        d.year_month,\n        COUNT(DISTINCT s.outlet_id) AS 活跃终端数\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.year = 2026\n    GROUP BY d.year_month\n)\nSELECT\n    ma.year_month AS 月份,\n    ma.活跃终端数,\n    ma.活跃终端数 - LAG(ma.活跃终端数) OVER (ORDER BY ma.year_month) AS 较上月变化\nFROM monthly_active ma\nORDER BY ma.year_month",
   "retry": 0,
-  "latency_ms": 983.0070829993929,
+  "latency_ms": 1235.921291001432,
   "tables": [
    "dim_date",
    "rel_outlet_sku",
    "fact_sales",
+   "dim_product",
    "dim_outlet"
   ]
  },
@@ -1489,19 +1511,19 @@
   "tier": 3,
   "question": "销额前十的终端合计占总销额的比例",
   "config": "full",
-  "correct": false,
+  "correct": true,
   "executed": true,
-  "error_type": "逻辑错误",
+  "error_type": "",
   "error_detail": "",
   "api_error": false,
-  "reason": "有序比对不一致",
-  "sql": "WITH outlet_sales AS (\n    SELECT \n        o.outlet_name,\n        SUM(s.net_amount) AS outlet_net_amount\n    FROM fact_sales s\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY o.outlet_name\n),\ntotal_sales AS (\n    SELECT SUM(s.net_amount) AS total_net_amount\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n),\ntop10 AS (\n    SELECT outlet_net_amount\n    FROM outlet_sales\n    ORDER BY outlet_net_amount DESC\n    LIMIT 10\n)\nSELECT \n    SUM(top10.outlet_net_amount) / NULLIF((SELECT total_net_amount FROM total_sales), 0) AS 销额前十终端合计占比\nFROM top10",
+  "reason": "",
+  "sql": "WITH terminal_sales AS (\n    SELECT \n        s.outlet_id,\n        SUM(s.net_amount) AS terminal_net_amount\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY s.outlet_id\n),\ntotal_sales AS (\n    SELECT SUM(s.net_amount) AS total_net_amount\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n),\ntop10_sales AS (\n    SELECT SUM(terminal_net_amount) AS top10_net_amount\n    FROM (\n        SELECT terminal_net_amount\n        FROM terminal_sales\n        ORDER BY terminal_net_amount DESC\n        LIMIT 10\n    )\n)\nSELECT \n    top10_sales.top10_net_amount / NULLIF(total_sales.total_net_amount, 0) AS 销额前十终端占比\nFROM top10_sales, total_sales",
   "retry": 0,
-  "latency_ms": 3292.749416999868,
+  "latency_ms": 1842.5819580006646,
   "tables": [
    "fact_sales",
-   "dim_outlet",
    "rel_outlet_sku",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -1512,16 +1534,15 @@
   "config": "full",
   "correct": false,
   "executed": true,
-  "error_type": "逻辑错误",
+  "error_type": "召回缺失",
   "error_detail": "",
   "api_error": false,
-  "reason": "行数不同 gold=175 pred=115",
-  "sql": "SELECT \n    o.outlet_name\nFROM dim_outlet o\nWHERE o.is_active = TRUE\n  AND NOT EXISTS (\n      SELECT 1\n      FROM fact_sales s\n      JOIN dim_date d ON s.date_key = d.date_key\n      WHERE s.outlet_id = o.outlet_id\n        AND d.year_month = '2026-08'\n  )",
+  "reason": "行数不同 gold=175 pred=0",
+  "sql": "SELECT DISTINCT s.outlet_id\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.year_month = '2026-08'\n  AND s.outlet_id NOT IN (\n    SELECT DISTINCT s2.outlet_id\n    FROM fact_sales s2\n    JOIN dim_date d2 ON s2.date_key = d2.date_key\n    WHERE d2.year_month = '2026-08'\n  )",
   "retry": 0,
-  "latency_ms": 1401.19520799999,
+  "latency_ms": 1469.6129170006316,
   "tables": [
    "fact_sales",
-   "dim_outlet",
    "rel_outlet_sku",
    "dim_date"
   ]
@@ -1537,13 +1558,14 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH dealer_monthly AS (\n  SELECT \n    dl.dealer_id,\n    dl.dealer_name,\n    d.year_month,\n    SUM(pc.cost_amount) AS monthly_cost\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  JOIN dim_dealer dl ON pc.dealer_id = dl.dealer_id\n  GROUP BY dl.dealer_id, dl.dealer_name, d.year_month\n),\ndealer_total AS (\n  SELECT \n    dealer_id,\n    dealer_name,\n    SUM(monthly_cost) AS total_cost\n  FROM dealer_monthly\n  GROUP BY dealer_id, dealer_name\n)\nSELECT COUNT(*) AS 经销商数量\nFROM dealer_total\nWHERE total_cost > (SELECT AVG(total_cost) FROM dealer_total)",
+  "sql": "WITH dealer_promo_cost AS (\n    SELECT \n        dl.dealer_id,\n        dl.dealer_name,\n        SUM(pc.cost_amount) AS total_cost\n    FROM fact_promo_cost pc\n    JOIN dim_date d ON pc.date_key = d.date_key\n    JOIN dim_dealer dl ON pc.dealer_id = dl.dealer_id\n    GROUP BY dl.dealer_id, dl.dealer_name\n),\navg_cost AS (\n    SELECT AVG(total_cost) AS avg_total_cost\n    FROM dealer_promo_cost\n)\nSELECT COUNT(*) AS 经销商数量\nFROM dealer_promo_cost\nWHERE total_cost > (SELECT avg_total_cost FROM avg_cost)",
   "retry": 0,
-  "latency_ms": 1513.0840410001838,
+  "latency_ms": 1409.578959002829,
   "tables": [
-   "dim_dealer",
    "fact_promo_cost",
+   "dim_dealer",
    "fact_sales",
+   "rel_outlet_sku",
    "dim_date"
   ]
  },
@@ -1558,14 +1580,14 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH city_sales AS (\n  SELECT \n    o.city,\n    SUM(s.net_amount) AS 净销额\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n  WHERE o.region = '华东'\n  GROUP BY o.city\n),\nnational_rank AS (\n  SELECT \n    o.city,\n    SUM(s.net_amount) AS 净销额,\n    RANK() OVER (ORDER BY SUM(s.net_amount) DESC) AS 全国排名\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n  GROUP BY o.city\n)\nSELECT \n  cs.city AS 城市,\n  nr.全国排名\nFROM city_sales cs\nJOIN national_rank nr ON cs.city = nr.city\nORDER BY cs.净销额 DESC\nLIMIT 5",
+  "sql": "WITH city_sales AS (\n    SELECT \n        o.city,\n        SUM(s.net_amount) AS 净销额\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    WHERE o.region = '华东'\n    GROUP BY o.city\n),\nranked_city_sales AS (\n    SELECT \n        city,\n        净销额,\n        ROW_NUMBER() OVER (ORDER BY 净销额 DESC) AS 华东排名\n    FROM city_sales\n),\nnational_sales AS (\n    SELECT \n        o.city,\n        SUM(s.net_amount) AS 净销额\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    GROUP BY o.city\n),\nnational_ranked AS (\n    SELECT \n        city,\n        ROW_NUMBER() OVER (ORDER BY 净销额 DESC) AS 全国排名\n    FROM national_sales\n)\nSELECT \n    r.city AS 城市,\n    r.全国排名\nFROM ranked_city_sales rc\nJOIN national_ranked r ON rc.city = r.city\nWHERE rc.华东排名 <= 5\nORDER BY rc.华东排名",
   "retry": 0,
-  "latency_ms": 1891.3345420005498,
+  "latency_ms": 1879.4740830016963,
   "tables": [
    "fact_sales",
    "dim_outlet",
-   "dim_dealer",
    "rel_outlet_sku",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -1580,9 +1602,9 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH s AS (\n  SELECT d.year_month, o.region, SUM(s.net_amount) AS amt\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n  WHERE s.is_promo = TRUE\n    AND d.year_month = '2026-08'\n  GROUP BY 1, 2\n),\nc AS (\n  SELECT d.year_month, o.region, SUM(pc.cost_amount) AS cost\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  JOIN dim_outlet o ON pc.outlet_id = o.outlet_id\n  WHERE d.year_month = '2026-08'\n  GROUP BY 1, 2\n)\nSELECT s.region AS 大区, s.amt / NULLIF(c.cost, 0) AS 费效比\nFROM s\nJOIN c USING (year_month, region)\nORDER BY s.region",
+  "sql": "WITH s AS (\n  SELECT d.year_month, o.region, SUM(s.net_amount) AS amt\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n  WHERE s.is_promo = TRUE\n    AND d.year_month = '2026-08'\n  GROUP BY 1, 2\n),\nc AS (\n  SELECT d.year_month, o.region, SUM(pc.cost_amount) AS cost\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  JOIN dim_outlet o ON pc.outlet_id = o.outlet_id\n  WHERE d.year_month = '2026-08'\n  GROUP BY 1, 2\n)\nSELECT s.region, s.amt / NULLIF(c.cost, 0) AS 费效比\nFROM s\nJOIN c USING (year_month, region)",
   "retry": 0,
-  "latency_ms": 1887.3420410000108,
+  "latency_ms": 1571.5683329981402,
   "tables": [
    "fact_promo_cost",
    "dim_date",
@@ -1600,13 +1622,12 @@
   "error_detail": "",
   "api_error": false,
   "reason": "多重集比对不一致",
-  "sql": "SELECT \n  COUNT(DISTINCT ros.outlet_id)::DOUBLE / NULLIF(COUNT(DISTINCT o.outlet_id), 0) AS 铺市率\nFROM dim_outlet o\nLEFT JOIN rel_outlet_sku ros ON o.outlet_id = ros.outlet_id\nLEFT JOIN dim_product p ON ros.sku_id = p.sku_id\nWHERE o.is_active = TRUE\n  AND p.brand = '清源'",
+  "sql": "SELECT \n  COUNT(DISTINCT r.outlet_id)::DOUBLE / NULLIF(COUNT(DISTINCT o.outlet_id), 0) AS 铺市率\nFROM dim_outlet o\nLEFT JOIN rel_outlet_sku r ON o.outlet_id = r.outlet_id\nLEFT JOIN dim_product p ON r.sku_id = p.sku_id\nWHERE o.is_active = TRUE\n  AND p.brand = '清源'",
   "retry": 0,
-  "latency_ms": 1282.4096669992286,
+  "latency_ms": 1348.9065419998951,
   "tables": [
    "dim_outlet",
    "rel_outlet_sku",
-   "dim_dealer",
    "dim_product"
   ]
  },
@@ -1621,14 +1642,14 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT \n  COUNT(DISTINCT (s.outlet_id, s.sku_id))::DOUBLE \n  / NULLIF((SELECT COUNT(*) FROM rel_outlet_sku r JOIN dim_product p2 ON r.sku_id = p2.sku_id WHERE p2.category = '碳酸饮料'), 0) AS 动销率\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE d.year_month = '2026-08'\n  AND p.category = '碳酸饮料'",
+  "sql": "SELECT \n  COUNT(DISTINCT (s.outlet_id, s.sku_id))::DOUBLE \n  / NULLIF((SELECT COUNT(*) FROM rel_outlet_sku ros \n            JOIN dim_product p2 ON ros.sku_id = p2.sku_id \n            WHERE p2.category = '碳酸饮料'), 0) AS 动销率\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE d.year_month = '2026-08'\n  AND p.category = '碳酸饮料'",
   "retry": 0,
-  "latency_ms": 1179.484375001266,
+  "latency_ms": 1007.1376250016328,
   "tables": [
-   "dim_date",
    "fact_sales",
+   "rel_outlet_sku",
    "dim_product",
-   "rel_outlet_sku"
+   "dim_date"
   ]
  },
  {
@@ -1644,13 +1665,13 @@
   "reason": "",
   "sql": "SELECT\n  o.region AS 大区,\n  SUM(s.net_amount) / NULLIF(COUNT(DISTINCT s.outlet_id), 0) AS 单店产出\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE d.year_month = '2026-08'\nGROUP BY o.region",
   "retry": 0,
-  "latency_ms": 1586.2833749997662,
+  "latency_ms": 986.4912919983908,
   "tables": [
-   "rel_outlet_sku",
    "dim_outlet",
-   "dim_date",
+   "rel_outlet_sku",
    "dim_product",
-   "fact_sales"
+   "fact_sales",
+   "dim_date"
   ]
  },
  {
@@ -1666,7 +1687,7 @@
   "reason": "",
   "sql": "SELECT\n  o.region AS 大区,\n  COUNT(*) FILTER (WHERE fv.is_executed)::DOUBLE / NULLIF(COUNT(*) FILTER (WHERE fv.is_planned), 0) AS 拜访达成率\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nJOIN dim_outlet o ON fv.outlet_id = o.outlet_id\nGROUP BY o.region",
   "retry": 0,
-  "latency_ms": 1659.3471659998613,
+  "latency_ms": 1015.9114589987439,
   "tables": [
    "fact_visit",
    "dim_outlet",
@@ -1684,9 +1705,9 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT\n    r.team AS 团队,\n    COUNT(*) FILTER (WHERE fv.has_order)::DOUBLE / NULLIF(COUNT(*) FILTER (WHERE fv.is_executed), 0) AS 拜访成单率\nFROM fact_visit fv\nJOIN dim_rep r ON fv.rep_id = r.rep_id\nJOIN dim_date d ON fv.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY r.team",
+  "sql": "SELECT\n  r.team,\n  COUNT(*) FILTER (WHERE fv.has_order)::DOUBLE / NULLIF(COUNT(*) FILTER (WHERE fv.is_executed), 0) AS 拜访成单率\nFROM fact_visit fv\nJOIN dim_rep r ON fv.rep_id = r.rep_id\nJOIN dim_date d ON fv.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY r.team",
   "retry": 0,
-  "latency_ms": 1668.92474999986,
+  "latency_ms": 1567.904332998296,
   "tables": [
    "fact_visit",
    "dim_rep",
@@ -1698,20 +1719,19 @@
   "tier": 4,
   "question": "2026年8月各渠道的促销费用率是多少",
   "config": "full",
-  "correct": false,
+  "correct": true,
   "executed": true,
-  "error_type": "口径歧义",
+  "error_type": "",
   "error_detail": "",
   "api_error": false,
-  "reason": "多重集比对不一致",
-  "sql": "SELECT \n  o.channel AS 渠道,\n  SUM(pc.cost_amount) / NULLIF(SUM(s.promo_net_amount), 0) AS 促销费用率\nFROM fact_promo_cost pc\nJOIN dim_date d ON pc.date_key = d.date_key\nJOIN dim_outlet o ON pc.outlet_id = o.outlet_id\nLEFT JOIN (\n  SELECT \n    s.outlet_id,\n    d.year_month,\n    SUM(s.net_amount) FILTER (WHERE s.is_promo) AS promo_net_amount\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  WHERE d.year_month = '2026-08'\n  GROUP BY s.outlet_id, d.year_month\n) s ON pc.outlet_id = s.outlet_id AND d.year_month = s.year_month\nWHERE d.year_month = '2026-08'\nGROUP BY o.channel",
-  "retry": 1,
-  "latency_ms": 3246.4027920013905,
+  "reason": "",
+  "sql": "WITH s AS (\n  SELECT \n    d.year_month,\n    o.channel,\n    SUM(s.net_amount) FILTER (WHERE s.is_promo) AS promo_net_amount\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n  WHERE d.year_month = '2026-08'\n  GROUP BY 1, 2\n),\nc AS (\n  SELECT \n    d.year_month,\n    o.channel,\n    SUM(pc.cost_amount) AS cost_amount\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  JOIN dim_outlet o ON pc.outlet_id = o.outlet_id\n  WHERE d.year_month = '2026-08'\n  GROUP BY 1, 2\n)\nSELECT \n  c.channel AS 渠道,\n  c.cost_amount / NULLIF(s.promo_net_amount, 0) AS 促销费用率\nFROM c\nLEFT JOIN s USING (year_month, channel)\nORDER BY c.channel",
+  "retry": 0,
+  "latency_ms": 1443.00879200091,
   "tables": [
-   "dim_date",
    "fact_promo_cost",
    "fact_sales",
-   "dim_outlet"
+   "dim_date"
   ]
  },
  {
@@ -1725,12 +1745,12 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH monthly_sales AS (\n    SELECT\n        d.year_month,\n        SUM(s.qty) AS total_qty,\n        COUNT(DISTINCT s.date_key) AS sales_days\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.year_month = '2026-08'\n    GROUP BY d.year_month\n),\nmonthly_inventory AS (\n    SELECT\n        d.year_month,\n        SUM(i.qty_on_hand) AS total_qty_on_hand\n    FROM fact_inventory i\n    JOIN dim_date d ON i.date_key = d.date_key\n    WHERE d.year_month = '2026-08'\n    GROUP BY d.year_month\n)\nSELECT\n    mi.total_qty_on_hand / NULLIF(ms.total_qty / NULLIF(ms.sales_days, 0), 0) AS 库存周转天数\nFROM monthly_inventory mi\nJOIN monthly_sales ms ON mi.year_month = ms.year_month",
+  "sql": "WITH monthly_sales AS (\n    SELECT\n        d.year_month,\n        SUM(s.qty) AS total_qty,\n        COUNT(DISTINCT s.date_key) AS sales_days\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.year_month = '2026-08'\n    GROUP BY d.year_month\n),\nmonthly_inventory AS (\n    SELECT\n        d.year_month,\n        SUM(i.qty_on_hand) AS total_on_hand\n    FROM fact_inventory i\n    JOIN dim_date d ON i.date_key = d.date_key\n    WHERE d.year_month = '2026-08'\n    GROUP BY d.year_month\n)\nSELECT\n    mi.total_on_hand / NULLIF(ms.total_qty / NULLIF(ms.sales_days, 0), 0) AS 库存周转天数\nFROM monthly_inventory mi\nJOIN monthly_sales ms ON mi.year_month = ms.year_month",
   "retry": 0,
-  "latency_ms": 1979.6277090008516,
+  "latency_ms": 1323.1893749980372,
   "tables": [
-   "dim_date",
    "fact_inventory",
+   "dim_date",
    "fact_sales"
   ]
  },
@@ -1747,13 +1767,13 @@
   "reason": "多重集比对不一致",
   "sql": "SELECT\n  o.region AS 大区,\n  SUM(fi.near_expiry_qty)::DOUBLE / NULLIF(SUM(fi.qty_on_hand), 0) AS 临期库存占比\nFROM fact_inventory fi\nJOIN dim_date d ON fi.date_key = d.date_key\nJOIN dim_product p ON fi.sku_id = p.sku_id\nJOIN dim_outlet o ON fi.dealer_id = o.dealer_id\nWHERE d.year_month = '2026-08'\nGROUP BY o.region",
   "retry": 0,
-  "latency_ms": 1010.7620409999072,
+  "latency_ms": 1161.764291999134,
   "tables": [
-   "dim_date",
    "fact_inventory",
-   "dim_outlet",
+   "dim_date",
    "rel_outlet_sku",
-   "dim_product"
+   "dim_product",
+   "dim_outlet"
   ]
  },
  {
@@ -1769,7 +1789,7 @@
   "reason": "",
   "sql": "SELECT \n  COUNT(DISTINCT CASE WHEN p.is_new_product THEN r.outlet_id END)::DOUBLE \n  / NULLIF(COUNT(DISTINCT o.outlet_id), 0) AS 新品铺市率\nFROM dim_outlet o\nLEFT JOIN rel_outlet_sku r ON o.outlet_id = r.outlet_id\nLEFT JOIN dim_product p ON r.sku_id = p.sku_id\nWHERE o.is_active = TRUE",
   "retry": 0,
-  "latency_ms": 895.4620830008935,
+  "latency_ms": 1191.8201670014241,
   "tables": [
    "dim_outlet",
    "rel_outlet_sku",
@@ -1781,17 +1801,18 @@
   "tier": 4,
   "question": "2026年8月的净销额同比去年同期增长了多少",
   "config": "full",
-  "correct": true,
+  "correct": false,
   "executed": true,
-  "error_type": "",
+  "error_type": "口径歧义",
   "error_detail": "",
   "api_error": false,
-  "reason": "",
-  "sql": "WITH monthly_sales AS (\n    SELECT\n        d.year_month,\n        SUM(s.net_amount) AS net_sales\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2025-08-01' AND DATE '2026-08-31'\n    GROUP BY d.year_month\n)\nSELECT\n    (current.net_sales - previous.net_sales) / NULLIF(previous.net_sales, 0) AS 净销额同比增长率\nFROM monthly_sales current\nJOIN monthly_sales previous ON previous.year_month = '2025-08'\nWHERE current.year_month = '2026-08'",
+  "reason": "列数不同 gold=1 pred=2",
+  "sql": "SELECT \n  (SUM(CASE WHEN d.year = 2026 AND d.month = 8 THEN s.net_amount ELSE 0 END) - \n   SUM(CASE WHEN d.year = 2025 AND d.month = 8 THEN s.net_amount ELSE 0 END)) AS 净销额同比增长额,\n  (SUM(CASE WHEN d.year = 2026 AND d.month = 8 THEN s.net_amount ELSE 0 END) - \n   SUM(CASE WHEN d.year = 2025 AND d.month = 8 THEN s.net_amount ELSE 0 END))::DOUBLE / \n   NULLIF(SUM(CASE WHEN d.year = 2025 AND d.month = 8 THEN s.net_amount ELSE 0 END), 0) AS 净销额同比增长率\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE (d.year = 2026 AND d.month = 8) OR (d.year = 2025 AND d.month = 8)",
   "retry": 0,
-  "latency_ms": 1711.0673329989368,
+  "latency_ms": 1589.9129999997967,
   "tables": [
    "fact_sales",
+   "rel_outlet_sku",
    "dim_date"
   ]
  },
@@ -1806,11 +1827,12 @@
   "error_detail": "",
   "api_error": false,
   "reason": "多重集比对不一致",
-  "sql": "WITH monthly AS (\n  SELECT\n    d.year_month,\n    SUM(s.net_amount) AS net_amount\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  WHERE d.year_month IN ('2026-07', '2026-08')\n  GROUP BY d.year_month\n)\nSELECT\n  (SELECT net_amount FROM monthly WHERE year_month = '2026-08') -\n  (SELECT net_amount FROM monthly WHERE year_month = '2026-07') AS 净销额环比增长额",
+  "sql": "WITH monthly AS (\n  SELECT\n    d.year_month,\n    SUM(s.net_amount) AS 净销额\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  WHERE d.full_date BETWEEN DATE '2026-07-01' AND DATE '2026-08-31'\n  GROUP BY d.year_month\n)\nSELECT\n  (SELECT 净销额 FROM monthly WHERE year_month = '2026-08') -\n  (SELECT 净销额 FROM monthly WHERE year_month = '2026-07') AS 净销额环比增长额",
   "retry": 0,
-  "latency_ms": 1509.1390409997985,
+  "latency_ms": 1459.551708001527,
   "tables": [
    "fact_sales",
+   "rel_outlet_sku",
    "dim_date"
   ]
  },
@@ -1821,17 +1843,19 @@
   "config": "full",
   "correct": false,
   "executed": true,
-  "error_type": "召回缺失",
+  "error_type": "口径歧义",
   "error_detail": "",
   "api_error": false,
   "reason": "多重集比对不一致",
-  "sql": "WITH \n铺货组合 AS (\n    SELECT \n        o.channel,\n        COUNT(*) AS 铺货组合数\n    FROM rel_outlet_sku ros\n    JOIN dim_outlet o ON ros.outlet_id = o.outlet_id\n    GROUP BY o.channel\n),\n动销组合 AS (\n    SELECT \n        o.channel,\n        COUNT(DISTINCT (s.outlet_id, s.sku_id)) AS 动销组合数\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    WHERE d.year_month = '2026-08'\n    GROUP BY o.channel\n)\nSELECT \n    pc.channel AS 渠道,\n    (动销组合数::DOUBLE / NULLIF(铺货组合数, 0)) AS 动销率\nFROM 铺货组合 pc\nLEFT JOIN 动销组合 dc ON pc.channel = dc.channel\nORDER BY pc.channel",
+  "sql": "SELECT\n  o.channel AS 渠道,\n  COUNT(DISTINCT (s.outlet_id, s.sku_id))::DOUBLE / NULLIF(COUNT(DISTINCT (r.outlet_id, r.sku_id)), 0) AS 动销率\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nJOIN dim_product p ON s.sku_id = p.sku_id\nJOIN rel_outlet_sku r ON r.outlet_id = o.outlet_id AND r.sku_id = p.sku_id\nWHERE d.year_month = '2026-08'\nGROUP BY o.channel",
   "retry": 0,
-  "latency_ms": 2158.0142909988353,
+  "latency_ms": 1355.4429579999123,
   "tables": [
    "fact_sales",
-   "dim_date",
-   "rel_outlet_sku"
+   "rel_outlet_sku",
+   "dim_product",
+   "dim_outlet",
+   "dim_date"
   ]
  },
  {
@@ -1845,13 +1869,13 @@
   "error_detail": "",
   "api_error": false,
   "reason": "有序比对不一致",
-  "sql": "WITH s AS (\n  SELECT\n    dl.dealer_name,\n    SUM(s.net_amount) AS promo_net_amount\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  JOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\n  WHERE s.is_promo = TRUE\n    AND d.year_month = '2026-08'\n  GROUP BY dl.dealer_name\n),\nc AS (\n  SELECT\n    dl.dealer_name,\n    SUM(pc.cost_amount) AS promo_cost\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  JOIN dim_dealer dl ON pc.dealer_id = dl.dealer_id\n  WHERE d.year_month = '2026-08'\n  GROUP BY dl.dealer_name\n)\nSELECT\n  s.dealer_name AS 经销商名称,\n  s.promo_net_amount / NULLIF(c.promo_cost, 0) AS 费效比\nFROM s\nJOIN c USING (dealer_name)\nORDER BY 费效比 DESC\nLIMIT 5",
+  "sql": "WITH s AS (\n  SELECT\n    dl.dealer_name,\n    SUM(s.net_amount) AS amt\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  JOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\n  WHERE s.is_promo = TRUE\n    AND d.year_month = '2026-08'\n  GROUP BY dl.dealer_name\n),\nc AS (\n  SELECT\n    dl.dealer_name,\n    SUM(pc.cost_amount) AS cost\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  JOIN dim_dealer dl ON pc.dealer_id = dl.dealer_id\n  WHERE d.year_month = '2026-08'\n  GROUP BY dl.dealer_name\n)\nSELECT\n  s.dealer_name AS 经销商名称,\n  s.amt / NULLIF(c.cost, 0) AS 费效比\nFROM s\nJOIN c USING (dealer_name)\nORDER BY 费效比 DESC\nLIMIT 5",
   "retry": 0,
-  "latency_ms": 1889.5008330000564,
+  "latency_ms": 1564.657333001378,
   "tables": [
    "fact_promo_cost",
-   "dim_dealer",
    "fact_sales",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -1860,19 +1884,20 @@
   "tier": 4,
   "question": "华东区在2026年8月的铺市率和动销率分别是多少",
   "config": "full",
-  "correct": true,
+  "correct": false,
   "executed": true,
-  "error_type": "",
+  "error_type": "口径歧义",
   "error_detail": "",
   "api_error": false,
-  "reason": "",
-  "sql": "WITH \noutlet_base AS (\n    SELECT COUNT(DISTINCT o.outlet_id) AS total_outlets\n    FROM dim_outlet o\n    WHERE o.region = '华东'\n      AND o.is_active = TRUE\n),\nlisted_base AS (\n    SELECT COUNT(DISTINCT r.outlet_id) AS listed_outlets,\n           COUNT(*) AS listed_combos\n    FROM rel_outlet_sku r\n    JOIN dim_outlet o ON r.outlet_id = o.outlet_id\n    WHERE o.region = '华东'\n      AND o.is_active = TRUE\n      AND r.listed_date <= DATE '2026-08-31'\n      AND (r.delisted_date IS NULL OR r.delisted_date >= DATE '2026-08-01')\n),\nsales_combos AS (\n    SELECT COUNT(DISTINCT (s.outlet_id, s.sku_id)) AS sold_combos\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    WHERE o.region = '华东'\n      AND d.year_month = '2026-08'\n)\nSELECT \n    (lb.listed_outlets::DOUBLE / NULLIF(ob.total_outlets, 0)) AS 铺市率,\n    (sc.sold_combos::DOUBLE / NULLIF(lb.listed_combos, 0)) AS 动销率\nFROM outlet_base ob\nCROSS JOIN listed_base lb\nCROSS JOIN sales_combos sc",
-  "retry": 1,
-  "latency_ms": 4545.704582998951,
+  "reason": "多重集比对不一致",
+  "sql": "WITH \n铺货组合 AS (\n    SELECT DISTINCT r.outlet_id, r.sku_id\n    FROM rel_outlet_sku r\n    JOIN dim_outlet o ON r.outlet_id = o.outlet_id\n    JOIN dim_dealer dl ON o.dealer_id = dl.dealer_id\n    WHERE dl.region = '华东'\n      AND r.listed_date <= DATE '2026-08-31'\n      AND (r.delisted_date IS NULL OR r.delisted_date >= DATE '2026-08-01')\n),\n动销组合 AS (\n    SELECT DISTINCT s.outlet_id, s.sku_id\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    JOIN dim_dealer dl ON o.dealer_id = dl.dealer_id\n    WHERE dl.region = '华东'\n      AND d.year_month = '2026-08'\n)\nSELECT \n    COUNT(DISTINCT 铺货组合.outlet_id)::DOUBLE \n    / NULLIF(COUNT(DISTINCT o.outlet_id), 0) AS 铺市率,\n    COUNT(DISTINCT (动销组合.outlet_id, 动销组合.sku_id))::DOUBLE\n    / NULLIF((SELECT COUNT(*) FROM 铺货组合), 0) AS 动销率\nFROM dim_outlet o\nJOIN dim_dealer dl ON o.dealer_id = dl.dealer_id\nLEFT JOIN 铺货组合 ON o.outlet_id = 铺货组合.outlet_id\nLEFT JOIN 动销组合 ON o.outlet_id = 动销组合.outlet_id AND 铺货组合.sku_id = 动销组合.sku_id\nWHERE dl.region = '华东'\n  AND o.is_active = TRUE",
+  "retry": 0,
+  "latency_ms": 2469.1539999985253,
   "tables": [
    "dim_outlet",
    "rel_outlet_sku",
    "fact_sales",
+   "dim_dealer",
    "dim_date"
   ]
  },
@@ -1889,13 +1914,13 @@
   "reason": "",
   "sql": "SELECT\n  p.category AS 品类,\n  SUM(s.net_amount) / NULLIF(COUNT(DISTINCT s.outlet_id), 0) AS 单店产出\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE d.year_month = '2026-08'\nGROUP BY p.category",
   "retry": 0,
-  "latency_ms": 1123.5305000009248,
+  "latency_ms": 1010.3177499986487,
   "tables": [
    "dim_product",
    "rel_outlet_sku",
-   "dim_date",
    "fact_sales",
-   "dim_outlet"
+   "dim_outlet",
+   "dim_date"
   ]
  },
  {
@@ -1927,7 +1952,7 @@
   "reason": "",
   "sql": "SELECT\n  o.region AS 大区,\n  COUNT(*) FILTER (WHERE fv.is_executed)::DOUBLE / NULLIF(COUNT(*) FILTER (WHERE fv.is_planned), 0) AS 拜访达成率,\n  COUNT(*) FILTER (WHERE fv.has_order)::DOUBLE / NULLIF(COUNT(*) FILTER (WHERE fv.is_executed), 0) AS 拜访成单率\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nJOIN dim_outlet o ON fv.outlet_id = o.outlet_id\nWHERE d.year_month = '2026-08'\nGROUP BY o.region",
   "retry": 0,
-  "latency_ms": 1747.2743329999503,
+  "latency_ms": 1348.5227919991303,
   "tables": [
    "fact_visit",
    "dim_date"
@@ -1938,20 +1963,19 @@
   "tier": 4,
   "question": "2026年8月库存周转天数最长的十个经销商",
   "config": "full",
-  "correct": true,
+  "correct": false,
   "executed": true,
-  "error_type": "",
+  "error_type": "召回缺失",
   "error_detail": "",
   "api_error": false,
-  "reason": "",
-  "sql": "WITH monthly_sales AS (\n    SELECT \n        s.dealer_id,\n        d.year_month,\n        SUM(s.qty) AS total_qty,\n        COUNT(DISTINCT s.date_key) AS sales_days\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.year_month = '2026-08'\n    GROUP BY s.dealer_id, d.year_month\n),\nmonthly_inventory AS (\n    SELECT \n        i.dealer_id,\n        d.year_month,\n        SUM(i.qty_on_hand) AS total_qty_on_hand\n    FROM fact_inventory i\n    JOIN dim_date d ON i.date_key = d.date_key\n    WHERE d.year_month = '2026-08'\n    GROUP BY i.dealer_id, d.year_month\n)\nSELECT \n    dl.dealer_name AS 经销商名称,\n    mi.total_qty_on_hand / NULLIF(ms.total_qty / NULLIF(ms.sales_days, 0), 0) AS 库存周转天数\nFROM monthly_inventory mi\nJOIN monthly_sales ms ON mi.dealer_id = ms.dealer_id AND mi.year_month = ms.year_month\nJOIN dim_dealer dl ON mi.dealer_id = dl.dealer_id\nORDER BY 库存周转天数 DESC\nLIMIT 10",
+  "reason": "有序比对不一致",
+  "sql": "WITH inv AS (\n    SELECT \n        i.dealer_id,\n        SUM(i.qty_on_hand) AS total_qty_on_hand\n    FROM fact_inventory i\n    JOIN dim_date d ON i.date_key = d.date_key\n    WHERE d.year_month = '2026-08'\n    GROUP BY i.dealer_id\n),\nsales AS (\n    SELECT \n        s.dealer_id,\n        SUM(s.qty) AS total_qty,\n        COUNT(DISTINCT s.date_key) AS days\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.year_month = '2026-08'\n    GROUP BY s.dealer_id\n)\nSELECT \n    inv.dealer_id,\n    inv.total_qty_on_hand / NULLIF(sales.total_qty / NULLIF(sales.days, 0), 0) AS 库存周转天数\nFROM inv\nJOIN sales ON inv.dealer_id = sales.dealer_id\nORDER BY 库存周转天数 DESC\nLIMIT 10",
   "retry": 0,
-  "latency_ms": 2209.1031250001834,
+  "latency_ms": 1485.5542500008596,
   "tables": [
    "fact_inventory",
    "dim_date",
    "fact_sales",
-   "dim_dealer",
    "rel_outlet_sku"
   ]
  },
@@ -1968,10 +1992,9 @@
   "reason": "",
   "sql": "SELECT \n  COUNT(DISTINCT (s.outlet_id, s.sku_id))::DOUBLE \n  / NULLIF((SELECT COUNT(*) FROM rel_outlet_sku ros \n            JOIN dim_product p2 ON ros.sku_id = p2.sku_id \n            WHERE p2.brand = '清源'), 0) AS 动销率\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE p.brand = '清源'\n  AND d.year_month = '2026-08'",
   "retry": 0,
-  "latency_ms": 1442.6079999993817,
+  "latency_ms": 1147.9160839990072,
   "tables": [
    "fact_sales",
-   "dim_dealer",
    "rel_outlet_sku",
    "dim_product",
    "dim_outlet",
@@ -1989,9 +2012,9 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "SELECT \n  o.region AS 大区,\n  COUNT(DISTINCT CASE WHEN p.is_new_product THEN r.outlet_id END)::DOUBLE \n    / NULLIF(COUNT(DISTINCT o.outlet_id), 0) AS 新品铺市率\nFROM dim_outlet o\nLEFT JOIN rel_outlet_sku r ON o.outlet_id = r.outlet_id\nLEFT JOIN dim_product p ON r.sku_id = p.sku_id\nWHERE o.is_active = TRUE\nGROUP BY o.region\nORDER BY o.region",
+  "sql": "SELECT \n  o.region AS 大区,\n  COUNT(DISTINCT CASE WHEN p.is_new_product THEN r.outlet_id END)::DOUBLE / NULLIF(COUNT(DISTINCT o.outlet_id), 0) AS 新品铺市率\nFROM dim_outlet o\nLEFT JOIN rel_outlet_sku r ON o.outlet_id = r.outlet_id\nLEFT JOIN dim_product p ON r.sku_id = p.sku_id\nWHERE o.is_active = TRUE\nGROUP BY o.region\nORDER BY o.region",
   "retry": 0,
-  "latency_ms": 1306.9226660009008,
+  "latency_ms": 1293.3662499999627,
   "tables": [
    "dim_outlet",
    "rel_outlet_sku",
@@ -2011,11 +2034,11 @@
   "reason": "",
   "sql": "WITH s AS (\n  SELECT d.year_month, o.region, SUM(s.net_amount) AS amt\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n  WHERE s.is_promo AND d.year_month = '2026-08'\n  GROUP BY 1, 2\n),\nc AS (\n  SELECT d.year_month, o.region, SUM(pc.cost_amount) AS cost\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  JOIN dim_outlet o ON pc.outlet_id = o.outlet_id\n  WHERE d.year_month = '2026-08'\n  GROUP BY 1, 2\n)\nSELECT s.region\nFROM s\nJOIN c USING (year_month, region)\nWHERE s.amt / NULLIF(c.cost, 0) < 5.5",
   "retry": 0,
-  "latency_ms": 1779.5397080008115,
+  "latency_ms": 1427.491624999675,
   "tables": [
    "fact_promo_cost",
-   "dim_date",
-   "fact_sales"
+   "fact_sales",
+   "dim_date"
   ]
  },
  {
@@ -2029,14 +2052,13 @@
   "error_detail": "",
   "api_error": false,
   "reason": "",
-  "sql": "WITH current_period AS (\n    SELECT \n        dl.region,\n        SUM(s.net_amount) AS current_net_amount\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\n    WHERE d.year_month = '2026-08'\n    GROUP BY dl.region\n),\nprevious_period AS (\n    SELECT \n        dl.region,\n        SUM(s.net_amount) AS previous_net_amount\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\n    WHERE d.year_month = '2025-08'\n    GROUP BY dl.region\n)\nSELECT \n    COALESCE(cp.region, pp.region) AS 大区,\n    (cp.current_net_amount - pp.previous_net_amount) / NULLIF(pp.previous_net_amount, 0) AS 同比增长率\nFROM current_period cp\nFULL OUTER JOIN previous_period pp ON cp.region = pp.region\nORDER BY 大区",
+  "sql": "WITH current_period AS (\n    SELECT\n        o.region AS 大区,\n        SUM(s.net_amount) AS 当前净销额\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    WHERE d.year_month = '2026-08'\n    GROUP BY o.region\n),\nprevious_period AS (\n    SELECT\n        o.region AS 大区,\n        SUM(s.net_amount) AS 去年同期净销额\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    WHERE d.year_month = '2025-08'\n    GROUP BY o.region\n)\nSELECT\n    COALESCE(c.大区, p.大区) AS 大区,\n    (c.当前净销额 - p.去年同期净销额) / NULLIF(p.去年同期净销额, 0) AS 同比增长率\nFROM current_period c\nFULL JOIN previous_period p ON c.大区 = p.大区\nORDER BY 大区",
   "retry": 0,
-  "latency_ms": 1806.8051249993005,
+  "latency_ms": 2189.07025000226,
   "tables": [
    "fact_sales",
-   "dim_date",
-   "dim_dealer",
-   "dim_outlet"
+   "rel_outlet_sku",
+   "dim_date"
   ]
  },
  {
@@ -2044,21 +2066,21 @@
   "tier": 4,
   "question": "各渠道2026年8月的单店产出相比去年同期的变化",
   "config": "full",
-  "correct": false,
+  "correct": true,
   "executed": true,
-  "error_type": "口径歧义",
+  "error_type": "",
   "error_detail": "",
   "api_error": false,
-  "reason": "列数不同 gold=2 pred=4",
-  "sql": "WITH current_month AS (\n    SELECT \n        o.channel,\n        SUM(s.net_amount) / NULLIF(COUNT(DISTINCT s.outlet_id), 0) AS 单店产出\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    WHERE d.year_month = '2026-08'\n    GROUP BY o.channel\n),\nlast_year_month AS (\n    SELECT \n        o.channel,\n        SUM(s.net_amount) / NULLIF(COUNT(DISTINCT s.outlet_id), 0) AS 单店产出\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    WHERE d.year_month = '2025-08'\n    GROUP BY o.channel\n)\nSELECT \n    COALESCE(cm.channel, lym.channel) AS 渠道,\n    COALESCE(lym.单店产出, 0) AS 去年同期单店产出,\n    COALESCE(cm.单店产出, 0) AS 本期单店产出,\n    CASE \n        WHEN COALESCE(lym.单店产出, 0) = 0 THEN NULL\n        ELSE (COALESCE(cm.单店产出, 0) - COALESCE(lym.单店产出, 0)) / COALESCE(lym.单店产出, 0)\n    END AS 单店产出同比变化率\nFROM current_month cm\nFULL OUTER JOIN last_year_month lym ON cm.channel = lym.channel\nORDER BY 渠道",
+  "reason": "",
+  "sql": "WITH current_month AS (\n    SELECT\n        o.channel,\n        SUM(s.net_amount) / NULLIF(COUNT(DISTINCT s.outlet_id), 0) AS 单店产出\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    WHERE d.year_month = '2026-08'\n    GROUP BY o.channel\n),\nlast_year_month AS (\n    SELECT\n        o.channel,\n        SUM(s.net_amount) / NULLIF(COUNT(DISTINCT s.outlet_id), 0) AS 单店产出\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    WHERE d.year_month = '2025-08'\n    GROUP BY o.channel\n)\nSELECT\n    COALESCE(cm.channel, lym.channel) AS 渠道,\n    cm.单店产出 - lym.单店产出 AS 单店产出变化\nFROM current_month cm\nFULL JOIN last_year_month lym ON cm.channel = lym.channel\nORDER BY 渠道",
   "retry": 0,
-  "latency_ms": 2437.7894999997807,
+  "latency_ms": 2058.465707999858,
   "tables": [
-   "dim_date",
    "rel_outlet_sku",
    "dim_outlet",
    "dim_product",
-   "fact_sales"
+   "fact_sales",
+   "dim_date"
   ]
  },
  {
@@ -2066,18 +2088,18 @@
   "tier": 4,
   "question": "2026年上半年的费效比比2025年下半年高多少",
   "config": "full",
-  "correct": false,
+  "correct": true,
   "executed": true,
-  "error_type": "口径歧义",
+  "error_type": "",
   "error_detail": "",
   "api_error": false,
-  "reason": "多重集比对不一致",
-  "sql": "WITH s AS (\n  SELECT d.year_month, SUM(s.net_amount) AS amt\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  WHERE s.is_promo AND d.full_date BETWEEN DATE '2025-07-01' AND DATE '2026-06-30'\n  GROUP BY d.year_month\n),\nc AS (\n  SELECT d.year_month, SUM(pc.cost_amount) AS cost\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  WHERE d.full_date BETWEEN DATE '2025-07-01' AND DATE '2026-06-30'\n  GROUP BY d.year_month\n),\ncombined AS (\n  SELECT s.year_month, s.amt / NULLIF(c.cost, 0) AS ratio\n  FROM s\n  JOIN c ON s.year_month = c.year_month\n)\nSELECT \n  (SELECT AVG(ratio) FROM combined WHERE year_month >= '2026-01' AND year_month <= '2026-06') -\n  (SELECT AVG(ratio) FROM combined WHERE year_month >= '2025-07' AND year_month <= '2025-12') AS 费效比差值",
+  "reason": "",
+  "sql": "WITH s AS (\n  SELECT d.year_month, SUM(s.net_amount) AS amt\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  WHERE s.is_promo = TRUE\n    AND d.full_date BETWEEN DATE '2025-07-01' AND DATE '2026-06-30'\n  GROUP BY d.year_month\n),\nc AS (\n  SELECT d.year_month, SUM(pc.cost_amount) AS cost\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  WHERE d.full_date BETWEEN DATE '2025-07-01' AND DATE '2026-06-30'\n  GROUP BY d.year_month\n),\ncombined AS (\n  SELECT s.year_month, s.amt / NULLIF(c.cost, 0) AS ratio\n  FROM s\n  JOIN c ON s.year_month = c.year_month\n),\nperiod_ratio AS (\n  SELECT \n    CASE \n      WHEN year_month BETWEEN '2025-07' AND '2025-12' THEN '2025H2'\n      WHEN year_month BETWEEN '2026-01' AND '2026-06' THEN '2026H1'\n    END AS period,\n    SUM(amt) / NULLIF(SUM(cost), 0) AS ratio\n  FROM (\n    SELECT s.year_month, s.amt, c.cost\n    FROM s\n    JOIN c ON s.year_month = c.year_month\n  ) t\n  GROUP BY period\n)\nSELECT \n  MAX(CASE WHEN period = '2026H1' THEN ratio END) - \n  MAX(CASE WHEN period = '2025H2' THEN ratio END) AS 费效比提升\nFROM period_ratio",
   "retry": 0,
-  "latency_ms": 2210.0022079994233,
+  "latency_ms": 2088.7144159969466,
   "tables": [
-   "dim_date",
    "fact_promo_cost",
+   "dim_date",
    "fact_sales"
   ]
  }

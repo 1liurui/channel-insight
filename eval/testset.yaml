@@ -115,7 +115,7 @@ cases:
     tags: [分组TOPN, 窗口函数]
     question: "每个大区销量最高的单品是哪个"
     gold_sql: |
-      SELECT region, sku_name, q FROM (
+      SELECT region, sku_name FROM (
         SELECT o.region, p.sku_name, SUM(s.qty) AS q,
                ROW_NUMBER() OVER (PARTITION BY o.region ORDER BY SUM(s.qty) DESC) rn
         FROM fact_sales s JOIN dim_outlet o ON s.outlet_id=o.outlet_id
@@ -125,7 +125,7 @@ cases:
   - id: T3-02
     tier: 3
     tags: [占比]
-    question: "各渠道净销额占总销额的比例"
+    question: "各渠道净销额占全渠道净销额合计的比例"
     gold_sql: |
       SELECT o.channel, SUM(s.net_amount) / (SELECT SUM(net_amount) FROM fact_sales) AS ratio
       FROM fact_sales s JOIN dim_outlet o ON s.outlet_id=o.outlet_id GROUP BY o.channel
@@ -189,7 +189,7 @@ cases:
   - id: T3-09
     tier: 3
     tags: [子查询比较]
-    question: "哪些业务代表的拜访次数高于平均值"
+    question: "哪些业务代表的有效拜访次数高于平均值"
     gold_sql: |
       WITH t AS (SELECT r.rep_name, COUNT(*) c FROM fact_visit v
                  JOIN dim_rep r ON v.rep_id=r.rep_id WHERE v.is_executed GROUP BY r.rep_name)
@@ -256,7 +256,7 @@ cases:
     tags: [分组TOPN]
     question: "每个城市销额最高的渠道是哪个"
     gold_sql: |
-      SELECT city, channel, amt FROM (
+      SELECT city, channel FROM (
         SELECT o.city, o.channel, SUM(s.net_amount) amt,
                ROW_NUMBER() OVER (PARTITION BY o.city ORDER BY SUM(s.net_amount) DESC) rn
         FROM fact_sales s JOIN dim_outlet o ON s.outlet_id=o.outlet_id
@@ -296,7 +296,7 @@ cases:
     gold_sql: |
       SELECT category, sku_name, list_price FROM (
         SELECT category, sku_name, list_price,
-               ROW_NUMBER() OVER (PARTITION BY category ORDER BY list_price DESC) rn
+               RANK() OVER (PARTITION BY category ORDER BY list_price DESC) rn
         FROM dim_product)
       WHERE rn = 1
   - id: T3-21
@@ -340,7 +340,7 @@ cases:
       WITH t AS (SELECT o.region, o.city, SUM(s.net_amount) amt FROM fact_sales s
                  JOIN dim_outlet o ON s.outlet_id=o.outlet_id GROUP BY o.region, o.city),
       r AS (SELECT region, city, amt, RANK() OVER (ORDER BY amt DESC) national_rank FROM t)
-      SELECT city, amt, national_rank FROM r WHERE region='华东' ORDER BY amt DESC LIMIT 5
+      SELECT city, national_rank FROM r WHERE region='华东' ORDER BY amt DESC LIMIT 5
 
   # ========== 第四档：复合指标与跨粒度 ==========
   - id: T4-01

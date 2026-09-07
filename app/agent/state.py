@@ -25,6 +25,7 @@ class AgentState(TypedDict, total=False):
     metric_hits: list[dict[str, Any]]
     column_hits: list[dict[str, Any]]
     value_hits: list[dict[str, Any]]
+    literal_metrics: list[str]   # 问题中字面出现的指标 id，用作召回重排的硬先验
 
     # 规划
     tables: list[str]

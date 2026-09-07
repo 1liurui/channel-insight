@@ -1,0 +1,162 @@
+[
+ {
+  "id": "MT-01",
+  "correct": false,
+  "turns": 2,
+  "final_question": "那华南呢",
+  "rewritten": "那华南呢",
+  "sql": "SELECT \n  COUNT(DISTINCT rel_outlet_sku.outlet_id)::DOUBLE / NULLIF(COUNT(DISTINCT o.outlet_id), 0) AS 铺市率\nFROM dim_outlet o\nLEFT JOIN rel_outlet_sku ON o.outlet_id = rel_outlet_sku.outlet_id\nWHERE o.region = '华南'\n  AND o.is_active = TRUE"
+ },
+ {
+  "id": "MT-02",
+  "correct": false,
+  "turns": 2,
+  "final_question": "只看便利店",
+  "rewritten": "只看便利店",
+  "sql": "SELECT\n  o.outlet_name AS 终端名称,\n  COUNT(*) FILTER (WHERE fv.is_executed)::DOUBLE / NULLIF(COUNT(*) FILTER (WHERE fv.is_planned), 0) AS 拜访达成率,\n  COUNT(*) FILTER (WHERE fv.has_order)::DOUBLE / NULLIF(COUNT(*) FILTER (WHERE fv.is_executed), 0) AS 拜访成单率\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nJOIN dim_outlet o ON fv.outlet_id = o.outlet_id\nWHERE o.channel = '便利店'\n  AND d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY o.outlet_name"
+ },
+ {
+  "id": "MT-03",
+  "correct": false,
+  "turns": 2,
+  "final_question": "上个月是多少",
+  "rewritten": "上个月是多少",
+  "sql": "SELECT year_month AS 月份\nFROM dim_date\nWHERE full_date = DATE '2026-08-01'"
+ },
+ {
+  "id": "MT-04",
+  "correct": false,
+  "turns": 2,
+  "final_question": "换成华北",
+  "rewritten": "换成华北",
+  "sql": "SELECT\n  dl.dealer_name AS 经销商名称,\n  COUNT(*) FILTER (WHERE fv.has_order)::DOUBLE / NULLIF(COUNT(*) FILTER (WHERE fv.is_executed), 0) AS 拜访成单率\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nJOIN dim_outlet o ON fv.outlet_id = o.outlet_id\nJOIN dim_dealer dl ON o.dealer_id = dl.dealer_id\nWHERE dl.region = '华北'\n  AND d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY dl.dealer_name"
+ },
+ {
+  "id": "MT-05",
+  "correct": true,
+  "turns": 2,
+  "final_question": "其中最高的是哪个大区",
+  "rewritten": "其中最高的是哪个大区",
+  "sql": "WITH region_sales AS (\n    SELECT \n        o.region AS 大区,\n        SUM(s.qty) AS 总销量\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_outlet o ON s.outlet_id = o.outlet_id\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY o.region\n)\nSELECT 大区\nFROM region_sales\nORDER BY 总销量 DESC\nLIMIT 1"
+ },
+ {
+  "id": "MT-06",
+  "correct": false,
+  "turns": 2,
+  "final_question": "净销额呢",
+  "rewritten": "净销额呢",
+  "sql": "SELECT SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key"
+ },
+ {
+  "id": "MT-07",
+  "correct": false,
+  "turns": 2,
+  "final_question": "这个渠道有多少家有效终端",
+  "rewritten": "这个渠道有多少家有效终端",
+  "sql": "SELECT COUNT(DISTINCT o.outlet_id) AS 有效终端数\nFROM dim_outlet o\nWHERE o.is_active = TRUE\n  AND o.channel = '这个渠道'"
+ },
+ {
+  "id": "MT-08",
+  "correct": false,
+  "turns": 2,
+  "final_question": "占全国的比例是多少",
+  "rewritten": "占全国的比例是多少",
+  "sql": "WITH monthly_sales AS (\n    SELECT\n        d.year_month,\n        SUM(s.net_amount) AS net_amount\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY d.year_month\n),\nmonthly_promo AS (\n    SELECT\n        d.year_month,\n        SUM(pc.cost_amount) AS cost_amount\n    FROM fact_promo_cost pc\n    JOIN dim_date d ON pc.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\n    GROUP BY d.year_month\n),\ncombined AS (\n    SELECT\n        COALESCE(ms.year_month, mp.year_month) AS year_month,\n        ms.net_amount,\n        mp.cost_amount\n    FROM monthly_sales ms\n    FULL OUTER JOIN monthly_promo mp ON ms.year_month = mp.year_month\n)\nSELECT\n    SUM(cost_amount) / NULLIF(SUM(net_amount) FILTER (WHERE net_amount IS NOT NULL), 0) AS 促销费用率\nFROM combined"
+ },
+ {
+  "id": "MT-09",
+  "correct": false,
+  "turns": 2,
+  "final_question": "果汁的销量是多少",
+  "rewritten": "果汁的销量是多少",
+  "sql": "SELECT\n  SUM(s.qty) AS 果汁销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE p.category = '果汁'\n  AND d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'"
+ },
+ {
+  "id": "MT-10",
+  "correct": false,
+  "turns": 2,
+  "final_question": "8月比7月增长了多少金额",
+  "rewritten": "8月比7月增长了多少金额",
+  "sql": "WITH monthly_sales AS (\n    SELECT\n        d.year_month,\n        SUM(s.net_amount) AS net_amount\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    WHERE d.full_date BETWEEN DATE '2025-07-01' AND DATE '2025-08-31'\n    GROUP BY d.year_month\n)\nSELECT\n    (SELECT net_amount FROM monthly_sales WHERE year_month = '2025-08') -\n    (SELECT net_amount FROM monthly_sales WHERE year_month = '2025-07') AS 增长金额"
+ },
+ {
+  "id": "MT-11",
+  "correct": false,
+  "turns": 2,
+  "final_question": "A类店呢",
+  "rewritten": "A类店呢",
+  "sql": "SELECT \n  COUNT(DISTINCT CASE WHEN p.is_new_product THEN r.outlet_id END)::DOUBLE / NULLIF(COUNT(DISTINCT o.outlet_id), 0) AS 新品铺市率\nFROM dim_outlet o\nLEFT JOIN rel_outlet_sku r ON o.outlet_id = r.outlet_id\nLEFT JOIN dim_product p ON r.sku_id = p.sku_id\nWHERE o.is_active = TRUE\n  AND o.outlet_grade = 'A'"
+ },
+ {
+  "id": "MT-12",
+  "correct": false,
+  "turns": 2,
+  "final_question": "那个区有多少家有效终端",
+  "rewritten": "那个区有多少家有效终端",
+  "sql": "SELECT o.region, COUNT(DISTINCT o.outlet_id) AS 有效终端数\nFROM dim_outlet o\nWHERE o.is_active = TRUE\nGROUP BY o.region"
+ },
+ {
+  "id": "MT-13",
+  "correct": false,
+  "turns": 2,
+  "final_question": "华东区的呢",
+  "rewritten": "华东区的呢",
+  "sql": "SELECT \n  COUNT(DISTINCT CASE WHEN p.is_new_product THEN r.outlet_id END)::DOUBLE / NULLIF(COUNT(DISTINCT o.outlet_id), 0) AS 新品铺市率\nFROM dim_outlet o\nJOIN dim_dealer dl ON o.dealer_id = dl.dealer_id\nLEFT JOIN rel_outlet_sku r ON o.outlet_id = r.outlet_id\nLEFT JOIN dim_product p ON r.sku_id = p.sku_id\nWHERE dl.region = '华东'\n  AND o.is_active = TRUE"
+ },
+ {
+  "id": "MT-14",
+  "correct": false,
+  "turns": 2,
+  "final_question": "只要华东和华南",
+  "rewritten": "只要华东和华南",
+  "sql": "SELECT\n  o.region AS 大区,\n  COUNT(DISTINCT CASE WHEN p.is_new_product THEN ros.outlet_id END)::DOUBLE / NULLIF(COUNT(DISTINCT o.outlet_id), 0) AS 新品铺市率\nFROM rel_outlet_sku ros\nJOIN dim_outlet o ON ros.outlet_id = o.outlet_id\nJOIN dim_product p ON ros.sku_id = p.sku_id\nWHERE o.region IN ('华东', '华南')\nGROUP BY o.region"
+ },
+ {
+  "id": "MT-15",
+  "correct": false,
+  "turns": 3,
+  "final_question": "华北呢",
+  "rewritten": "华北呢",
+  "sql": "WITH inv AS (\n  SELECT\n    fi.dealer_id,\n    d.year_month,\n    SUM(fi.qty_on_hand) AS qty_on_hand\n  FROM fact_inventory fi\n  JOIN dim_date d ON fi.date_key = d.date_key\n  WHERE d.full_date >= DATE '2024-09-01'\n    AND d.full_date <= DATE '2026-08-31'\n  GROUP BY fi.dealer_id, d.year_month\n),\nsales AS (\n  SELECT\n    fs.dealer_id,\n    d.year_month,\n    SUM(fs.qty) AS qty,\n    COUNT(DISTINCT fs.date_key) AS days\n  FROM fact_sales fs\n  JOIN dim_date d ON fs.date_key = d.date_key\n  WHERE d.full_date >= DATE '2024-09-01'\n    AND d.full_date <= DATE '2026-08-31'\n  GROUP BY fs.dealer_id, d.year_month\n)\nSELECT\n  dl.dealer_name AS 经销商名称,\n  SUM(inv.qty_on_hand) / NULLIF(SUM(sales.qty) / NULLIF(SUM(sales.days), 0), 0) AS 库存周转天数\nFROM inv\nJOIN dim_dealer dl ON inv.dealer_id = dl.dealer_id\nLEFT JOIN sales ON inv.dealer_id = sales.dealer_id AND inv.year_month = sales.year_month\nWHERE dl.region = '华北'\nGROUP BY dl.dealer_name"
+ },
+ {
+  "id": "MT-16",
+  "correct": false,
+  "turns": 3,
+  "final_question": "销量呢",
+  "rewritten": "销量呢",
+  "sql": "SELECT SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'"
+ },
+ {
+  "id": "MT-17",
+  "correct": false,
+  "turns": 3,
+  "final_question": "两个月合计",
+  "rewritten": "两个月合计",
+  "sql": "WITH s AS (\n  SELECT d.year_month, SUM(s.net_amount) AS amt\n  FROM fact_sales s\n  JOIN dim_date d ON s.date_key = d.date_key\n  WHERE s.is_promo = TRUE\n    AND d.full_date BETWEEN DATE '2026-07-01' AND DATE '2026-08-31'\n  GROUP BY 1\n),\nc AS (\n  SELECT d.year_month, SUM(pc.cost_amount) AS cost\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  WHERE d.full_date BETWEEN DATE '2026-07-01' AND DATE '2026-08-31'\n  GROUP BY 1\n)\nSELECT SUM(s.amt) / NULLIF(SUM(c.cost), 0) AS 费效比\nFROM s\nJOIN c USING (year_month)"
+ },
+ {
+  "id": "MT-18",
+  "correct": false,
+  "turns": 2,
+  "final_question": "华东区的呢",
+  "rewritten": "华东区的呢",
+  "sql": "SELECT \n  COUNT(DISTINCT CASE WHEN p.is_new_product THEN r.outlet_id END)::DOUBLE / NULLIF(COUNT(DISTINCT o.outlet_id), 0) AS 新品铺市率\nFROM dim_outlet o\nLEFT JOIN rel_outlet_sku r ON o.outlet_id = r.outlet_id\nLEFT JOIN dim_product p ON r.sku_id = p.sku_id\nWHERE o.region = '华东'\n  AND o.is_active = TRUE"
+ },
+ {
+  "id": "MT-19",
+  "correct": false,
+  "turns": 2,
+  "final_question": "最高的那家叫什么",
+  "rewritten": "最高的那家叫什么",
+  "sql": "SELECT o.outlet_name AS 终端名称\nFROM fact_visit fv\nJOIN dim_date d ON fv.date_key = d.date_key\nJOIN dim_outlet o ON fv.outlet_id = o.outlet_id\nWHERE d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY o.outlet_name\nORDER BY COUNT(*) FILTER (WHERE fv.is_executed)::DOUBLE / NULLIF(COUNT(*) FILTER (WHERE fv.is_planned), 0) DESC\nLIMIT 1"
+ },
+ {
+  "id": "MT-20",
+  "correct": false,
+  "turns": 2,
+  "final_question": "把渠道换成连锁超市",
+  "rewritten": "把渠道换成连锁超市",
+  "sql": "SELECT \n  o.outlet_name AS 终端名称,\n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE o.channel = '连锁超市'\n  AND d.full_date BETWEEN DATE '2024-09-01' AND DATE '2026-08-31'\nGROUP BY o.outlet_name"
+ }
+]

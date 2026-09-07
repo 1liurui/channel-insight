@@ -1,0 +1,162 @@
+[
+ {
+  "id": "MT-01",
+  "correct": true,
+  "turns": 2,
+  "final_question": "那华南呢",
+  "rewritten": "华南区2026年8月的净销额是多少",
+  "sql": "SELECT \n    SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE o.region = '华南'\n  AND d.year_month = '2026-08'"
+ },
+ {
+  "id": "MT-02",
+  "correct": false,
+  "turns": 2,
+  "final_question": "只看便利店",
+  "rewritten": "2026年8月各渠道中便利店的净销额是多少",
+  "sql": "SELECT \n  o.channel AS 渠道,\n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE d.year_month = '2026-08'\n  AND o.channel = '便利店'\nGROUP BY o.channel"
+ },
+ {
+  "id": "MT-03",
+  "correct": false,
+  "turns": 2,
+  "final_question": "上个月是多少",
+  "rewritten": "华东区2026年8月的净销额是多少",
+  "sql": "SELECT \n    SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE o.region = '华东'\n  AND d.year_month = '2026-08'"
+ },
+ {
+  "id": "MT-04",
+  "correct": true,
+  "turns": 2,
+  "final_question": "换成华北",
+  "rewritten": "华北区的铺市率是多少",
+  "sql": "SELECT \n  COUNT(DISTINCT r.outlet_id)::DOUBLE / NULLIF(COUNT(DISTINCT o.outlet_id), 0) AS 铺市率\nFROM dim_outlet o\nLEFT JOIN rel_outlet_sku r ON r.outlet_id = o.outlet_id\nWHERE o.region = '华北'\n  AND o.is_active = TRUE"
+ },
+ {
+  "id": "MT-05",
+  "correct": false,
+  "turns": 2,
+  "final_question": "其中最高的是哪个大区",
+  "rewritten": "2026年8月各大区中净销额最高的是哪个大区",
+  "sql": "SELECT o.region AS 大区, SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE d.year_month = '2026-08'\nGROUP BY o.region\nORDER BY 净销额 DESC\nLIMIT 1"
+ },
+ {
+  "id": "MT-06",
+  "correct": true,
+  "turns": 2,
+  "final_question": "净销额呢",
+  "rewritten": "华东区2026年8月的净销额是多少",
+  "sql": "SELECT \n    SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE o.region = '华东'\n  AND d.year_month = '2026-08'"
+ },
+ {
+  "id": "MT-07",
+  "correct": true,
+  "turns": 2,
+  "final_question": "这个渠道有多少家有效终端",
+  "rewritten": "2026年8月大卖场渠道有多少家有效终端",
+  "sql": "SELECT COUNT(DISTINCT o.outlet_id) AS 有效终端数\nFROM dim_outlet o\nJOIN dim_date d ON 1 = 1\nWHERE o.channel = '大卖场'\n  AND o.is_active = TRUE\n  AND d.year_month = '2026-08'\n  AND o.open_date <= d.full_date"
+ },
+ {
+  "id": "MT-08",
+  "correct": false,
+  "turns": 2,
+  "final_question": "占全国的比例是多少",
+  "rewritten": "2026年8月华东区的净销额占全国的比例是多少",
+  "sql": "WITH monthly_sales AS (\n    SELECT\n        d.year_month,\n        dl.region,\n        SUM(s.net_amount) AS net_sales\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\n    WHERE d.year_month = '2026-08'\n    GROUP BY d.year_month, dl.region\n)\nSELECT\n    ROUND(\n        100.0 * SUM(CASE WHEN region = '华东' THEN net_sales ELSE 0 END) / NULLIF(SUM(net_sales), 0),\n        2\n    ) AS 华东区净销额占比\nFROM monthly_sales"
+ },
+ {
+  "id": "MT-09",
+  "correct": true,
+  "turns": 2,
+  "final_question": "果汁的销量是多少",
+  "rewritten": "2026年8月果汁的销量是多少",
+  "sql": "SELECT\n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE d.year_month = '2026-08'\n  AND p.category = '果汁'"
+ },
+ {
+  "id": "MT-10",
+  "correct": true,
+  "turns": 2,
+  "final_question": "8月比7月增长了多少金额",
+  "rewritten": "华南区2026年8月比7月的净销额增长了多少金额",
+  "sql": "WITH monthly_sales AS (\n    SELECT\n        dl.region,\n        d.year_month,\n        SUM(s.net_amount) AS net_sales\n    FROM fact_sales s\n    JOIN dim_date d ON s.date_key = d.date_key\n    JOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\n    WHERE dl.region = '华南'\n      AND d.year_month IN ('2026-07', '2026-08')\n    GROUP BY dl.region, d.year_month\n)\nSELECT\n    MAX(CASE WHEN year_month = '2026-08' THEN net_sales END) -\n    MAX(CASE WHEN year_month = '2026-07' THEN net_sales END) AS 净销额增长金额\nFROM monthly_sales"
+ },
+ {
+  "id": "MT-11",
+  "correct": true,
+  "turns": 2,
+  "final_question": "A类店呢",
+  "rewritten": "2026年8月便利店渠道中A类店的净销额是多少",
+  "sql": "SELECT \n    SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE d.year_month = '2026-08'\n  AND o.channel = '便利店'\n  AND o.outlet_grade = 'A'"
+ },
+ {
+  "id": "MT-12",
+  "correct": true,
+  "turns": 2,
+  "final_question": "那个区有多少家有效终端",
+  "rewritten": "2026年8月华东区有多少家有效终端",
+  "sql": "SELECT COUNT(DISTINCT o.outlet_id) AS 有效终端数\nFROM dim_outlet o\nJOIN dim_date d ON d.full_date = DATE '2026-08-01'\nWHERE o.region = '华东'\n  AND o.is_active = TRUE\n  AND o.open_date <= DATE '2026-08-31'"
+ },
+ {
+  "id": "MT-13",
+  "correct": true,
+  "turns": 2,
+  "final_question": "华东区的呢",
+  "rewritten": "2026年8月华东区的促销费用是多少",
+  "sql": "WITH c AS (\n  SELECT d.year_month, SUM(pc.cost_amount) AS 促销费用\n  FROM fact_promo_cost pc\n  JOIN dim_date d ON pc.date_key = d.date_key\n  JOIN dim_dealer dl ON pc.dealer_id = dl.dealer_id\n  WHERE d.year_month = '2026-08' AND dl.region = '华东'\n  GROUP BY d.year_month\n)\nSELECT 促销费用\nFROM c"
+ },
+ {
+  "id": "MT-14",
+  "correct": true,
+  "turns": 2,
+  "final_question": "只要华东和华南",
+  "rewritten": "2026年8月华东和华南两大区的净销额是多少",
+  "sql": "SELECT\n  dl.region AS 大区,\n  SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\nWHERE d.year_month = '2026-08'\n  AND dl.region IN ('华东', '华南')\nGROUP BY dl.region"
+ },
+ {
+  "id": "MT-15",
+  "correct": true,
+  "turns": 3,
+  "final_question": "华北呢",
+  "rewritten": "华北区2026年8月的净销额是多少",
+  "sql": "SELECT\n    SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE o.region = '华北'\n  AND d.year_month = '2026-08'"
+ },
+ {
+  "id": "MT-16",
+  "correct": true,
+  "turns": 3,
+  "final_question": "销量呢",
+  "rewritten": "2026年8月茶饮料的销量是多少",
+  "sql": "SELECT \n  SUM(s.qty) AS 销量\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_product p ON s.sku_id = p.sku_id\nWHERE p.category = '茶饮料'\n  AND d.year_month = '2026-08'"
+ },
+ {
+  "id": "MT-17",
+  "correct": true,
+  "turns": 3,
+  "final_question": "两个月合计",
+  "rewritten": "2026年7月和8月华东区的净销额合计是多少",
+  "sql": "SELECT \n  SUM(s.net_amount) AS 净销额合计\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE o.region = '华东'\n  AND d.year_month IN ('2026-07', '2026-08')"
+ },
+ {
+  "id": "MT-18",
+  "correct": true,
+  "turns": 2,
+  "final_question": "华东区的呢",
+  "rewritten": "华东区的有效终端有多少家",
+  "sql": "SELECT COUNT(*) AS 有效终端数\nFROM dim_outlet AS o\nWHERE o.region = '华东'\n  AND o.is_active = TRUE"
+ },
+ {
+  "id": "MT-19",
+  "correct": false,
+  "turns": 2,
+  "final_question": "最高的那家叫什么",
+  "rewritten": "2026年8月净销额最高的经销商叫什么",
+  "sql": "SELECT dl.dealer_name AS 经销商名称\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_dealer dl ON s.dealer_id = dl.dealer_id\nWHERE d.year_month = '2026-08'\nGROUP BY dl.dealer_name\nORDER BY SUM(s.net_amount) DESC\nLIMIT 1"
+ },
+ {
+  "id": "MT-20",
+  "correct": true,
+  "turns": 2,
+  "final_question": "把渠道换成连锁超市",
+  "rewritten": "2026年8月华东区连锁超市的净销额是多少",
+  "sql": "SELECT \n    SUM(s.net_amount) AS 净销额\nFROM fact_sales s\nJOIN dim_date d ON s.date_key = d.date_key\nJOIN dim_outlet o ON s.outlet_id = o.outlet_id\nWHERE d.year_month = '2026-08'\n  AND o.region = '华东'\n  AND o.channel = '连锁超市'"
+ }
+]

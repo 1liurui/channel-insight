@@ -1,0 +1,158 @@
+# 多轮指代消解测试集
+#
+# 主测试集 100 题全是单轮，指代消解这条链路从未被评测覆盖。
+# 这里每组给出前置轮次与最后一轮的省略式追问，只对最后一轮判分：
+# 链路需把「那华南呢」还原成完整问句后再进 schema linking。
+#
+# 对照组是关掉 rewrite_question 节点——此时模型只看到省略式问句，
+# 缺主语或缺时间范围，必然错。
+cases:
+  - id: MT-01
+    turns: ["华东区2026年8月的净销额是多少", "那华南呢"]
+    gold_sql: |
+      SELECT SUM(s.net_amount) FROM fact_sales s
+      JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+      WHERE o.region='华南' AND d.year_month='2026-08'
+
+  - id: MT-02
+    turns: ["2026年8月各渠道的净销额", "只看便利店"]
+    gold_sql: |
+      SELECT SUM(s.net_amount) FROM fact_sales s
+      JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+      WHERE o.channel='便利店' AND d.year_month='2026-08'
+
+  - id: MT-03
+    turns: ["华东区2026年8月的净销额是多少", "上个月是多少"]
+    gold_sql: |
+      SELECT SUM(s.net_amount) FROM fact_sales s
+      JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+      WHERE o.region='华东' AND d.year_month='2026-07'
+
+  - id: MT-04
+    turns: ["华东区的铺市率是多少", "换成华北"]
+    gold_sql: |
+      SELECT COUNT(DISTINCT r.outlet_id)::DOUBLE / NULLIF(COUNT(DISTINCT o.outlet_id),0)
+      FROM dim_outlet o LEFT JOIN rel_outlet_sku r ON o.outlet_id=r.outlet_id
+      WHERE o.is_active AND o.region='华北'
+
+  - id: MT-05
+    turns: ["2026年8月各大区的净销额", "其中最高的是哪个大区"]
+    gold_sql: |
+      SELECT o.region FROM fact_sales s
+      JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+      WHERE d.year_month='2026-08' GROUP BY o.region
+      ORDER BY SUM(s.net_amount) DESC LIMIT 1
+
+  - id: MT-06
+    turns: ["华东区2026年8月的销量是多少", "净销额呢"]
+    gold_sql: |
+      SELECT SUM(s.net_amount) FROM fact_sales s
+      JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+      WHERE o.region='华东' AND d.year_month='2026-08'
+
+  - id: MT-07
+    turns: ["2026年8月大卖场的净销额", "这个渠道有多少家有效终端"]
+    gold_sql: "SELECT COUNT(*) FROM dim_outlet WHERE is_active AND channel='大卖场'"
+
+  - id: MT-08
+    turns: ["2026年8月华东区的净销额", "占全国的比例是多少"]
+    gold_sql: |
+      SELECT SUM(s.net_amount) FILTER (WHERE o.region='华东') / SUM(s.net_amount)
+      FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id WHERE d.year_month='2026-08'
+
+  - id: MT-09
+    turns: ["2026年8月各品类的净销额", "果汁的销量是多少"]
+    gold_sql: |
+      SELECT SUM(s.qty) FROM fact_sales s
+      JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_product p ON s.sku_id=p.sku_id
+      WHERE p.category='果汁' AND d.year_month='2026-08'
+
+  - id: MT-10
+    turns: ["华南区2026年7月的净销额是多少", "8月比7月增长了多少金额"]
+    gold_sql: |
+      SELECT SUM(s.net_amount) FILTER (WHERE d.year_month='2026-08')
+           - SUM(s.net_amount) FILTER (WHERE d.year_month='2026-07')
+      FROM fact_sales s JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+      WHERE o.region='华南' AND d.year_month IN ('2026-07','2026-08')
+
+  - id: MT-11
+    turns: ["2026年8月便利店渠道的净销额", "A类店呢"]
+    gold_sql: |
+      SELECT SUM(s.net_amount) FROM fact_sales s
+      JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+      WHERE o.channel='便利店' AND o.outlet_grade='A' AND d.year_month='2026-08'
+
+  - id: MT-12
+    turns: ["2026年8月华东区的净销额是多少", "那个区有多少家有效终端"]
+    gold_sql: "SELECT COUNT(*) FROM dim_outlet WHERE is_active AND region='华东'"
+
+  - id: MT-13
+    turns: ["2026年8月的促销费用是多少", "华东区的呢"]
+    gold_sql: |
+      SELECT SUM(pc.cost_amount) FROM fact_promo_cost pc
+      JOIN dim_date d ON pc.date_key=d.date_key
+      JOIN dim_outlet o ON pc.outlet_id=o.outlet_id
+      WHERE o.region='华东' AND d.year_month='2026-08'
+
+  - id: MT-14
+    turns: ["2026年8月各大区的净销额", "只要华东和华南"]
+    gold_sql: |
+      SELECT o.region, SUM(s.net_amount) FROM fact_sales s
+      JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+      WHERE d.year_month='2026-08' AND o.region IN ('华东','华南')
+      GROUP BY o.region
+
+  - id: MT-15
+    turns: ["华东区2026年8月的净销额是多少", "那华南呢", "华北呢"]
+    gold_sql: |
+      SELECT SUM(s.net_amount) FROM fact_sales s
+      JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+      WHERE o.region='华北' AND d.year_month='2026-08'
+
+  - id: MT-16
+    turns: ["2026年8月碳酸饮料的净销额", "改成茶饮料", "销量呢"]
+    gold_sql: |
+      SELECT SUM(s.qty) FROM fact_sales s
+      JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_product p ON s.sku_id=p.sku_id
+      WHERE p.category='茶饮料' AND d.year_month='2026-08'
+
+  - id: MT-17
+    turns: ["2026年8月华东区的净销额", "7月呢", "两个月合计"]
+    gold_sql: |
+      SELECT SUM(s.net_amount) FROM fact_sales s
+      JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+      WHERE o.region='华东' AND d.year_month IN ('2026-07','2026-08')
+
+  - id: MT-18
+    turns: ["有多少家有效终端", "华东区的呢"]
+    gold_sql: "SELECT COUNT(*) FROM dim_outlet WHERE is_active AND region='华东'"
+
+  - id: MT-19
+    turns: ["2026年8月各经销商的净销额", "最高的那家叫什么"]
+    gold_sql: |
+      SELECT dl.dealer_name FROM fact_sales s
+      JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_dealer dl ON s.dealer_id=dl.dealer_id
+      WHERE d.year_month='2026-08' GROUP BY dl.dealer_id, dl.dealer_name
+      ORDER BY SUM(s.net_amount) DESC LIMIT 1
+
+  - id: MT-20
+    turns: ["2026年8月华东区大卖场的净销额", "把渠道换成连锁超市"]
+    gold_sql: |
+      SELECT SUM(s.net_amount) FROM fact_sales s
+      JOIN dim_date d ON s.date_key=d.date_key
+      JOIN dim_outlet o ON s.outlet_id=o.outlet_id
+      WHERE o.region='华东' AND o.channel='连锁超市' AND d.year_month='2026-08'

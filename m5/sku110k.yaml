@@ -1,0 +1,9 @@
+# SKU110K 数据集配置（单类别密集检测）
+# 图片已由 prep.py 预缩放至长边 1024；YOLO 坐标归一化，缩放不影响标注
+path: /root/autodl-tmp/sku110k
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: product   # 货架上的单个商品排面

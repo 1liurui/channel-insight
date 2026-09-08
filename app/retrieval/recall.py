@@ -45,7 +45,20 @@ def sparse(kind: str, query: str, k: int) -> list[str]:
     return [uid for uid, score in get_sparse(kind).search(query, k) if score > 0]
 
 
-def recall(kind: str, query: str, k: int = 15, hybrid: bool = True) -> list[Candidate]:
+def recall(kind: str, query: str, k: int = 15, hybrid: bool = True,
+           rerank: bool = False) -> list[Candidate]:
+    if rerank:
+        # 向量召回一个大候选池，再由 cross-encoder 精排到 k 个。
+        # 双塔的粗排负责覆盖率，交互式的精排负责准确率。
+        from app.config import get_settings
+        from app.retrieval.reranker import rerank as cross_rerank
+        umap0 = unit_map(kind)
+        pool = dense(kind, query, get_settings().rerank_pool)
+        picked = cross_rerank(query, [umap0[u].text for u in pool], pool, k)
+        return [Candidate(uid=u, kind=kind, score=1.0 / (i + 1), payload=umap0[u].payload,
+                          dense_rank=pool.index(u) + 1)
+                for i, u in enumerate(picked)]
+
     d = dense(kind, query, k * 2)
     s = sparse(kind, query, k * 2) if hybrid else []
     fused = rrf([d, s] if hybrid else [d])

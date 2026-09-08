@@ -187,7 +187,31 @@ def col_type(name: str) -> str:
     return "VARCHAR"
 
 
-def build_tables() -> list[dict]:
+# 数仓分层变体。真实数仓的表数量主要不是被业务实体撑起来的，而是被分层撑起来的：
+# 同一个实体在 ODS 有贴源表、DWD 有清洗后的明细、DWS 有按不同粒度的汇总、
+# ADS 有面向报表的应用表。这也是「几千张表」的由来。
+LAYERS = [
+    ("ods_", "ODS 贴源层", "贴源同步表，字段与源系统一致未做清洗", ["src_system", "load_time", "load_batch", "is_deleted"]),
+    ("dwd_", "DWD 明细层", "清洗后的明细表，已做标准化与去重", ["etl_time", "data_version"]),
+    ("dws_", "DWS 汇总层", "按主题与粒度预聚合的汇总表", ["stat_period", "grain", "agg_value", "record_cnt"]),
+    ("ads_", "ADS 应用层", "面向固定报表的应用表，口径随报表定制", ["report_code", "stat_date", "dim_key", "metric_value"]),
+]
+
+
+def layered(base_name: str, domain: str, base_desc: str, cols: list[str], want: int) -> list[dict]:
+    """给一个业务实体生成分层变体，直到凑够 want 张。"""
+    out = []
+    for prefix, layer, layer_desc, extra in LAYERS[:want]:
+        out.append({
+            "name": prefix + base_name, "type": "distractor",
+            "description": f"[{domain}域·{layer}] {base_desc}的{layer_desc}。与渠道销售分析无关。",
+            "columns": [{"name": c, "type": col_type(c), "description": c}
+                        for c in cols[:5] + extra],
+        })
+    return out
+
+
+def build_tables(target: int = 90) -> list[dict]:
     out = []
     for prefix, (domain, tables) in DOMAINS.items():
         for name, desc, cols in tables:
@@ -202,11 +226,20 @@ def build_tables() -> list[dict]:
             "description": desc,
             "columns": [{"name": c, "type": col_type(c), "description": c} for c in cols],
         })
+
+    # 不够就按数仓分层展开，一轮一层，保证各业务域均匀铺开而不是堆在某个域
+    for depth in range(1, len(LAYERS) + 1):
+        for prefix, (domain, tables) in DOMAINS.items():
+            for name, desc, cols in tables:
+                if len(out) >= target:
+                    return out
+                out.extend(layered(name, domain, desc, cols, depth)[depth - 1:depth])
     return out
 
 
 def main() -> None:
-    tables = build_tables()
+    target = int(sys.argv[1]) - 10 if len(sys.argv) > 1 else 90
+    tables = build_tables(target)
     conf_dir = get_settings().conf_dir
     (conf_dir / "schema_extra.yaml").write_text(
         "# 干扰表，仅用于 schema 压力测试（WIDE_SCHEMA=1 时并入检索语料）\n"
@@ -221,7 +254,8 @@ def main() -> None:
     con.close()
 
     ncol = sum(len(t["columns"]) for t in tables)
-    print(f"生成干扰表 {len(tables)} 张（其中陷阱表 {len(TRAPS)} 张），{ncol} 字段")
+    layers = sum(1 for t in tables if t["name"][:4] in ("ods_", "dwd_", "dws_", "ads_"))
+    print(f"生成干扰表 {len(tables)} 张（陷阱表 {len(TRAPS)} 张，分层变体 {layers} 张），{ncol} 字段")
     print(f"数仓现有表总数：{n}")
     print(f"写入 {conf_dir / 'schema_extra.yaml'}")
 

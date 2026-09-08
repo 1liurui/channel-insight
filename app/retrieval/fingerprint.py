@@ -34,6 +34,8 @@ VALUE_COLUMNS: list[tuple[str, str]] = [
 ]
 
 # 时间表达归一。顺序即优先级，先匹配到的胜出。
+CN_DIGIT = {"一": "1", "二": "2", "三": "3", "四": "4"}
+
 TIME_PATTERNS: list[tuple[str, str]] = [
     (r"(上上个?月|前个?月)", "MONTH-2"),
     (r"(上个?月|上一个?月|前一个?月)", "MONTH-1"),
@@ -125,7 +127,13 @@ def extract(question: str) -> Fingerprint:
     tc = []
     for pat, tpl in TIME_PATTERNS:
         for m in re.finditer(pat, q):
-            groups = [g for g in m.groups() if g and not re.fullmatch(r"[^\d]+", g)]
+            # 过滤掉整体匹配那类不含数字的捕获组（如「上个月」自身），
+            # 但中文数字要先归一化——否则「第二季度」的「二」会被当成噪声滤掉，
+            # 模板 Q{} 拿不到参数直接 IndexError，整题在指纹阶段就崩掉。
+            groups = [CN_DIGIT.get(g, g) for g in m.groups() if g]
+            groups = [g for g in groups if not re.fullmatch(r"[^\d]+", g)]
+            if "{}" in tpl and len(groups) < tpl.count("{}"):
+                continue
             tc.append((m.start(), m.end(), tpl.format(*groups) if "{}" in tpl else tpl))
 
     return Fingerprint(

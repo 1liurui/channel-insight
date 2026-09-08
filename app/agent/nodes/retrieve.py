@@ -7,17 +7,29 @@ from app.agent.state import AgentState
 from app.retrieval.fingerprint import extract
 from app.retrieval.recall import recall, recall_values
 
-TOP_COLUMN = 18
 TOP_METRIC = 4
-TOP_TABLE = 5
 # 维表相关性下限（相对最高分）。多余维表危害小，只剪明显无关的。
 MIN_TABLE_RATIO = 0.15
+
+
+# 曾把这两个上限做成随 schema 规模自适应（字段 18→80、选表 5→7），
+# 假设是压力测试里「召回缺失从 9 次涨到 34 次」源于上限太死。实测否掉了：
+# 300 张表下自适应 73.3%，固定上限 74.0%，放宽反而略降——
+# 多出来的名额全被干扰表占了（单题实测选出 8 张表，只有 2 张是真表）。
+# 召回缺失的真正成因是排序质量而非候选数量，放宽上限解决不了。
+TOP_COLUMN = 18
+TOP_TABLE = 5
+
+
+def _budget() -> tuple[int, int]:
+    return TOP_COLUMN, TOP_TABLE
 
 
 @timed("recall_column")
 def recall_column(state: AgentState) -> dict:
     q = state.get("rewritten") or state["question"]
-    hits = recall("column", q, k=TOP_COLUMN, hybrid=state.get("use_hybrid", False))
+    hits = recall("column", q, k=_budget()[0], hybrid=state.get("use_hybrid", False),
+                  rerank=state.get("use_rerank", False))
     return {"column_hits": [{"uid": c.uid, "score": c.score, **c.payload} for c in hits]}
 
 
@@ -100,6 +112,6 @@ def fuse_candidates(state: AgentState) -> dict:
         elif s < top * MIN_TABLE_RATIO:
             continue
         tables.append(t)
-        if len(tables) >= TOP_TABLE:
+        if len(tables) >= _budget()[1]:
             break
     return {"tables": tables}

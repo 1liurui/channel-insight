@@ -53,6 +53,27 @@ def filter_schema(state: AgentState) -> dict:
     return {"tables": tables}
 
 
+# 口径全量注入的上限。指标数不超过这个值时直接全塞，超过才走检索。
+#
+# 检索注入只给 top-2，而复合指标题往往要两个以上口径（费效比要销额与费用、
+# 库存周转要库存与销量），漏一个就必错——实测全量注入 82.3% 对检索注入 80.8%，
+# T4 复合指标档 78.7% 对 64.7%，差 14 个百分点。
+#
+# 但不能无条件全塞：口径带 caveat 后每项约 300 字符，指标上百时会挤爆上下文，
+# 且无关口径本身就是干扰。所以按规模分流，而不是二选一。
+METRIC_INJECT_ALL_MAX = 20
+
+
+def _metric_context(state: AgentState) -> list[dict]:
+    from app.retrieval.corpus import metric_units
+    if state.get("force_metric_retrieval"):
+        return state.get("metric_hits", [])[:2]
+    units = metric_units()
+    if len(units) <= METRIC_INJECT_ALL_MAX:
+        return [u.payload for u in units]
+    return state.get("metric_hits", [])[:2]
+
+
 @timed("build_context")
 def build_context(state: AgentState) -> dict:
     """组装 semantic layer 上下文。
@@ -69,9 +90,10 @@ def build_context(state: AgentState) -> dict:
         sel = set(state.get("tables", []))
         rel = [j for j in joins() if _join_tables(j) <= sel]
         parts += ["", "关联路径（只允许使用以下等值关联）："] + [f"  {j}" for j in rel or joins()]
-        if state.get("metric_hits"):
+        hits = _metric_context(state)
+        if hits:
             parts += ["", "相关指标口径（必须严格按此计算，不得自行发挥）："]
-            for m in state["metric_hits"][:2]:
+            for m in hits:
                 parts.append(f"  【{m['name']}】{m['description']}")
                 parts.append(f"    计算式：{m['expr']}")
                 if m.get("caveat"):

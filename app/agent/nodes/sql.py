@@ -92,12 +92,85 @@ def _clean(text: str) -> str:
 
 @timed("generate_sql")
 def generate_sql(state: AgentState) -> dict:
-    msg = get_llm().invoke([
-        SystemMessage(content=SYSTEM),
-        HumanMessage(content=GEN_PROMPT.format(
-            context=state["context"], question=state.get("rewritten") or state["question"])),
-    ])
-    return {"sql": _clean(msg.content), "llm_calls": 1}
+    n = state.get("n_samples", 1)
+    if n <= 1:
+        msg = get_llm().invoke([
+            SystemMessage(content=SYSTEM),
+            HumanMessage(content=GEN_PROMPT.format(
+                context=state["context"], question=state.get("rewritten") or state["question"])),
+        ])
+        return {"sql": _clean(msg.content), "llm_calls": 1}
+    return _self_consistency(state, n)
+
+
+def _self_consistency(state: AgentState, n: int) -> dict:
+    """采样 n 条 SQL，各自执行后按结果集投票。
+
+    针对失败分布里最大的一类：逻辑错误（占失败一半以上）。这类错误的特征是
+    SQL 语法正确、表也选对，但聚合或筛选写错——护栏和 self-correction 都拦不住，
+    因为引擎不报错，错的是语义。
+
+    投票依据是**执行结果**而不是 SQL 文本：同一个问题有无数种正确写法，
+    比文本必然把等价写法判成分歧。结果集归一化后哈希，取票数最多的那一组，
+    平票时取生成顺序靠前的（temperature 较低的那条）。
+
+    代价是 n 倍 API 调用。采样串行发出——曾用内层线程池并发，
+    但链路本身已在外层线程池里跑，嵌套后每题再起 n 个短命线程，
+    评测跑到第二轮必然挂起（CPU 归零、无网络活动、不返回）。
+    并发收益本就有限：外层已有并发，内层再并发只是把同一批请求挤在一起。
+    """
+    prompt = GEN_PROMPT.format(context=state["context"],
+                               question=state.get("rewritten") or state["question"])
+    # 第一条走 temperature=0 保证可复现，其余抬温采样以产生真正的分歧
+    temps = [0.0] + [0.7] * (n - 1)
+
+    cands = []
+    for t in temps:
+        try:
+            c = _clean(get_llm(temperature=t).invoke(
+                [SystemMessage(content=SYSTEM), HumanMessage(content=prompt)]).content)
+            if c:
+                cands.append(c)
+        except Exception:            # noqa: BLE001  单条采样失败不该拖垮整题
+            continue
+    if not cands:
+        return {"sql": "", "llm_calls": n}
+
+    buckets: dict[str, list[str]] = {}
+    for sql in cands:
+        if not guardrail({**state, "sql": sql}).get("guard_ok"):
+            continue
+        try:
+            res = duck.run(sql)
+        except Exception:            # noqa: BLE001  跑不通的候选直接弃权，不参与投票
+            continue
+        key = _result_key(res.columns, res.rows)
+        buckets.setdefault(key, []).append(sql)
+
+    if not buckets:
+        return {"sql": cands[0], "llm_calls": n}
+    best = max(buckets.values(), key=len)
+    return {"sql": best[0], "llm_calls": n}
+
+
+def _result_key(columns: list[str], rows: list) -> str:
+    """结果集指纹。列名不参与——列别名不同不代表答案不同。"""
+    import hashlib
+    norm = sorted(repr([_round(v) for v in r]) for r in rows[:200])
+    return hashlib.md5(f"{len(columns)}|{len(rows)}|{'|'.join(norm)}".encode()).hexdigest()
+
+
+def _round(v):
+    """数值按 4 位有效数字归一，吸收浮点累加顺序差异——与评测口径一致。"""
+    if isinstance(v, bool) or v is None:
+        return v
+    if isinstance(v, (int, float)) or type(v).__name__ == "Decimal":
+        f = float(v)
+        if f == 0:
+            return 0.0
+        import math
+        return round(f, -int(math.floor(math.log10(abs(f)))) + 3)
+    return v
 
 
 @timed("guardrail")

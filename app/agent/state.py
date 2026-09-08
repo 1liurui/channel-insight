@@ -53,19 +53,25 @@ class AgentState(TypedDict, total=False):
     timings: Annotated[dict[str, float], operator.or_]
     llm_calls: Annotated[int, operator.add]
     use_hybrid: bool
+    use_rerank: bool
     use_retrieval: bool
     use_semantic_layer: bool
+    force_metric_retrieval: bool
     use_self_correction: bool
+    n_samples: int
 
 
 def new_state(question: str, history: list[dict] | None = None, *,
-              use_hybrid: bool = False, use_retrieval: bool = True,
-              use_semantic_layer: bool = True,
-              use_self_correction: bool = True, session_id: str = "") -> AgentState:
+              use_hybrid: bool = False, use_rerank: bool = False,
+              use_retrieval: bool = True,
+              use_semantic_layer: bool = True, force_metric_retrieval: bool = False,
+              use_self_correction: bool = True, n_samples: int = 1,
+              session_id: str = "") -> AgentState:
     return AgentState(
         question=question, history=history or [], session_id=session_id,
         rewritten=question, retry=0, timings={}, llm_calls=0, attempts=[],
-        use_hybrid=use_hybrid, use_retrieval=use_retrieval,
+        use_hybrid=use_hybrid, use_rerank=use_rerank, use_retrieval=use_retrieval,
         use_semantic_layer=use_semantic_layer,
-        use_self_correction=use_self_correction,
+        force_metric_retrieval=force_metric_retrieval,
+        use_self_correction=use_self_correction, n_samples=n_samples,
     )

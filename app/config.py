@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     qdrant_path: Path = Path("data/qdrant")
 
     embed_model: str = "BAAI/bge-small-zh-v1.5"
+    rerank_model: str = "BAAI/bge-reranker-base"
+    rerank_pool: int = 60          # 送进 cross-encoder 的候选池大小
 
     @property
     def duckdb_file(self) -> Path:

@@ -24,6 +24,9 @@ CONFIGS: dict[str, dict[str, Any]] = {
     "hybrid_bm25":        {"use_hybrid": True},
     "no_self_correction": {"use_self_correction": False},
     "no_retrieval":       {"use_retrieval": False},
+    "rerank":             {"use_rerank": True},
+    "metric_retrieval":   {"force_metric_retrieval": True},
+    "selfcons5":          {"n_samples": 5},
 }
 CONFIG_LABEL = {
     "full": "主方案（全链路）",
@@ -32,6 +35,9 @@ CONFIG_LABEL = {
     "hybrid_bm25": "消融：加回 BM25 混合检索",
     "no_self_correction": "消融：移除 self-correction",
     "no_retrieval": "消融：不做检索，全量 schema + semantic layer",
+    "rerank": "改进：字段召回加 cross-encoder 重排",
+    "metric_retrieval": "消融：口径改回检索注入 top-2",
+    "selfcons5": "改进：SQL 采样 5 条按执行结果投票",
 }
 
 BARE_SYSTEM = "你是资深数据分析工程师，只输出可直接执行的 DuckDB SQL，不输出任何解释。"

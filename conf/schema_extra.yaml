@@ -1747,3 +1747,5615 @@ tables:
   - name: in_transit_qty
     type: INTEGER
     description: in_transit_qty
+- name: ods_fin_gl_entry
+  type: distractor
+  description: '[财务域·ODS 贴源层] 总账分录明细的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: entry_id
+    type: INTEGER
+    description: entry_id
+  - name: voucher_no
+    type: INTEGER
+    description: voucher_no
+  - name: account_code
+    type: VARCHAR
+    description: account_code
+  - name: debit_amt
+    type: DECIMAL
+    description: debit_amt
+  - name: credit_amt
+    type: DECIMAL
+    description: credit_amt
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_fin_account
+  type: distractor
+  description: '[财务域·ODS 贴源层] 会计科目主数据的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: account_code
+    type: VARCHAR
+    description: account_code
+  - name: account_name
+    type: VARCHAR
+    description: account_name
+  - name: account_level
+    type: INTEGER
+    description: account_level
+  - name: parent_code
+    type: VARCHAR
+    description: parent_code
+  - name: is_leaf
+    type: BOOLEAN
+    description: is_leaf
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_fin_ar_invoice
+  type: distractor
+  description: '[财务域·ODS 贴源层] 应收发票的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: invoice_id
+    type: INTEGER
+    description: invoice_id
+  - name: customer_code
+    type: VARCHAR
+    description: customer_code
+  - name: invoice_amt
+    type: DECIMAL
+    description: invoice_amt
+  - name: due_date
+    type: DATE
+    description: due_date
+  - name: settled_amt
+    type: DECIMAL
+    description: settled_amt
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_fin_ap_invoice
+  type: distractor
+  description: '[财务域·ODS 贴源层] 应付发票的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: invoice_id
+    type: INTEGER
+    description: invoice_id
+  - name: vendor_code
+    type: VARCHAR
+    description: vendor_code
+  - name: invoice_amt
+    type: DECIMAL
+    description: invoice_amt
+  - name: due_date
+    type: DATE
+    description: due_date
+  - name: paid_amt
+    type: DECIMAL
+    description: paid_amt
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_fin_budget
+  type: distractor
+  description: '[财务域·ODS 贴源层] 预算编制表的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: budget_id
+    type: INTEGER
+    description: budget_id
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: budget_year
+    type: VARCHAR
+    description: budget_year
+  - name: budget_amt
+    type: DECIMAL
+    description: budget_amt
+  - name: used_amt
+    type: DECIMAL
+    description: used_amt
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_fin_cost_center
+  type: distractor
+  description: '[财务域·ODS 贴源层] 成本中心主数据的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: cost_center
+    type: VARCHAR
+    description: cost_center
+  - name: cc_name
+    type: VARCHAR
+    description: cc_name
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: owner
+    type: VARCHAR
+    description: owner
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_fin_exchange_rate
+  type: distractor
+  description: '[财务域·ODS 贴源层] 汇率表的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: rate_date
+    type: DECIMAL
+    description: rate_date
+  - name: currency_from
+    type: DATE
+    description: currency_from
+  - name: currency_to
+    type: DATE
+    description: currency_to
+  - name: rate
+    type: DECIMAL
+    description: rate
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_fin_settlement
+  type: distractor
+  description: '[财务域·ODS 贴源层] 结算单的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: settle_id
+    type: INTEGER
+    description: settle_id
+  - name: dealer_code
+    type: VARCHAR
+    description: dealer_code
+  - name: settle_amt
+    type: DECIMAL
+    description: settle_amt
+  - name: settle_date
+    type: DATE
+    description: settle_date
+  - name: channel_type
+    type: VARCHAR
+    description: channel_type
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_fin_rebate
+  type: distractor
+  description: '[财务域·ODS 贴源层] 返利计提的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: rebate_id
+    type: INTEGER
+    description: rebate_id
+  - name: dealer_code
+    type: VARCHAR
+    description: dealer_code
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: rebate_amt
+    type: DECIMAL
+    description: rebate_amt
+  - name: policy_code
+    type: VARCHAR
+    description: policy_code
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_fin_tax_detail
+  type: distractor
+  description: '[财务域·ODS 贴源层] 税务明细的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: tax_id
+    type: INTEGER
+    description: tax_id
+  - name: invoice_id
+    type: INTEGER
+    description: invoice_id
+  - name: tax_rate
+    type: DECIMAL
+    description: tax_rate
+  - name: tax_amt
+    type: DECIMAL
+    description: tax_amt
+  - name: tax_type
+    type: VARCHAR
+    description: tax_type
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_fin_cash_flow
+  type: distractor
+  description: '[财务域·ODS 贴源层] 现金流水的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: flow_id
+    type: INTEGER
+    description: flow_id
+  - name: account_code
+    type: VARCHAR
+    description: account_code
+  - name: flow_amt
+    type: DECIMAL
+    description: flow_amt
+  - name: flow_date
+    type: DATE
+    description: flow_date
+  - name: direction
+    type: VARCHAR
+    description: direction
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_fin_period_close
+  type: distractor
+  description: '[财务域·ODS 贴源层] 期末结账记录的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: closed_by
+    type: VARCHAR
+    description: closed_by
+  - name: close_time
+    type: TIMESTAMP
+    description: close_time
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_hr_employee
+  type: distractor
+  description: '[人力资源域·ODS 贴源层] 员工主数据的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: emp_name
+    type: VARCHAR
+    description: emp_name
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: position
+    type: VARCHAR
+    description: position
+  - name: hire_date
+    type: DATE
+    description: hire_date
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_hr_department
+  type: distractor
+  description: '[人力资源域·ODS 贴源层] 部门主数据的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: dept_name
+    type: VARCHAR
+    description: dept_name
+  - name: parent_dept
+    type: VARCHAR
+    description: parent_dept
+  - name: manager_id
+    type: INTEGER
+    description: manager_id
+  - name: level
+    type: INTEGER
+    description: level
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_hr_attendance
+  type: distractor
+  description: '[人力资源域·ODS 贴源层] 考勤记录的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: record_id
+    type: INTEGER
+    description: record_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: work_date
+    type: DATE
+    description: work_date
+  - name: check_in
+    type: TIMESTAMP
+    description: check_in
+  - name: check_out
+    type: TIMESTAMP
+    description: check_out
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_hr_payroll
+  type: distractor
+  description: '[人力资源域·ODS 贴源层] 薪资发放的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: payroll_id
+    type: INTEGER
+    description: payroll_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: gross_pay
+    type: DECIMAL
+    description: gross_pay
+  - name: net_pay
+    type: DECIMAL
+    description: net_pay
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_hr_leave
+  type: distractor
+  description: '[人力资源域·ODS 贴源层] 请假申请的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: leave_id
+    type: INTEGER
+    description: leave_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: leave_type
+    type: VARCHAR
+    description: leave_type
+  - name: start_date
+    type: DATE
+    description: start_date
+  - name: end_date
+    type: DATE
+    description: end_date
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_hr_position
+  type: distractor
+  description: '[人力资源域·ODS 贴源层] 岗位字典的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: position_code
+    type: VARCHAR
+    description: position_code
+  - name: position_name
+    type: VARCHAR
+    description: position_name
+  - name: job_family
+    type: VARCHAR
+    description: job_family
+  - name: grade
+    type: INTEGER
+    description: grade
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_hr_training
+  type: distractor
+  description: '[人力资源域·ODS 贴源层] 培训记录的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: training_id
+    type: INTEGER
+    description: training_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: course_code
+    type: VARCHAR
+    description: course_code
+  - name: finish_date
+    type: DATE
+    description: finish_date
+  - name: score
+    type: INTEGER
+    description: score
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_hr_performance
+  type: distractor
+  description: '[人力资源域·ODS 贴源层] 绩效考核的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: review_id
+    type: INTEGER
+    description: review_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: rating
+    type: VARCHAR
+    description: rating
+  - name: reviewer_id
+    type: INTEGER
+    description: reviewer_id
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_hr_recruit
+  type: distractor
+  description: '[人力资源域·ODS 贴源层] 招聘需求的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: req_id
+    type: INTEGER
+    description: req_id
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: position_code
+    type: VARCHAR
+    description: position_code
+  - name: headcount
+    type: INTEGER
+    description: headcount
+  - name: open_date
+    type: DATE
+    description: open_date
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_hr_contract
+  type: distractor
+  description: '[人力资源域·ODS 贴源层] 劳动合同的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: contract_id
+    type: INTEGER
+    description: contract_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: start_date
+    type: DATE
+    description: start_date
+  - name: end_date
+    type: DATE
+    description: end_date
+  - name: contract_type
+    type: VARCHAR
+    description: contract_type
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_scm_purchase_order
+  type: distractor
+  description: '[供应链与物流域·ODS 贴源层] 采购订单的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: po_id
+    type: INTEGER
+    description: po_id
+  - name: vendor_code
+    type: VARCHAR
+    description: vendor_code
+  - name: order_date
+    type: DATE
+    description: order_date
+  - name: total_amt
+    type: DECIMAL
+    description: total_amt
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_scm_purchase_item
+  type: distractor
+  description: '[供应链与物流域·ODS 贴源层] 采购订单行的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: po_id
+    type: INTEGER
+    description: po_id
+  - name: line_no
+    type: INTEGER
+    description: line_no
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: qty
+    type: INTEGER
+    description: qty
+  - name: unit_price
+    type: DECIMAL
+    description: unit_price
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_scm_vendor
+  type: distractor
+  description: '[供应链与物流域·ODS 贴源层] 供应商主数据的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: vendor_code
+    type: VARCHAR
+    description: vendor_code
+  - name: vendor_name
+    type: VARCHAR
+    description: vendor_name
+  - name: vendor_type
+    type: VARCHAR
+    description: vendor_type
+  - name: region
+    type: VARCHAR
+    description: region
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_scm_material
+  type: distractor
+  description: '[供应链与物流域·ODS 贴源层] 物料主数据的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: material_name
+    type: VARCHAR
+    description: material_name
+  - name: material_group
+    type: VARCHAR
+    description: material_group
+  - name: unit
+    type: VARCHAR
+    description: unit
+  - name: spec
+    type: VARCHAR
+    description: spec
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_scm_warehouse
+  type: distractor
+  description: '[供应链与物流域·ODS 贴源层] 仓库主数据的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: wh_name
+    type: VARCHAR
+    description: wh_name
+  - name: wh_type
+    type: VARCHAR
+    description: wh_type
+  - name: city
+    type: VARCHAR
+    description: city
+  - name: capacity
+    type: INTEGER
+    description: capacity
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_scm_stock_move
+  type: distractor
+  description: '[供应链与物流域·ODS 贴源层] 库存移动的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: move_id
+    type: INTEGER
+    description: move_id
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: move_qty
+    type: INTEGER
+    description: move_qty
+  - name: move_date
+    type: DATE
+    description: move_date
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_scm_shipment
+  type: distractor
+  description: '[供应链与物流域·ODS 贴源层] 发运单的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: shipment_id
+    type: INTEGER
+    description: shipment_id
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: dest_city
+    type: VARCHAR
+    description: dest_city
+  - name: ship_date
+    type: DATE
+    description: ship_date
+  - name: carrier_code
+    type: VARCHAR
+    description: carrier_code
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_scm_carrier
+  type: distractor
+  description: '[供应链与物流域·ODS 贴源层] 承运商主数据的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: carrier_code
+    type: VARCHAR
+    description: carrier_code
+  - name: carrier_name
+    type: VARCHAR
+    description: carrier_name
+  - name: transport_mode
+    type: VARCHAR
+    description: transport_mode
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_scm_delivery_note
+  type: distractor
+  description: '[供应链与物流域·ODS 贴源层] 送货单的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: dn_id
+    type: INTEGER
+    description: dn_id
+  - name: shipment_id
+    type: INTEGER
+    description: shipment_id
+  - name: receiver
+    type: VARCHAR
+    description: receiver
+  - name: sign_date
+    type: DATE
+    description: sign_date
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_scm_transport_cost
+  type: distractor
+  description: '[供应链与物流域·ODS 贴源层] 运输费用的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: cost_id
+    type: INTEGER
+    description: cost_id
+  - name: shipment_id
+    type: INTEGER
+    description: shipment_id
+  - name: freight_amt
+    type: DECIMAL
+    description: freight_amt
+  - name: fuel_surcharge
+    type: VARCHAR
+    description: fuel_surcharge
+  - name: settle_month
+    type: VARCHAR
+    description: settle_month
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_scm_safety_stock
+  type: distractor
+  description: '[供应链与物流域·ODS 贴源层] 安全库存设置的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: min_qty
+    type: INTEGER
+    description: min_qty
+  - name: max_qty
+    type: INTEGER
+    description: max_qty
+  - name: lead_days
+    type: INTEGER
+    description: lead_days
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_scm_return_order
+  type: distractor
+  description: '[供应链与物流域·ODS 贴源层] 退货单的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: return_id
+    type: INTEGER
+    description: return_id
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: return_qty
+    type: INTEGER
+    description: return_qty
+  - name: return_date
+    type: DATE
+    description: return_date
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mfg_work_order
+  type: distractor
+  description: '[生产制造域·ODS 贴源层] 生产工单的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: wo_id
+    type: INTEGER
+    description: wo_id
+  - name: plant_code
+    type: VARCHAR
+    description: plant_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: plan_qty
+    type: INTEGER
+    description: plan_qty
+  - name: actual_qty
+    type: INTEGER
+    description: actual_qty
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mfg_plant
+  type: distractor
+  description: '[生产制造域·ODS 贴源层] 工厂主数据的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: plant_code
+    type: VARCHAR
+    description: plant_code
+  - name: plant_name
+    type: VARCHAR
+    description: plant_name
+  - name: city
+    type: VARCHAR
+    description: city
+  - name: capacity_per_day
+    type: INTEGER
+    description: capacity_per_day
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mfg_line
+  type: distractor
+  description: '[生产制造域·ODS 贴源层] 产线主数据的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: plant_code
+    type: VARCHAR
+    description: plant_code
+  - name: line_name
+    type: VARCHAR
+    description: line_name
+  - name: designed_speed
+    type: DECIMAL
+    description: designed_speed
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mfg_bom
+  type: distractor
+  description: '[生产制造域·ODS 贴源层] 物料清单的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: bom_id
+    type: INTEGER
+    description: bom_id
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: component_code
+    type: VARCHAR
+    description: component_code
+  - name: component_qty
+    type: INTEGER
+    description: component_qty
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mfg_quality_check
+  type: distractor
+  description: '[生产制造域·ODS 贴源层] 质检记录的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: check_id
+    type: INTEGER
+    description: check_id
+  - name: wo_id
+    type: INTEGER
+    description: wo_id
+  - name: check_date
+    type: DATE
+    description: check_date
+  - name: pass_qty
+    type: INTEGER
+    description: pass_qty
+  - name: defect_qty
+    type: INTEGER
+    description: defect_qty
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mfg_defect_type
+  type: distractor
+  description: '[生产制造域·ODS 贴源层] 缺陷类型字典的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: defect_code
+    type: VARCHAR
+    description: defect_code
+  - name: defect_name
+    type: VARCHAR
+    description: defect_name
+  - name: severity
+    type: INTEGER
+    description: severity
+  - name: category
+    type: VARCHAR
+    description: category
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mfg_downtime
+  type: distractor
+  description: '[生产制造域·ODS 贴源层] 停机记录的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: downtime_id
+    type: INTEGER
+    description: downtime_id
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: start_time
+    type: TIMESTAMP
+    description: start_time
+  - name: end_time
+    type: TIMESTAMP
+    description: end_time
+  - name: reason_code
+    type: VARCHAR
+    description: reason_code
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mfg_shift
+  type: distractor
+  description: '[生产制造域·ODS 贴源层] 班次定义的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: shift_code
+    type: VARCHAR
+    description: shift_code
+  - name: shift_name
+    type: VARCHAR
+    description: shift_name
+  - name: start_time
+    type: TIMESTAMP
+    description: start_time
+  - name: end_time
+    type: TIMESTAMP
+    description: end_time
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mfg_yield_daily
+  type: distractor
+  description: '[生产制造域·ODS 贴源层] 日产量汇总的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: stat_date
+    type: DATE
+    description: stat_date
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: output_qty
+    type: INTEGER
+    description: output_qty
+  - name: scrap_qty
+    type: INTEGER
+    description: scrap_qty
+  - name: yield_rate
+    type: DECIMAL
+    description: yield_rate
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mfg_equipment
+  type: distractor
+  description: '[生产制造域·ODS 贴源层] 设备台账的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: equip_code
+    type: VARCHAR
+    description: equip_code
+  - name: equip_name
+    type: VARCHAR
+    description: equip_name
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: install_date
+    type: DATE
+    description: install_date
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mkt_campaign
+  type: distractor
+  description: '[市场营销域·ODS 贴源层] 营销活动的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: campaign_id
+    type: INTEGER
+    description: campaign_id
+  - name: campaign_name
+    type: VARCHAR
+    description: campaign_name
+  - name: start_date
+    type: DATE
+    description: start_date
+  - name: end_date
+    type: DATE
+    description: end_date
+  - name: budget_amt
+    type: DECIMAL
+    description: budget_amt
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mkt_ad_spend
+  type: distractor
+  description: '[市场营销域·ODS 贴源层] 广告投放花费的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: spend_id
+    type: INTEGER
+    description: spend_id
+  - name: campaign_id
+    type: INTEGER
+    description: campaign_id
+  - name: media_code
+    type: VARCHAR
+    description: media_code
+  - name: spend_date
+    type: DATE
+    description: spend_date
+  - name: spend_amt
+    type: DECIMAL
+    description: spend_amt
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mkt_media
+  type: distractor
+  description: '[市场营销域·ODS 贴源层] 媒体渠道字典的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: media_code
+    type: VARCHAR
+    description: media_code
+  - name: media_name
+    type: VARCHAR
+    description: media_name
+  - name: media_type
+    type: VARCHAR
+    description: media_type
+  - name: settle_mode
+    type: VARCHAR
+    description: settle_mode
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mkt_coupon
+  type: distractor
+  description: '[市场营销域·ODS 贴源层] 优惠券主数据的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: coupon_id
+    type: INTEGER
+    description: coupon_id
+  - name: coupon_name
+    type: VARCHAR
+    description: coupon_name
+  - name: discount_type
+    type: VARCHAR
+    description: discount_type
+  - name: face_value
+    type: DECIMAL
+    description: face_value
+  - name: valid_days
+    type: INTEGER
+    description: valid_days
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mkt_coupon_usage
+  type: distractor
+  description: '[市场营销域·ODS 贴源层] 优惠券核销的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: usage_id
+    type: INTEGER
+    description: usage_id
+  - name: coupon_id
+    type: INTEGER
+    description: coupon_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: use_time
+    type: TIMESTAMP
+    description: use_time
+  - name: order_no
+    type: INTEGER
+    description: order_no
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mkt_member
+  type: distractor
+  description: '[市场营销域·ODS 贴源层] 会员主数据的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: member_name
+    type: VARCHAR
+    description: member_name
+  - name: level
+    type: INTEGER
+    description: level
+  - name: register_date
+    type: DATE
+    description: register_date
+  - name: points
+    type: INTEGER
+    description: points
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mkt_member_point
+  type: distractor
+  description: '[市场营销域·ODS 贴源层] 会员积分流水的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: flow_id
+    type: INTEGER
+    description: flow_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: point_change
+    type: VARCHAR
+    description: point_change
+  - name: flow_time
+    type: TIMESTAMP
+    description: flow_time
+  - name: source
+    type: VARCHAR
+    description: source
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mkt_survey
+  type: distractor
+  description: '[市场营销域·ODS 贴源层] 问卷调研的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: survey_id
+    type: INTEGER
+    description: survey_id
+  - name: survey_name
+    type: VARCHAR
+    description: survey_name
+  - name: publish_date
+    type: DATE
+    description: publish_date
+  - name: sample_size
+    type: INTEGER
+    description: sample_size
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mkt_survey_answer
+  type: distractor
+  description: '[市场营销域·ODS 贴源层] 问卷答案明细的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: answer_id
+    type: INTEGER
+    description: answer_id
+  - name: survey_id
+    type: INTEGER
+    description: survey_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: question_no
+    type: INTEGER
+    description: question_no
+  - name: answer_text
+    type: VARCHAR
+    description: answer_text
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_mkt_brand_index
+  type: distractor
+  description: '[市场营销域·ODS 贴源层] 品牌健康度指数的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: stat_month
+    type: VARCHAR
+    description: stat_month
+  - name: brand_name
+    type: VARCHAR
+    description: brand_name
+  - name: awareness
+    type: VARCHAR
+    description: awareness
+  - name: preference
+    type: VARCHAR
+    description: preference
+  - name: nps
+    type: VARCHAR
+    description: nps
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_crm_ticket
+  type: distractor
+  description: '[客户服务域·ODS 贴源层] 客服工单的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: ticket_id
+    type: INTEGER
+    description: ticket_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: channel
+    type: VARCHAR
+    description: channel
+  - name: create_time
+    type: TIMESTAMP
+    description: create_time
+  - name: close_time
+    type: TIMESTAMP
+    description: close_time
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_crm_ticket_category
+  type: distractor
+  description: '[客户服务域·ODS 贴源层] 工单分类字典的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: category_code
+    type: VARCHAR
+    description: category_code
+  - name: category_name
+    type: VARCHAR
+    description: category_name
+  - name: parent_code
+    type: VARCHAR
+    description: parent_code
+  - name: sla_hours
+    type: VARCHAR
+    description: sla_hours
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_crm_complaint
+  type: distractor
+  description: '[客户服务域·ODS 贴源层] 投诉记录的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: complaint_id
+    type: INTEGER
+    description: complaint_id
+  - name: ticket_id
+    type: INTEGER
+    description: ticket_id
+  - name: complaint_type
+    type: VARCHAR
+    description: complaint_type
+  - name: severity
+    type: INTEGER
+    description: severity
+  - name: handled_by
+    type: VARCHAR
+    description: handled_by
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_crm_agent
+  type: distractor
+  description: '[客户服务域·ODS 贴源层] 客服坐席的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: agent_id
+    type: INTEGER
+    description: agent_id
+  - name: agent_name
+    type: VARCHAR
+    description: agent_name
+  - name: team_code
+    type: VARCHAR
+    description: team_code
+  - name: online_status
+    type: VARCHAR
+    description: online_status
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_crm_call_log
+  type: distractor
+  description: '[客户服务域·ODS 贴源层] 通话记录的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: call_id
+    type: INTEGER
+    description: call_id
+  - name: agent_id
+    type: INTEGER
+    description: agent_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: call_time
+    type: TIMESTAMP
+    description: call_time
+  - name: duration_sec
+    type: INTEGER
+    description: duration_sec
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_crm_satisfaction
+  type: distractor
+  description: '[客户服务域·ODS 贴源层] 满意度评价的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: eval_id
+    type: INTEGER
+    description: eval_id
+  - name: ticket_id
+    type: INTEGER
+    description: ticket_id
+  - name: score
+    type: INTEGER
+    description: score
+  - name: eval_time
+    type: TIMESTAMP
+    description: eval_time
+  - name: comment_text
+    type: VARCHAR
+    description: comment_text
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_crm_knowledge
+  type: distractor
+  description: '[客户服务域·ODS 贴源层] 知识库条目的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: doc_id
+    type: INTEGER
+    description: doc_id
+  - name: title
+    type: VARCHAR
+    description: title
+  - name: category_code
+    type: VARCHAR
+    description: category_code
+  - name: update_time
+    type: TIMESTAMP
+    description: update_time
+  - name: view_count
+    type: INTEGER
+    description: view_count
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_crm_sla_stat
+  type: distractor
+  description: '[客户服务域·ODS 贴源层] SLA 达成统计的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: stat_date
+    type: DATE
+    description: stat_date
+  - name: team_code
+    type: VARCHAR
+    description: team_code
+  - name: total_ticket
+    type: VARCHAR
+    description: total_ticket
+  - name: in_sla_ticket
+    type: VARCHAR
+    description: in_sla_ticket
+  - name: sla_rate
+    type: DECIMAL
+    description: sla_rate
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_ec_order
+  type: distractor
+  description: '[电商域·ODS 贴源层] 电商订单的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: order_no
+    type: INTEGER
+    description: order_no
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: order_time
+    type: TIMESTAMP
+    description: order_time
+  - name: pay_amt
+    type: DECIMAL
+    description: pay_amt
+  - name: platform
+    type: VARCHAR
+    description: platform
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_ec_order_item
+  type: distractor
+  description: '[电商域·ODS 贴源层] 电商订单行的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: order_no
+    type: INTEGER
+    description: order_no
+  - name: line_no
+    type: INTEGER
+    description: line_no
+  - name: item_code
+    type: VARCHAR
+    description: item_code
+  - name: qty
+    type: INTEGER
+    description: qty
+  - name: item_price
+    type: DECIMAL
+    description: item_price
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_ec_item
+  type: distractor
+  description: '[电商域·ODS 贴源层] 电商商品的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: item_code
+    type: VARCHAR
+    description: item_code
+  - name: item_title
+    type: VARCHAR
+    description: item_title
+  - name: shop_code
+    type: VARCHAR
+    description: shop_code
+  - name: list_price
+    type: DECIMAL
+    description: list_price
+  - name: is_online
+    type: BOOLEAN
+    description: is_online
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_ec_shop
+  type: distractor
+  description: '[电商域·ODS 贴源层] 店铺主数据的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: shop_code
+    type: VARCHAR
+    description: shop_code
+  - name: shop_name
+    type: VARCHAR
+    description: shop_name
+  - name: platform
+    type: VARCHAR
+    description: platform
+  - name: open_date
+    type: DATE
+    description: open_date
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_ec_traffic
+  type: distractor
+  description: '[电商域·ODS 贴源层] 店铺流量的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: stat_date
+    type: DATE
+    description: stat_date
+  - name: shop_code
+    type: VARCHAR
+    description: shop_code
+  - name: uv
+    type: INTEGER
+    description: uv
+  - name: pv
+    type: INTEGER
+    description: pv
+  - name: conversion_rate
+    type: DECIMAL
+    description: conversion_rate
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_sys_user
+  type: distractor
+  description: '[系统与主数据域·ODS 贴源层] 系统用户的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: user_id
+    type: INTEGER
+    description: user_id
+  - name: login_name
+    type: VARCHAR
+    description: login_name
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: role_code
+    type: VARCHAR
+    description: role_code
+  - name: last_login
+    type: VARCHAR
+    description: last_login
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_sys_role
+  type: distractor
+  description: '[系统与主数据域·ODS 贴源层] 角色定义的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: role_code
+    type: VARCHAR
+    description: role_code
+  - name: role_name
+    type: VARCHAR
+    description: role_name
+  - name: scope
+    type: VARCHAR
+    description: scope
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_sys_audit_log
+  type: distractor
+  description: '[系统与主数据域·ODS 贴源层] 操作审计日志的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: log_id
+    type: INTEGER
+    description: log_id
+  - name: user_id
+    type: INTEGER
+    description: user_id
+  - name: action
+    type: VARCHAR
+    description: action
+  - name: target
+    type: VARCHAR
+    description: target
+  - name: action_time
+    type: TIMESTAMP
+    description: action_time
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_sys_dict
+  type: distractor
+  description: '[系统与主数据域·ODS 贴源层] 通用字典的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: dict_code
+    type: VARCHAR
+    description: dict_code
+  - name: dict_type
+    type: VARCHAR
+    description: dict_type
+  - name: dict_label
+    type: VARCHAR
+    description: dict_label
+  - name: sort_no
+    type: INTEGER
+    description: sort_no
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_sys_job_run
+  type: distractor
+  description: '[系统与主数据域·ODS 贴源层] 调度任务运行记录的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: run_id
+    type: INTEGER
+    description: run_id
+  - name: job_name
+    type: VARCHAR
+    description: job_name
+  - name: start_time
+    type: TIMESTAMP
+    description: start_time
+  - name: end_time
+    type: TIMESTAMP
+    description: end_time
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_sys_data_quality
+  type: distractor
+  description: '[系统与主数据域·ODS 贴源层] 数据质量检查结果的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: check_id
+    type: INTEGER
+    description: check_id
+  - name: table_name
+    type: VARCHAR
+    description: table_name
+  - name: rule_name
+    type: VARCHAR
+    description: rule_name
+  - name: check_date
+    type: DATE
+    description: check_date
+  - name: fail_count
+    type: INTEGER
+    description: fail_count
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_sys_region
+  type: distractor
+  description: '[系统与主数据域·ODS 贴源层] 行政区划字典的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: region_code
+    type: VARCHAR
+    description: region_code
+  - name: region_name
+    type: VARCHAR
+    description: region_name
+  - name: parent_code
+    type: VARCHAR
+    description: parent_code
+  - name: level
+    type: INTEGER
+    description: level
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: ods_sys_calendar
+  type: distractor
+  description: '[系统与主数据域·ODS 贴源层] 系统日历的贴源同步表，字段与源系统一致未做清洗。与渠道销售分析无关。'
+  columns:
+  - name: cal_date
+    type: DATE
+    description: cal_date
+  - name: is_workday
+    type: BOOLEAN
+    description: is_workday
+  - name: holiday_name
+    type: VARCHAR
+    description: holiday_name
+  - name: week_of_year
+    type: INTEGER
+    description: week_of_year
+  - name: src_system
+    type: VARCHAR
+    description: src_system
+  - name: load_time
+    type: TIMESTAMP
+    description: load_time
+  - name: load_batch
+    type: VARCHAR
+    description: load_batch
+  - name: is_deleted
+    type: BOOLEAN
+    description: is_deleted
+- name: dwd_fin_gl_entry
+  type: distractor
+  description: '[财务域·DWD 明细层] 总账分录明细的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: entry_id
+    type: INTEGER
+    description: entry_id
+  - name: voucher_no
+    type: INTEGER
+    description: voucher_no
+  - name: account_code
+    type: VARCHAR
+    description: account_code
+  - name: debit_amt
+    type: DECIMAL
+    description: debit_amt
+  - name: credit_amt
+    type: DECIMAL
+    description: credit_amt
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_fin_account
+  type: distractor
+  description: '[财务域·DWD 明细层] 会计科目主数据的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: account_code
+    type: VARCHAR
+    description: account_code
+  - name: account_name
+    type: VARCHAR
+    description: account_name
+  - name: account_level
+    type: INTEGER
+    description: account_level
+  - name: parent_code
+    type: VARCHAR
+    description: parent_code
+  - name: is_leaf
+    type: BOOLEAN
+    description: is_leaf
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_fin_ar_invoice
+  type: distractor
+  description: '[财务域·DWD 明细层] 应收发票的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: invoice_id
+    type: INTEGER
+    description: invoice_id
+  - name: customer_code
+    type: VARCHAR
+    description: customer_code
+  - name: invoice_amt
+    type: DECIMAL
+    description: invoice_amt
+  - name: due_date
+    type: DATE
+    description: due_date
+  - name: settled_amt
+    type: DECIMAL
+    description: settled_amt
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_fin_ap_invoice
+  type: distractor
+  description: '[财务域·DWD 明细层] 应付发票的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: invoice_id
+    type: INTEGER
+    description: invoice_id
+  - name: vendor_code
+    type: VARCHAR
+    description: vendor_code
+  - name: invoice_amt
+    type: DECIMAL
+    description: invoice_amt
+  - name: due_date
+    type: DATE
+    description: due_date
+  - name: paid_amt
+    type: DECIMAL
+    description: paid_amt
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_fin_budget
+  type: distractor
+  description: '[财务域·DWD 明细层] 预算编制表的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: budget_id
+    type: INTEGER
+    description: budget_id
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: budget_year
+    type: VARCHAR
+    description: budget_year
+  - name: budget_amt
+    type: DECIMAL
+    description: budget_amt
+  - name: used_amt
+    type: DECIMAL
+    description: used_amt
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_fin_cost_center
+  type: distractor
+  description: '[财务域·DWD 明细层] 成本中心主数据的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: cost_center
+    type: VARCHAR
+    description: cost_center
+  - name: cc_name
+    type: VARCHAR
+    description: cc_name
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: owner
+    type: VARCHAR
+    description: owner
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_fin_exchange_rate
+  type: distractor
+  description: '[财务域·DWD 明细层] 汇率表的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: rate_date
+    type: DECIMAL
+    description: rate_date
+  - name: currency_from
+    type: DATE
+    description: currency_from
+  - name: currency_to
+    type: DATE
+    description: currency_to
+  - name: rate
+    type: DECIMAL
+    description: rate
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_fin_settlement
+  type: distractor
+  description: '[财务域·DWD 明细层] 结算单的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: settle_id
+    type: INTEGER
+    description: settle_id
+  - name: dealer_code
+    type: VARCHAR
+    description: dealer_code
+  - name: settle_amt
+    type: DECIMAL
+    description: settle_amt
+  - name: settle_date
+    type: DATE
+    description: settle_date
+  - name: channel_type
+    type: VARCHAR
+    description: channel_type
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_fin_rebate
+  type: distractor
+  description: '[财务域·DWD 明细层] 返利计提的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: rebate_id
+    type: INTEGER
+    description: rebate_id
+  - name: dealer_code
+    type: VARCHAR
+    description: dealer_code
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: rebate_amt
+    type: DECIMAL
+    description: rebate_amt
+  - name: policy_code
+    type: VARCHAR
+    description: policy_code
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_fin_tax_detail
+  type: distractor
+  description: '[财务域·DWD 明细层] 税务明细的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: tax_id
+    type: INTEGER
+    description: tax_id
+  - name: invoice_id
+    type: INTEGER
+    description: invoice_id
+  - name: tax_rate
+    type: DECIMAL
+    description: tax_rate
+  - name: tax_amt
+    type: DECIMAL
+    description: tax_amt
+  - name: tax_type
+    type: VARCHAR
+    description: tax_type
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_fin_cash_flow
+  type: distractor
+  description: '[财务域·DWD 明细层] 现金流水的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: flow_id
+    type: INTEGER
+    description: flow_id
+  - name: account_code
+    type: VARCHAR
+    description: account_code
+  - name: flow_amt
+    type: DECIMAL
+    description: flow_amt
+  - name: flow_date
+    type: DATE
+    description: flow_date
+  - name: direction
+    type: VARCHAR
+    description: direction
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_fin_period_close
+  type: distractor
+  description: '[财务域·DWD 明细层] 期末结账记录的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: closed_by
+    type: VARCHAR
+    description: closed_by
+  - name: close_time
+    type: TIMESTAMP
+    description: close_time
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_hr_employee
+  type: distractor
+  description: '[人力资源域·DWD 明细层] 员工主数据的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: emp_name
+    type: VARCHAR
+    description: emp_name
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: position
+    type: VARCHAR
+    description: position
+  - name: hire_date
+    type: DATE
+    description: hire_date
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_hr_department
+  type: distractor
+  description: '[人力资源域·DWD 明细层] 部门主数据的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: dept_name
+    type: VARCHAR
+    description: dept_name
+  - name: parent_dept
+    type: VARCHAR
+    description: parent_dept
+  - name: manager_id
+    type: INTEGER
+    description: manager_id
+  - name: level
+    type: INTEGER
+    description: level
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_hr_attendance
+  type: distractor
+  description: '[人力资源域·DWD 明细层] 考勤记录的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: record_id
+    type: INTEGER
+    description: record_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: work_date
+    type: DATE
+    description: work_date
+  - name: check_in
+    type: TIMESTAMP
+    description: check_in
+  - name: check_out
+    type: TIMESTAMP
+    description: check_out
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_hr_payroll
+  type: distractor
+  description: '[人力资源域·DWD 明细层] 薪资发放的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: payroll_id
+    type: INTEGER
+    description: payroll_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: gross_pay
+    type: DECIMAL
+    description: gross_pay
+  - name: net_pay
+    type: DECIMAL
+    description: net_pay
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_hr_leave
+  type: distractor
+  description: '[人力资源域·DWD 明细层] 请假申请的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: leave_id
+    type: INTEGER
+    description: leave_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: leave_type
+    type: VARCHAR
+    description: leave_type
+  - name: start_date
+    type: DATE
+    description: start_date
+  - name: end_date
+    type: DATE
+    description: end_date
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_hr_position
+  type: distractor
+  description: '[人力资源域·DWD 明细层] 岗位字典的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: position_code
+    type: VARCHAR
+    description: position_code
+  - name: position_name
+    type: VARCHAR
+    description: position_name
+  - name: job_family
+    type: VARCHAR
+    description: job_family
+  - name: grade
+    type: INTEGER
+    description: grade
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_hr_training
+  type: distractor
+  description: '[人力资源域·DWD 明细层] 培训记录的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: training_id
+    type: INTEGER
+    description: training_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: course_code
+    type: VARCHAR
+    description: course_code
+  - name: finish_date
+    type: DATE
+    description: finish_date
+  - name: score
+    type: INTEGER
+    description: score
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_hr_performance
+  type: distractor
+  description: '[人力资源域·DWD 明细层] 绩效考核的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: review_id
+    type: INTEGER
+    description: review_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: rating
+    type: VARCHAR
+    description: rating
+  - name: reviewer_id
+    type: INTEGER
+    description: reviewer_id
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_hr_recruit
+  type: distractor
+  description: '[人力资源域·DWD 明细层] 招聘需求的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: req_id
+    type: INTEGER
+    description: req_id
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: position_code
+    type: VARCHAR
+    description: position_code
+  - name: headcount
+    type: INTEGER
+    description: headcount
+  - name: open_date
+    type: DATE
+    description: open_date
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_hr_contract
+  type: distractor
+  description: '[人力资源域·DWD 明细层] 劳动合同的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: contract_id
+    type: INTEGER
+    description: contract_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: start_date
+    type: DATE
+    description: start_date
+  - name: end_date
+    type: DATE
+    description: end_date
+  - name: contract_type
+    type: VARCHAR
+    description: contract_type
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_scm_purchase_order
+  type: distractor
+  description: '[供应链与物流域·DWD 明细层] 采购订单的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: po_id
+    type: INTEGER
+    description: po_id
+  - name: vendor_code
+    type: VARCHAR
+    description: vendor_code
+  - name: order_date
+    type: DATE
+    description: order_date
+  - name: total_amt
+    type: DECIMAL
+    description: total_amt
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_scm_purchase_item
+  type: distractor
+  description: '[供应链与物流域·DWD 明细层] 采购订单行的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: po_id
+    type: INTEGER
+    description: po_id
+  - name: line_no
+    type: INTEGER
+    description: line_no
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: qty
+    type: INTEGER
+    description: qty
+  - name: unit_price
+    type: DECIMAL
+    description: unit_price
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_scm_vendor
+  type: distractor
+  description: '[供应链与物流域·DWD 明细层] 供应商主数据的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: vendor_code
+    type: VARCHAR
+    description: vendor_code
+  - name: vendor_name
+    type: VARCHAR
+    description: vendor_name
+  - name: vendor_type
+    type: VARCHAR
+    description: vendor_type
+  - name: region
+    type: VARCHAR
+    description: region
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_scm_material
+  type: distractor
+  description: '[供应链与物流域·DWD 明细层] 物料主数据的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: material_name
+    type: VARCHAR
+    description: material_name
+  - name: material_group
+    type: VARCHAR
+    description: material_group
+  - name: unit
+    type: VARCHAR
+    description: unit
+  - name: spec
+    type: VARCHAR
+    description: spec
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_scm_warehouse
+  type: distractor
+  description: '[供应链与物流域·DWD 明细层] 仓库主数据的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: wh_name
+    type: VARCHAR
+    description: wh_name
+  - name: wh_type
+    type: VARCHAR
+    description: wh_type
+  - name: city
+    type: VARCHAR
+    description: city
+  - name: capacity
+    type: INTEGER
+    description: capacity
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_scm_stock_move
+  type: distractor
+  description: '[供应链与物流域·DWD 明细层] 库存移动的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: move_id
+    type: INTEGER
+    description: move_id
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: move_qty
+    type: INTEGER
+    description: move_qty
+  - name: move_date
+    type: DATE
+    description: move_date
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_scm_shipment
+  type: distractor
+  description: '[供应链与物流域·DWD 明细层] 发运单的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: shipment_id
+    type: INTEGER
+    description: shipment_id
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: dest_city
+    type: VARCHAR
+    description: dest_city
+  - name: ship_date
+    type: DATE
+    description: ship_date
+  - name: carrier_code
+    type: VARCHAR
+    description: carrier_code
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_scm_carrier
+  type: distractor
+  description: '[供应链与物流域·DWD 明细层] 承运商主数据的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: carrier_code
+    type: VARCHAR
+    description: carrier_code
+  - name: carrier_name
+    type: VARCHAR
+    description: carrier_name
+  - name: transport_mode
+    type: VARCHAR
+    description: transport_mode
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_scm_delivery_note
+  type: distractor
+  description: '[供应链与物流域·DWD 明细层] 送货单的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: dn_id
+    type: INTEGER
+    description: dn_id
+  - name: shipment_id
+    type: INTEGER
+    description: shipment_id
+  - name: receiver
+    type: VARCHAR
+    description: receiver
+  - name: sign_date
+    type: DATE
+    description: sign_date
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_scm_transport_cost
+  type: distractor
+  description: '[供应链与物流域·DWD 明细层] 运输费用的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: cost_id
+    type: INTEGER
+    description: cost_id
+  - name: shipment_id
+    type: INTEGER
+    description: shipment_id
+  - name: freight_amt
+    type: DECIMAL
+    description: freight_amt
+  - name: fuel_surcharge
+    type: VARCHAR
+    description: fuel_surcharge
+  - name: settle_month
+    type: VARCHAR
+    description: settle_month
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_scm_safety_stock
+  type: distractor
+  description: '[供应链与物流域·DWD 明细层] 安全库存设置的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: min_qty
+    type: INTEGER
+    description: min_qty
+  - name: max_qty
+    type: INTEGER
+    description: max_qty
+  - name: lead_days
+    type: INTEGER
+    description: lead_days
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_scm_return_order
+  type: distractor
+  description: '[供应链与物流域·DWD 明细层] 退货单的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: return_id
+    type: INTEGER
+    description: return_id
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: return_qty
+    type: INTEGER
+    description: return_qty
+  - name: return_date
+    type: DATE
+    description: return_date
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mfg_work_order
+  type: distractor
+  description: '[生产制造域·DWD 明细层] 生产工单的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: wo_id
+    type: INTEGER
+    description: wo_id
+  - name: plant_code
+    type: VARCHAR
+    description: plant_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: plan_qty
+    type: INTEGER
+    description: plan_qty
+  - name: actual_qty
+    type: INTEGER
+    description: actual_qty
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mfg_plant
+  type: distractor
+  description: '[生产制造域·DWD 明细层] 工厂主数据的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: plant_code
+    type: VARCHAR
+    description: plant_code
+  - name: plant_name
+    type: VARCHAR
+    description: plant_name
+  - name: city
+    type: VARCHAR
+    description: city
+  - name: capacity_per_day
+    type: INTEGER
+    description: capacity_per_day
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mfg_line
+  type: distractor
+  description: '[生产制造域·DWD 明细层] 产线主数据的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: plant_code
+    type: VARCHAR
+    description: plant_code
+  - name: line_name
+    type: VARCHAR
+    description: line_name
+  - name: designed_speed
+    type: DECIMAL
+    description: designed_speed
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mfg_bom
+  type: distractor
+  description: '[生产制造域·DWD 明细层] 物料清单的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: bom_id
+    type: INTEGER
+    description: bom_id
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: component_code
+    type: VARCHAR
+    description: component_code
+  - name: component_qty
+    type: INTEGER
+    description: component_qty
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mfg_quality_check
+  type: distractor
+  description: '[生产制造域·DWD 明细层] 质检记录的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: check_id
+    type: INTEGER
+    description: check_id
+  - name: wo_id
+    type: INTEGER
+    description: wo_id
+  - name: check_date
+    type: DATE
+    description: check_date
+  - name: pass_qty
+    type: INTEGER
+    description: pass_qty
+  - name: defect_qty
+    type: INTEGER
+    description: defect_qty
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mfg_defect_type
+  type: distractor
+  description: '[生产制造域·DWD 明细层] 缺陷类型字典的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: defect_code
+    type: VARCHAR
+    description: defect_code
+  - name: defect_name
+    type: VARCHAR
+    description: defect_name
+  - name: severity
+    type: INTEGER
+    description: severity
+  - name: category
+    type: VARCHAR
+    description: category
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mfg_downtime
+  type: distractor
+  description: '[生产制造域·DWD 明细层] 停机记录的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: downtime_id
+    type: INTEGER
+    description: downtime_id
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: start_time
+    type: TIMESTAMP
+    description: start_time
+  - name: end_time
+    type: TIMESTAMP
+    description: end_time
+  - name: reason_code
+    type: VARCHAR
+    description: reason_code
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mfg_shift
+  type: distractor
+  description: '[生产制造域·DWD 明细层] 班次定义的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: shift_code
+    type: VARCHAR
+    description: shift_code
+  - name: shift_name
+    type: VARCHAR
+    description: shift_name
+  - name: start_time
+    type: TIMESTAMP
+    description: start_time
+  - name: end_time
+    type: TIMESTAMP
+    description: end_time
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mfg_yield_daily
+  type: distractor
+  description: '[生产制造域·DWD 明细层] 日产量汇总的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: stat_date
+    type: DATE
+    description: stat_date
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: output_qty
+    type: INTEGER
+    description: output_qty
+  - name: scrap_qty
+    type: INTEGER
+    description: scrap_qty
+  - name: yield_rate
+    type: DECIMAL
+    description: yield_rate
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mfg_equipment
+  type: distractor
+  description: '[生产制造域·DWD 明细层] 设备台账的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: equip_code
+    type: VARCHAR
+    description: equip_code
+  - name: equip_name
+    type: VARCHAR
+    description: equip_name
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: install_date
+    type: DATE
+    description: install_date
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mkt_campaign
+  type: distractor
+  description: '[市场营销域·DWD 明细层] 营销活动的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: campaign_id
+    type: INTEGER
+    description: campaign_id
+  - name: campaign_name
+    type: VARCHAR
+    description: campaign_name
+  - name: start_date
+    type: DATE
+    description: start_date
+  - name: end_date
+    type: DATE
+    description: end_date
+  - name: budget_amt
+    type: DECIMAL
+    description: budget_amt
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mkt_ad_spend
+  type: distractor
+  description: '[市场营销域·DWD 明细层] 广告投放花费的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: spend_id
+    type: INTEGER
+    description: spend_id
+  - name: campaign_id
+    type: INTEGER
+    description: campaign_id
+  - name: media_code
+    type: VARCHAR
+    description: media_code
+  - name: spend_date
+    type: DATE
+    description: spend_date
+  - name: spend_amt
+    type: DECIMAL
+    description: spend_amt
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mkt_media
+  type: distractor
+  description: '[市场营销域·DWD 明细层] 媒体渠道字典的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: media_code
+    type: VARCHAR
+    description: media_code
+  - name: media_name
+    type: VARCHAR
+    description: media_name
+  - name: media_type
+    type: VARCHAR
+    description: media_type
+  - name: settle_mode
+    type: VARCHAR
+    description: settle_mode
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mkt_coupon
+  type: distractor
+  description: '[市场营销域·DWD 明细层] 优惠券主数据的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: coupon_id
+    type: INTEGER
+    description: coupon_id
+  - name: coupon_name
+    type: VARCHAR
+    description: coupon_name
+  - name: discount_type
+    type: VARCHAR
+    description: discount_type
+  - name: face_value
+    type: DECIMAL
+    description: face_value
+  - name: valid_days
+    type: INTEGER
+    description: valid_days
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mkt_coupon_usage
+  type: distractor
+  description: '[市场营销域·DWD 明细层] 优惠券核销的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: usage_id
+    type: INTEGER
+    description: usage_id
+  - name: coupon_id
+    type: INTEGER
+    description: coupon_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: use_time
+    type: TIMESTAMP
+    description: use_time
+  - name: order_no
+    type: INTEGER
+    description: order_no
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mkt_member
+  type: distractor
+  description: '[市场营销域·DWD 明细层] 会员主数据的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: member_name
+    type: VARCHAR
+    description: member_name
+  - name: level
+    type: INTEGER
+    description: level
+  - name: register_date
+    type: DATE
+    description: register_date
+  - name: points
+    type: INTEGER
+    description: points
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mkt_member_point
+  type: distractor
+  description: '[市场营销域·DWD 明细层] 会员积分流水的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: flow_id
+    type: INTEGER
+    description: flow_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: point_change
+    type: VARCHAR
+    description: point_change
+  - name: flow_time
+    type: TIMESTAMP
+    description: flow_time
+  - name: source
+    type: VARCHAR
+    description: source
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mkt_survey
+  type: distractor
+  description: '[市场营销域·DWD 明细层] 问卷调研的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: survey_id
+    type: INTEGER
+    description: survey_id
+  - name: survey_name
+    type: VARCHAR
+    description: survey_name
+  - name: publish_date
+    type: DATE
+    description: publish_date
+  - name: sample_size
+    type: INTEGER
+    description: sample_size
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mkt_survey_answer
+  type: distractor
+  description: '[市场营销域·DWD 明细层] 问卷答案明细的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: answer_id
+    type: INTEGER
+    description: answer_id
+  - name: survey_id
+    type: INTEGER
+    description: survey_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: question_no
+    type: INTEGER
+    description: question_no
+  - name: answer_text
+    type: VARCHAR
+    description: answer_text
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_mkt_brand_index
+  type: distractor
+  description: '[市场营销域·DWD 明细层] 品牌健康度指数的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: stat_month
+    type: VARCHAR
+    description: stat_month
+  - name: brand_name
+    type: VARCHAR
+    description: brand_name
+  - name: awareness
+    type: VARCHAR
+    description: awareness
+  - name: preference
+    type: VARCHAR
+    description: preference
+  - name: nps
+    type: VARCHAR
+    description: nps
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_crm_ticket
+  type: distractor
+  description: '[客户服务域·DWD 明细层] 客服工单的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: ticket_id
+    type: INTEGER
+    description: ticket_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: channel
+    type: VARCHAR
+    description: channel
+  - name: create_time
+    type: TIMESTAMP
+    description: create_time
+  - name: close_time
+    type: TIMESTAMP
+    description: close_time
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_crm_ticket_category
+  type: distractor
+  description: '[客户服务域·DWD 明细层] 工单分类字典的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: category_code
+    type: VARCHAR
+    description: category_code
+  - name: category_name
+    type: VARCHAR
+    description: category_name
+  - name: parent_code
+    type: VARCHAR
+    description: parent_code
+  - name: sla_hours
+    type: VARCHAR
+    description: sla_hours
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_crm_complaint
+  type: distractor
+  description: '[客户服务域·DWD 明细层] 投诉记录的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: complaint_id
+    type: INTEGER
+    description: complaint_id
+  - name: ticket_id
+    type: INTEGER
+    description: ticket_id
+  - name: complaint_type
+    type: VARCHAR
+    description: complaint_type
+  - name: severity
+    type: INTEGER
+    description: severity
+  - name: handled_by
+    type: VARCHAR
+    description: handled_by
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_crm_agent
+  type: distractor
+  description: '[客户服务域·DWD 明细层] 客服坐席的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: agent_id
+    type: INTEGER
+    description: agent_id
+  - name: agent_name
+    type: VARCHAR
+    description: agent_name
+  - name: team_code
+    type: VARCHAR
+    description: team_code
+  - name: online_status
+    type: VARCHAR
+    description: online_status
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_crm_call_log
+  type: distractor
+  description: '[客户服务域·DWD 明细层] 通话记录的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: call_id
+    type: INTEGER
+    description: call_id
+  - name: agent_id
+    type: INTEGER
+    description: agent_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: call_time
+    type: TIMESTAMP
+    description: call_time
+  - name: duration_sec
+    type: INTEGER
+    description: duration_sec
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_crm_satisfaction
+  type: distractor
+  description: '[客户服务域·DWD 明细层] 满意度评价的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: eval_id
+    type: INTEGER
+    description: eval_id
+  - name: ticket_id
+    type: INTEGER
+    description: ticket_id
+  - name: score
+    type: INTEGER
+    description: score
+  - name: eval_time
+    type: TIMESTAMP
+    description: eval_time
+  - name: comment_text
+    type: VARCHAR
+    description: comment_text
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_crm_knowledge
+  type: distractor
+  description: '[客户服务域·DWD 明细层] 知识库条目的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: doc_id
+    type: INTEGER
+    description: doc_id
+  - name: title
+    type: VARCHAR
+    description: title
+  - name: category_code
+    type: VARCHAR
+    description: category_code
+  - name: update_time
+    type: TIMESTAMP
+    description: update_time
+  - name: view_count
+    type: INTEGER
+    description: view_count
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_crm_sla_stat
+  type: distractor
+  description: '[客户服务域·DWD 明细层] SLA 达成统计的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: stat_date
+    type: DATE
+    description: stat_date
+  - name: team_code
+    type: VARCHAR
+    description: team_code
+  - name: total_ticket
+    type: VARCHAR
+    description: total_ticket
+  - name: in_sla_ticket
+    type: VARCHAR
+    description: in_sla_ticket
+  - name: sla_rate
+    type: DECIMAL
+    description: sla_rate
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_ec_order
+  type: distractor
+  description: '[电商域·DWD 明细层] 电商订单的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: order_no
+    type: INTEGER
+    description: order_no
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: order_time
+    type: TIMESTAMP
+    description: order_time
+  - name: pay_amt
+    type: DECIMAL
+    description: pay_amt
+  - name: platform
+    type: VARCHAR
+    description: platform
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_ec_order_item
+  type: distractor
+  description: '[电商域·DWD 明细层] 电商订单行的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: order_no
+    type: INTEGER
+    description: order_no
+  - name: line_no
+    type: INTEGER
+    description: line_no
+  - name: item_code
+    type: VARCHAR
+    description: item_code
+  - name: qty
+    type: INTEGER
+    description: qty
+  - name: item_price
+    type: DECIMAL
+    description: item_price
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_ec_item
+  type: distractor
+  description: '[电商域·DWD 明细层] 电商商品的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: item_code
+    type: VARCHAR
+    description: item_code
+  - name: item_title
+    type: VARCHAR
+    description: item_title
+  - name: shop_code
+    type: VARCHAR
+    description: shop_code
+  - name: list_price
+    type: DECIMAL
+    description: list_price
+  - name: is_online
+    type: BOOLEAN
+    description: is_online
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_ec_shop
+  type: distractor
+  description: '[电商域·DWD 明细层] 店铺主数据的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: shop_code
+    type: VARCHAR
+    description: shop_code
+  - name: shop_name
+    type: VARCHAR
+    description: shop_name
+  - name: platform
+    type: VARCHAR
+    description: platform
+  - name: open_date
+    type: DATE
+    description: open_date
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_ec_traffic
+  type: distractor
+  description: '[电商域·DWD 明细层] 店铺流量的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: stat_date
+    type: DATE
+    description: stat_date
+  - name: shop_code
+    type: VARCHAR
+    description: shop_code
+  - name: uv
+    type: INTEGER
+    description: uv
+  - name: pv
+    type: INTEGER
+    description: pv
+  - name: conversion_rate
+    type: DECIMAL
+    description: conversion_rate
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_sys_user
+  type: distractor
+  description: '[系统与主数据域·DWD 明细层] 系统用户的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: user_id
+    type: INTEGER
+    description: user_id
+  - name: login_name
+    type: VARCHAR
+    description: login_name
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: role_code
+    type: VARCHAR
+    description: role_code
+  - name: last_login
+    type: VARCHAR
+    description: last_login
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_sys_role
+  type: distractor
+  description: '[系统与主数据域·DWD 明细层] 角色定义的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: role_code
+    type: VARCHAR
+    description: role_code
+  - name: role_name
+    type: VARCHAR
+    description: role_name
+  - name: scope
+    type: VARCHAR
+    description: scope
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_sys_audit_log
+  type: distractor
+  description: '[系统与主数据域·DWD 明细层] 操作审计日志的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: log_id
+    type: INTEGER
+    description: log_id
+  - name: user_id
+    type: INTEGER
+    description: user_id
+  - name: action
+    type: VARCHAR
+    description: action
+  - name: target
+    type: VARCHAR
+    description: target
+  - name: action_time
+    type: TIMESTAMP
+    description: action_time
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_sys_dict
+  type: distractor
+  description: '[系统与主数据域·DWD 明细层] 通用字典的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: dict_code
+    type: VARCHAR
+    description: dict_code
+  - name: dict_type
+    type: VARCHAR
+    description: dict_type
+  - name: dict_label
+    type: VARCHAR
+    description: dict_label
+  - name: sort_no
+    type: INTEGER
+    description: sort_no
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_sys_job_run
+  type: distractor
+  description: '[系统与主数据域·DWD 明细层] 调度任务运行记录的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: run_id
+    type: INTEGER
+    description: run_id
+  - name: job_name
+    type: VARCHAR
+    description: job_name
+  - name: start_time
+    type: TIMESTAMP
+    description: start_time
+  - name: end_time
+    type: TIMESTAMP
+    description: end_time
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_sys_data_quality
+  type: distractor
+  description: '[系统与主数据域·DWD 明细层] 数据质量检查结果的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: check_id
+    type: INTEGER
+    description: check_id
+  - name: table_name
+    type: VARCHAR
+    description: table_name
+  - name: rule_name
+    type: VARCHAR
+    description: rule_name
+  - name: check_date
+    type: DATE
+    description: check_date
+  - name: fail_count
+    type: INTEGER
+    description: fail_count
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_sys_region
+  type: distractor
+  description: '[系统与主数据域·DWD 明细层] 行政区划字典的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: region_code
+    type: VARCHAR
+    description: region_code
+  - name: region_name
+    type: VARCHAR
+    description: region_name
+  - name: parent_code
+    type: VARCHAR
+    description: parent_code
+  - name: level
+    type: INTEGER
+    description: level
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dwd_sys_calendar
+  type: distractor
+  description: '[系统与主数据域·DWD 明细层] 系统日历的清洗后的明细表，已做标准化与去重。与渠道销售分析无关。'
+  columns:
+  - name: cal_date
+    type: DATE
+    description: cal_date
+  - name: is_workday
+    type: BOOLEAN
+    description: is_workday
+  - name: holiday_name
+    type: VARCHAR
+    description: holiday_name
+  - name: week_of_year
+    type: INTEGER
+    description: week_of_year
+  - name: etl_time
+    type: TIMESTAMP
+    description: etl_time
+  - name: data_version
+    type: VARCHAR
+    description: data_version
+- name: dws_fin_gl_entry
+  type: distractor
+  description: '[财务域·DWS 汇总层] 总账分录明细的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: entry_id
+    type: INTEGER
+    description: entry_id
+  - name: voucher_no
+    type: INTEGER
+    description: voucher_no
+  - name: account_code
+    type: VARCHAR
+    description: account_code
+  - name: debit_amt
+    type: DECIMAL
+    description: debit_amt
+  - name: credit_amt
+    type: DECIMAL
+    description: credit_amt
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_fin_account
+  type: distractor
+  description: '[财务域·DWS 汇总层] 会计科目主数据的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: account_code
+    type: VARCHAR
+    description: account_code
+  - name: account_name
+    type: VARCHAR
+    description: account_name
+  - name: account_level
+    type: INTEGER
+    description: account_level
+  - name: parent_code
+    type: VARCHAR
+    description: parent_code
+  - name: is_leaf
+    type: BOOLEAN
+    description: is_leaf
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_fin_ar_invoice
+  type: distractor
+  description: '[财务域·DWS 汇总层] 应收发票的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: invoice_id
+    type: INTEGER
+    description: invoice_id
+  - name: customer_code
+    type: VARCHAR
+    description: customer_code
+  - name: invoice_amt
+    type: DECIMAL
+    description: invoice_amt
+  - name: due_date
+    type: DATE
+    description: due_date
+  - name: settled_amt
+    type: DECIMAL
+    description: settled_amt
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_fin_ap_invoice
+  type: distractor
+  description: '[财务域·DWS 汇总层] 应付发票的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: invoice_id
+    type: INTEGER
+    description: invoice_id
+  - name: vendor_code
+    type: VARCHAR
+    description: vendor_code
+  - name: invoice_amt
+    type: DECIMAL
+    description: invoice_amt
+  - name: due_date
+    type: DATE
+    description: due_date
+  - name: paid_amt
+    type: DECIMAL
+    description: paid_amt
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_fin_budget
+  type: distractor
+  description: '[财务域·DWS 汇总层] 预算编制表的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: budget_id
+    type: INTEGER
+    description: budget_id
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: budget_year
+    type: VARCHAR
+    description: budget_year
+  - name: budget_amt
+    type: DECIMAL
+    description: budget_amt
+  - name: used_amt
+    type: DECIMAL
+    description: used_amt
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_fin_cost_center
+  type: distractor
+  description: '[财务域·DWS 汇总层] 成本中心主数据的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: cost_center
+    type: VARCHAR
+    description: cost_center
+  - name: cc_name
+    type: VARCHAR
+    description: cc_name
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: owner
+    type: VARCHAR
+    description: owner
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_fin_exchange_rate
+  type: distractor
+  description: '[财务域·DWS 汇总层] 汇率表的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: rate_date
+    type: DECIMAL
+    description: rate_date
+  - name: currency_from
+    type: DATE
+    description: currency_from
+  - name: currency_to
+    type: DATE
+    description: currency_to
+  - name: rate
+    type: DECIMAL
+    description: rate
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_fin_settlement
+  type: distractor
+  description: '[财务域·DWS 汇总层] 结算单的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: settle_id
+    type: INTEGER
+    description: settle_id
+  - name: dealer_code
+    type: VARCHAR
+    description: dealer_code
+  - name: settle_amt
+    type: DECIMAL
+    description: settle_amt
+  - name: settle_date
+    type: DATE
+    description: settle_date
+  - name: channel_type
+    type: VARCHAR
+    description: channel_type
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_fin_rebate
+  type: distractor
+  description: '[财务域·DWS 汇总层] 返利计提的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: rebate_id
+    type: INTEGER
+    description: rebate_id
+  - name: dealer_code
+    type: VARCHAR
+    description: dealer_code
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: rebate_amt
+    type: DECIMAL
+    description: rebate_amt
+  - name: policy_code
+    type: VARCHAR
+    description: policy_code
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_fin_tax_detail
+  type: distractor
+  description: '[财务域·DWS 汇总层] 税务明细的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: tax_id
+    type: INTEGER
+    description: tax_id
+  - name: invoice_id
+    type: INTEGER
+    description: invoice_id
+  - name: tax_rate
+    type: DECIMAL
+    description: tax_rate
+  - name: tax_amt
+    type: DECIMAL
+    description: tax_amt
+  - name: tax_type
+    type: VARCHAR
+    description: tax_type
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_fin_cash_flow
+  type: distractor
+  description: '[财务域·DWS 汇总层] 现金流水的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: flow_id
+    type: INTEGER
+    description: flow_id
+  - name: account_code
+    type: VARCHAR
+    description: account_code
+  - name: flow_amt
+    type: DECIMAL
+    description: flow_amt
+  - name: flow_date
+    type: DATE
+    description: flow_date
+  - name: direction
+    type: VARCHAR
+    description: direction
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_fin_period_close
+  type: distractor
+  description: '[财务域·DWS 汇总层] 期末结账记录的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: closed_by
+    type: VARCHAR
+    description: closed_by
+  - name: close_time
+    type: TIMESTAMP
+    description: close_time
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_hr_employee
+  type: distractor
+  description: '[人力资源域·DWS 汇总层] 员工主数据的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: emp_name
+    type: VARCHAR
+    description: emp_name
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: position
+    type: VARCHAR
+    description: position
+  - name: hire_date
+    type: DATE
+    description: hire_date
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_hr_department
+  type: distractor
+  description: '[人力资源域·DWS 汇总层] 部门主数据的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: dept_name
+    type: VARCHAR
+    description: dept_name
+  - name: parent_dept
+    type: VARCHAR
+    description: parent_dept
+  - name: manager_id
+    type: INTEGER
+    description: manager_id
+  - name: level
+    type: INTEGER
+    description: level
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_hr_attendance
+  type: distractor
+  description: '[人力资源域·DWS 汇总层] 考勤记录的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: record_id
+    type: INTEGER
+    description: record_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: work_date
+    type: DATE
+    description: work_date
+  - name: check_in
+    type: TIMESTAMP
+    description: check_in
+  - name: check_out
+    type: TIMESTAMP
+    description: check_out
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_hr_payroll
+  type: distractor
+  description: '[人力资源域·DWS 汇总层] 薪资发放的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: payroll_id
+    type: INTEGER
+    description: payroll_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: gross_pay
+    type: DECIMAL
+    description: gross_pay
+  - name: net_pay
+    type: DECIMAL
+    description: net_pay
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_hr_leave
+  type: distractor
+  description: '[人力资源域·DWS 汇总层] 请假申请的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: leave_id
+    type: INTEGER
+    description: leave_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: leave_type
+    type: VARCHAR
+    description: leave_type
+  - name: start_date
+    type: DATE
+    description: start_date
+  - name: end_date
+    type: DATE
+    description: end_date
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_hr_position
+  type: distractor
+  description: '[人力资源域·DWS 汇总层] 岗位字典的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: position_code
+    type: VARCHAR
+    description: position_code
+  - name: position_name
+    type: VARCHAR
+    description: position_name
+  - name: job_family
+    type: VARCHAR
+    description: job_family
+  - name: grade
+    type: INTEGER
+    description: grade
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_hr_training
+  type: distractor
+  description: '[人力资源域·DWS 汇总层] 培训记录的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: training_id
+    type: INTEGER
+    description: training_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: course_code
+    type: VARCHAR
+    description: course_code
+  - name: finish_date
+    type: DATE
+    description: finish_date
+  - name: score
+    type: INTEGER
+    description: score
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_hr_performance
+  type: distractor
+  description: '[人力资源域·DWS 汇总层] 绩效考核的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: review_id
+    type: INTEGER
+    description: review_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: period
+    type: VARCHAR
+    description: period
+  - name: rating
+    type: VARCHAR
+    description: rating
+  - name: reviewer_id
+    type: INTEGER
+    description: reviewer_id
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_hr_recruit
+  type: distractor
+  description: '[人力资源域·DWS 汇总层] 招聘需求的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: req_id
+    type: INTEGER
+    description: req_id
+  - name: dept_code
+    type: VARCHAR
+    description: dept_code
+  - name: position_code
+    type: VARCHAR
+    description: position_code
+  - name: headcount
+    type: INTEGER
+    description: headcount
+  - name: open_date
+    type: DATE
+    description: open_date
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_hr_contract
+  type: distractor
+  description: '[人力资源域·DWS 汇总层] 劳动合同的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: contract_id
+    type: INTEGER
+    description: contract_id
+  - name: emp_id
+    type: INTEGER
+    description: emp_id
+  - name: start_date
+    type: DATE
+    description: start_date
+  - name: end_date
+    type: DATE
+    description: end_date
+  - name: contract_type
+    type: VARCHAR
+    description: contract_type
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_scm_purchase_order
+  type: distractor
+  description: '[供应链与物流域·DWS 汇总层] 采购订单的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: po_id
+    type: INTEGER
+    description: po_id
+  - name: vendor_code
+    type: VARCHAR
+    description: vendor_code
+  - name: order_date
+    type: DATE
+    description: order_date
+  - name: total_amt
+    type: DECIMAL
+    description: total_amt
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_scm_purchase_item
+  type: distractor
+  description: '[供应链与物流域·DWS 汇总层] 采购订单行的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: po_id
+    type: INTEGER
+    description: po_id
+  - name: line_no
+    type: INTEGER
+    description: line_no
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: qty
+    type: INTEGER
+    description: qty
+  - name: unit_price
+    type: DECIMAL
+    description: unit_price
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_scm_vendor
+  type: distractor
+  description: '[供应链与物流域·DWS 汇总层] 供应商主数据的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: vendor_code
+    type: VARCHAR
+    description: vendor_code
+  - name: vendor_name
+    type: VARCHAR
+    description: vendor_name
+  - name: vendor_type
+    type: VARCHAR
+    description: vendor_type
+  - name: region
+    type: VARCHAR
+    description: region
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_scm_material
+  type: distractor
+  description: '[供应链与物流域·DWS 汇总层] 物料主数据的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: material_name
+    type: VARCHAR
+    description: material_name
+  - name: material_group
+    type: VARCHAR
+    description: material_group
+  - name: unit
+    type: VARCHAR
+    description: unit
+  - name: spec
+    type: VARCHAR
+    description: spec
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_scm_warehouse
+  type: distractor
+  description: '[供应链与物流域·DWS 汇总层] 仓库主数据的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: wh_name
+    type: VARCHAR
+    description: wh_name
+  - name: wh_type
+    type: VARCHAR
+    description: wh_type
+  - name: city
+    type: VARCHAR
+    description: city
+  - name: capacity
+    type: INTEGER
+    description: capacity
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_scm_stock_move
+  type: distractor
+  description: '[供应链与物流域·DWS 汇总层] 库存移动的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: move_id
+    type: INTEGER
+    description: move_id
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: move_qty
+    type: INTEGER
+    description: move_qty
+  - name: move_date
+    type: DATE
+    description: move_date
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_scm_shipment
+  type: distractor
+  description: '[供应链与物流域·DWS 汇总层] 发运单的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: shipment_id
+    type: INTEGER
+    description: shipment_id
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: dest_city
+    type: VARCHAR
+    description: dest_city
+  - name: ship_date
+    type: DATE
+    description: ship_date
+  - name: carrier_code
+    type: VARCHAR
+    description: carrier_code
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_scm_carrier
+  type: distractor
+  description: '[供应链与物流域·DWS 汇总层] 承运商主数据的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: carrier_code
+    type: VARCHAR
+    description: carrier_code
+  - name: carrier_name
+    type: VARCHAR
+    description: carrier_name
+  - name: transport_mode
+    type: VARCHAR
+    description: transport_mode
+  - name: is_active
+    type: BOOLEAN
+    description: is_active
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_scm_delivery_note
+  type: distractor
+  description: '[供应链与物流域·DWS 汇总层] 送货单的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: dn_id
+    type: INTEGER
+    description: dn_id
+  - name: shipment_id
+    type: INTEGER
+    description: shipment_id
+  - name: receiver
+    type: VARCHAR
+    description: receiver
+  - name: sign_date
+    type: DATE
+    description: sign_date
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_scm_transport_cost
+  type: distractor
+  description: '[供应链与物流域·DWS 汇总层] 运输费用的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: cost_id
+    type: INTEGER
+    description: cost_id
+  - name: shipment_id
+    type: INTEGER
+    description: shipment_id
+  - name: freight_amt
+    type: DECIMAL
+    description: freight_amt
+  - name: fuel_surcharge
+    type: VARCHAR
+    description: fuel_surcharge
+  - name: settle_month
+    type: VARCHAR
+    description: settle_month
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_scm_safety_stock
+  type: distractor
+  description: '[供应链与物流域·DWS 汇总层] 安全库存设置的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: min_qty
+    type: INTEGER
+    description: min_qty
+  - name: max_qty
+    type: INTEGER
+    description: max_qty
+  - name: lead_days
+    type: INTEGER
+    description: lead_days
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_scm_return_order
+  type: distractor
+  description: '[供应链与物流域·DWS 汇总层] 退货单的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: return_id
+    type: INTEGER
+    description: return_id
+  - name: wh_code
+    type: VARCHAR
+    description: wh_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: return_qty
+    type: INTEGER
+    description: return_qty
+  - name: return_date
+    type: DATE
+    description: return_date
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mfg_work_order
+  type: distractor
+  description: '[生产制造域·DWS 汇总层] 生产工单的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: wo_id
+    type: INTEGER
+    description: wo_id
+  - name: plant_code
+    type: VARCHAR
+    description: plant_code
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: plan_qty
+    type: INTEGER
+    description: plan_qty
+  - name: actual_qty
+    type: INTEGER
+    description: actual_qty
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mfg_plant
+  type: distractor
+  description: '[生产制造域·DWS 汇总层] 工厂主数据的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: plant_code
+    type: VARCHAR
+    description: plant_code
+  - name: plant_name
+    type: VARCHAR
+    description: plant_name
+  - name: city
+    type: VARCHAR
+    description: city
+  - name: capacity_per_day
+    type: INTEGER
+    description: capacity_per_day
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mfg_line
+  type: distractor
+  description: '[生产制造域·DWS 汇总层] 产线主数据的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: plant_code
+    type: VARCHAR
+    description: plant_code
+  - name: line_name
+    type: VARCHAR
+    description: line_name
+  - name: designed_speed
+    type: DECIMAL
+    description: designed_speed
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mfg_bom
+  type: distractor
+  description: '[生产制造域·DWS 汇总层] 物料清单的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: bom_id
+    type: INTEGER
+    description: bom_id
+  - name: material_code
+    type: VARCHAR
+    description: material_code
+  - name: component_code
+    type: VARCHAR
+    description: component_code
+  - name: component_qty
+    type: INTEGER
+    description: component_qty
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mfg_quality_check
+  type: distractor
+  description: '[生产制造域·DWS 汇总层] 质检记录的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: check_id
+    type: INTEGER
+    description: check_id
+  - name: wo_id
+    type: INTEGER
+    description: wo_id
+  - name: check_date
+    type: DATE
+    description: check_date
+  - name: pass_qty
+    type: INTEGER
+    description: pass_qty
+  - name: defect_qty
+    type: INTEGER
+    description: defect_qty
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mfg_defect_type
+  type: distractor
+  description: '[生产制造域·DWS 汇总层] 缺陷类型字典的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: defect_code
+    type: VARCHAR
+    description: defect_code
+  - name: defect_name
+    type: VARCHAR
+    description: defect_name
+  - name: severity
+    type: INTEGER
+    description: severity
+  - name: category
+    type: VARCHAR
+    description: category
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mfg_downtime
+  type: distractor
+  description: '[生产制造域·DWS 汇总层] 停机记录的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: downtime_id
+    type: INTEGER
+    description: downtime_id
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: start_time
+    type: TIMESTAMP
+    description: start_time
+  - name: end_time
+    type: TIMESTAMP
+    description: end_time
+  - name: reason_code
+    type: VARCHAR
+    description: reason_code
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mfg_shift
+  type: distractor
+  description: '[生产制造域·DWS 汇总层] 班次定义的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: shift_code
+    type: VARCHAR
+    description: shift_code
+  - name: shift_name
+    type: VARCHAR
+    description: shift_name
+  - name: start_time
+    type: TIMESTAMP
+    description: start_time
+  - name: end_time
+    type: TIMESTAMP
+    description: end_time
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mfg_yield_daily
+  type: distractor
+  description: '[生产制造域·DWS 汇总层] 日产量汇总的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: stat_date
+    type: DATE
+    description: stat_date
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: output_qty
+    type: INTEGER
+    description: output_qty
+  - name: scrap_qty
+    type: INTEGER
+    description: scrap_qty
+  - name: yield_rate
+    type: DECIMAL
+    description: yield_rate
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mfg_equipment
+  type: distractor
+  description: '[生产制造域·DWS 汇总层] 设备台账的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: equip_code
+    type: VARCHAR
+    description: equip_code
+  - name: equip_name
+    type: VARCHAR
+    description: equip_name
+  - name: line_code
+    type: VARCHAR
+    description: line_code
+  - name: install_date
+    type: DATE
+    description: install_date
+  - name: status
+    type: VARCHAR
+    description: status
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mkt_campaign
+  type: distractor
+  description: '[市场营销域·DWS 汇总层] 营销活动的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: campaign_id
+    type: INTEGER
+    description: campaign_id
+  - name: campaign_name
+    type: VARCHAR
+    description: campaign_name
+  - name: start_date
+    type: DATE
+    description: start_date
+  - name: end_date
+    type: DATE
+    description: end_date
+  - name: budget_amt
+    type: DECIMAL
+    description: budget_amt
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mkt_ad_spend
+  type: distractor
+  description: '[市场营销域·DWS 汇总层] 广告投放花费的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: spend_id
+    type: INTEGER
+    description: spend_id
+  - name: campaign_id
+    type: INTEGER
+    description: campaign_id
+  - name: media_code
+    type: VARCHAR
+    description: media_code
+  - name: spend_date
+    type: DATE
+    description: spend_date
+  - name: spend_amt
+    type: DECIMAL
+    description: spend_amt
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mkt_media
+  type: distractor
+  description: '[市场营销域·DWS 汇总层] 媒体渠道字典的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: media_code
+    type: VARCHAR
+    description: media_code
+  - name: media_name
+    type: VARCHAR
+    description: media_name
+  - name: media_type
+    type: VARCHAR
+    description: media_type
+  - name: settle_mode
+    type: VARCHAR
+    description: settle_mode
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mkt_coupon
+  type: distractor
+  description: '[市场营销域·DWS 汇总层] 优惠券主数据的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: coupon_id
+    type: INTEGER
+    description: coupon_id
+  - name: coupon_name
+    type: VARCHAR
+    description: coupon_name
+  - name: discount_type
+    type: VARCHAR
+    description: discount_type
+  - name: face_value
+    type: DECIMAL
+    description: face_value
+  - name: valid_days
+    type: INTEGER
+    description: valid_days
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mkt_coupon_usage
+  type: distractor
+  description: '[市场营销域·DWS 汇总层] 优惠券核销的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: usage_id
+    type: INTEGER
+    description: usage_id
+  - name: coupon_id
+    type: INTEGER
+    description: coupon_id
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: use_time
+    type: TIMESTAMP
+    description: use_time
+  - name: order_no
+    type: INTEGER
+    description: order_no
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
+- name: dws_mkt_member
+  type: distractor
+  description: '[市场营销域·DWS 汇总层] 会员主数据的按主题与粒度预聚合的汇总表。与渠道销售分析无关。'
+  columns:
+  - name: member_id
+    type: INTEGER
+    description: member_id
+  - name: member_name
+    type: VARCHAR
+    description: member_name
+  - name: level
+    type: INTEGER
+    description: level
+  - name: register_date
+    type: DATE
+    description: register_date
+  - name: points
+    type: INTEGER
+    description: points
+  - name: stat_period
+    type: VARCHAR
+    description: stat_period
+  - name: grain
+    type: VARCHAR
+    description: grain
+  - name: agg_value
+    type: DECIMAL
+    description: agg_value
+  - name: record_cnt
+    type: VARCHAR
+    description: record_cnt
